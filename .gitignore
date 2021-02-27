@@ -1,0 +1,11 @@
+# IDE metadata
+.vscode/
+
+# Python builds/cache
+__pycache__
+*.egg-info
+.eggs
+*.py[cod]
+
+# Secrets
+.env.local
