@@ -1,6 +1,9 @@
 # IDE metadata
 .vscode/
 
+# Storage
+mongo/
+
 # Python builds/cache
 __pycache__
 *.egg-info

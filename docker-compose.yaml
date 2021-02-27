@@ -1,0 +1,18 @@
+version: "3"
+services:
+  mongo:
+    image: mongo:4.4-bionic
+    command: [--auth]
+    ports:
+      - "27017:27017"
+    networks:
+      - local
+    volumes:
+      - "${PWD}/mongo/data:/data/db"
+    restart: always
+    container_name: roster_nosql
+
+networks:
+  local:
+    driver: bridge
+    name: local
