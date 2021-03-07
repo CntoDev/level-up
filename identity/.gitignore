@@ -2,3 +2,6 @@ bin
 obj
 .vscode
 docker-build
+appsettings.json
+Start-Container.ps1
+Start-Local.ps1

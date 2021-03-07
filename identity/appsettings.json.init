@@ -1,0 +1,6 @@
+{
+  "AllowedHosts": "your.dns.name",
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=host.docker.internal;Database=postgres;Username=postgres;Password=<some-password>;"
+  }
+}
