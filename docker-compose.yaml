@@ -11,6 +11,17 @@ services:
       - "${PWD}/mongo/data:/data/db"
     restart: always
     container_name: roster_nosql
+  rabbitmq:
+    image: rabbitmq:3.8-alpine
+    ports:
+      - "5672:5672"
+    networks:
+      - local
+    volumes:
+      - "${PWD}/rabbitmq:/var/lib/rabbitmq"
+    restart: always
+    container_name: roster_message_broker
+    hostname: roster-rabbitmq
 
 networks:
   local:

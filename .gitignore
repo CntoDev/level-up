@@ -3,6 +3,7 @@
 
 # Storage
 mongo/
+rabbitmq/
 
 # Python builds/cache
 __pycache__
