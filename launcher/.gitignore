@@ -1,0 +1,9 @@
+bin
+obj
+.vscode
+docker-build
+appsettings.json
+Start-Container.ps1
+Start-Local.ps1
+
+src/CNTO.Launcher.Desktop/*.txt
