@@ -8,6 +8,7 @@
 
 ## Features to add
 
+- Add Headless Client
 - Add Creator DLC mods (Cold War, Vietnam)
 - Ability to edit paths to repositories and add new repositories
 - Server watchdog

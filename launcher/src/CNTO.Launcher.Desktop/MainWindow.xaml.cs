@@ -32,16 +32,17 @@ namespace UI
         private FilesystemRepositoryCollection _filesystemRepositoryCollection;
 
         public MainWindow()
-        {   
-            InitializeComponent();     
-            
-            _repositories = (Repositories)(RepositoriesGrid.Resources["Repo"]);    
+        {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
+            InitializeComponent();
+
+            _repositories = (Repositories)(RepositoriesGrid.Resources["Repo"]);
             Initialize();
         }
 
         public void ShowRepositories(IEnumerable<Repository> repositories)
         {
-            
+
         }
 
         private void Initialize()
@@ -68,7 +69,7 @@ namespace UI
             WindowsProcessRunner windowsProcessRunner = new WindowsProcessRunner();
 
             _launcherService = new LauncherService(launcherParameters, _filesystemRepositoryCollection, display, windowsProcessRunner);
-            _launcherService.Run();           
+            _launcherService.Run();
         }
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)
@@ -77,8 +78,14 @@ namespace UI
 
             var selectedMods = _repositories.GetSelected().Select(r => r.Identity);
             Log.Information("Selected repositories are {selectedMods}.", selectedMods);
-            
-            _launcherService.StartServer(selectedMods.Select(s => new RepositoryId(s)));             
+
+            _launcherService.StartServer(selectedMods.Select(s => new RepositoryId(s)));
         }
+    
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.Fatal((Exception)e.ExceptionObject, "Undhandled exception in application.");
+            Log.Fatal("Runtime terminating {flag}.", e.IsTerminating);
+        }    
     }
 }
