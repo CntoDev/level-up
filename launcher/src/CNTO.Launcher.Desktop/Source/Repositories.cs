@@ -11,13 +11,20 @@ namespace UI.Source
 {
     public class Repositories : INotifyPropertyChanged
     {
+        public Repositories()
+        {
+            HeadlessClientNumber = 1;
+        }
+
         private List<RepositoryDto> _repositories;
 
-        public IEnumerable<RepositoryDto> All => _repositories;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public IEnumerable<RepositoryDto> All => _repositories;        
 
         public IEnumerable<RepositoryDto> GetSelected() => _repositories.Where(r => r.Selected);
+
+        public int HeadlessClientNumber { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Load(FilesystemRepositoryCollection collection)
         {

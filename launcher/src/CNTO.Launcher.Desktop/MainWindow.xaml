@@ -11,7 +11,7 @@
         <Grid.Resources>
             <source:Repositories x:Key="Repo"/>
         </Grid.Resources>
-        <ListView Margin="44,28,213,33" ItemsSource="{Binding Source={StaticResource ResourceKey=Repo}, Path=All}">
+        <ListView Margin="20,60,213,33" ItemsSource="{Binding Source={StaticResource ResourceKey=Repo}, Path=All}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Identity}" Width="100">
@@ -30,11 +30,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="90" x:Name="LoadColumn" Header="Select to load">
+                    <GridViewColumn Width="90" Header="Select to load">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Width="{Binding ElementName=LoadColumn, Path=Width}">
-                                    <CheckBox IsChecked="{Binding Path=Selected, Mode=TwoWay}" IsThreeState="False" HorizontalAlignment="Center" />
+                                <Grid>
+                                    <CheckBox IsChecked="{Binding Path=Selected, Mode=TwoWay}" HorizontalAlignment="Center" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -42,6 +42,8 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Label Margin="20,20,0,0" Content="Headless Clients" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBox Name="HeadlessCount" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,20,0,0" Text="{Binding Source={StaticResource ResourceKey=Repo}, Path=HeadlessClientNumber, Mode=TwoWay}" />
         <Button Name="LaunchButton" Content="Launch server" HorizontalAlignment="Right" Height="39" Margin="0,0,29,33" VerticalAlignment="Bottom" Width="130" Click="LaunchButton_Click"/>
     </Grid>
 </Window>

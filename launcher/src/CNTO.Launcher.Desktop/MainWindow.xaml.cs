@@ -79,7 +79,10 @@ namespace UI
             var selectedMods = _repositories.GetSelected().Select(r => r.Identity);
             Log.Information("Selected repositories are {selectedMods}.", selectedMods);
 
-            _launcherService.StartServer(selectedMods.Select(s => new RepositoryId(s)));
+            int headlessClients = _repositories.HeadlessClientNumber;
+            Log.Information("Number of headless clients is {headlessClients}.", headlessClients);
+
+            Task.Run(() => _launcherService.StartServerAsync(selectedMods.Select(s => new RepositoryId(s)), headlessClients));
         }
     
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

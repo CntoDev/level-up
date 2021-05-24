@@ -5,6 +5,7 @@ using CNTO.Launcher.Application;
 using NUnit.Framework;
 using Moq;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CNTO.Launcher.Test
 {
@@ -60,7 +61,7 @@ namespace CNTO.Launcher.Test
                 _processRunnerMock.Object
             );
 
-            launcher.StartServer(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") });
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") }));
             _processRunnerMock.Verify();
         }
 
@@ -84,7 +85,7 @@ namespace CNTO.Launcher.Test
                 _processRunnerMock.Object
             );
 
-            launcher.StartServer(new List<RepositoryId>() { new RepositoryId("main") });
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main") }));
             _processRunnerMock.Verify();
         }        
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using CNTO.Launcher.Identity;
 using Serilog;
 using CNTO.Launcher.Infrastructure;
+using System.Threading.Tasks;
 
 namespace CNTO.Launcher.CLI
 {
@@ -38,7 +39,7 @@ namespace CNTO.Launcher.CLI
             string[] selectedMods = selection.Split(",");
 
             Log.Information("Selected repositories are {selectedMods}.", selectedMods);
-            launcherService.StartServer(selectedMods.Select(s => new RepositoryId(s)));
+            Task.Run(() => launcherService.StartServerAsync(selectedMods.Select(s => new RepositoryId(s))));
         }
     }
 }

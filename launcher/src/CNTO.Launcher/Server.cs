@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CNTO.Launcher
 {
     public class Server
     {
+        private const int ServerStartDelay = 3000;
         private readonly string _processPath;
         private readonly string _arguments;
 
@@ -34,9 +36,10 @@ namespace CNTO.Launcher
             return new Server(fileName, sb.ToString());
         }
 
-        internal void Run(IProcessRunner processRunner)
+        internal async Task RunAsync(IProcessRunner processRunner)
         {
             processRunner.Run(_processPath, _arguments);
+            await Task.Delay(ServerStartDelay);
         }
     }
 }

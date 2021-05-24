@@ -7,6 +7,7 @@ namespace CNTO.Launcher
         public string GamePath { get; set; }
         public string ProfilePath { get; set; }
         public string ConfigDirectory { get; set; }
+        public string ServerPassword { get; set; }
         public IEnumerable<RepositoryParameters> Repositories { get; set; }
     }
 }

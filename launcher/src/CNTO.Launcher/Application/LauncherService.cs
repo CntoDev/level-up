@@ -1,16 +1,27 @@
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CNTO.Launcher.Identity;
 
 namespace CNTO.Launcher.Application
 {
+    /// <summary>
+    /// Launcher application service, a facade class.
+    /// </summary>
     public class LauncherService
     {
+        private const int AnarchysDelay = 3000;
         private readonly LauncherParameters _launcherParameters;
         private readonly IRepositoryCollection _repositoryCollection;
         private readonly IDisplay _display;
         private readonly IProcessRunner _processRunner;
 
+        /// <summary>
+        /// Initializes a launcher service.
+        /// </summary>
+        /// <param name="launcherParameters">Launcher parameters, read from JSON.</param>
+        /// <param name="repositoryCollection">A collection of repositories.</param>
+        /// <param name="display">UI display for sending messages to.</param>
+        /// <param name="processRunner">System process runner, launches the arma server.</param>
         public LauncherService(
             LauncherParameters launcherParameters,
             IRepositoryCollection repositoryCollection,
@@ -24,17 +35,30 @@ namespace CNTO.Launcher.Application
             _processRunner = processRunner;
         }
 
+        /// <summary>
+        /// Starts the Launcher.
+        /// </summary>
         public void Run ()
         {
             IEnumerable<Repository> repositories = _repositoryCollection.All();
             _display.ShowRepositories(repositories);
         }
 
-        public void StartServer (IEnumerable<RepositoryId> selectedRepositories)
+        /// <summary>
+        /// Starts the server with selected repositories.
+        /// </summary>
+        /// <param name="selectedRepositories">Repositories to start the server with.</param>
+        public async Task StartServerAsync (IEnumerable<RepositoryId> selectedRepositories, int numberOfClients = 0)
         {
             IEnumerable<Repository> repositoryMetadata = _repositoryCollection.WithId(selectedRepositories);
             var server = Server.Build(_launcherParameters, repositoryMetadata);
-            server.Run(_processRunner);
+            await server.RunAsync(_processRunner);
+
+            for (int i = 0; i < numberOfClients; i++)
+            {
+                HeadlessClient headlessClient = new HeadlessClient(_launcherParameters, _processRunner);
+                await headlessClient.StartAsync(repositoryMetadata);
+            }
         }
     }
 }
