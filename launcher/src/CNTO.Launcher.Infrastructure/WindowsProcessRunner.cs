@@ -7,9 +7,9 @@ namespace CNTO.Launcher.Infrastructure
     {
         public void Run(string processPath, string arguments)
         {
-            Log.Information("Starting server with {process} {arguments}.", processPath, arguments);
+            Log.Information("Starting process with {process} {arguments}.", processPath, arguments);
             Process process = Process.Start(processPath, arguments);
-            Log.Information("Server started.");
+            Log.Information("Process started.");
         }
     }
 }
