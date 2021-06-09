@@ -6,40 +6,39 @@ using System.Threading.Tasks;
 
 namespace CNTO.Launcher
 {
-    public class Server
+    public class Server : IServer
     {
         private const int ServerStartDelay = 3000;
         private readonly string _processPath;
-        private readonly string _arguments;
+        private IDictionary<string, string> _arguments;
 
-        private Server(string processPath, string arguments)
+        internal Server(string processPath)
         {
             _processPath = processPath;
-            _arguments = arguments;
+            _arguments = new Dictionary<string, string>();
         }
 
-        public static Server Build(LauncherParameters launcherParameters, IEnumerable<Repository> repositoryMetadata)
+        public async Task RunAsync(IProcessRunner processRunner)
         {
-            string fileName = launcherParameters.GamePath;
-            StringBuilder sb = new StringBuilder();
-            sb.Append($"-port 2302 -noSplash -noLand -enableHT -hugePages -profiles={launcherParameters.ProfilePath} -filePatching -name=server -config={launcherParameters.ConfigDirectory}\\server.cfg -cfg={launcherParameters.ConfigDirectory}\\basic.cfg");
-            sb.Append(" ");
-            var sortedRepositories = repositoryMetadata.OrderBy(r => r.Priority);
-            ModSet modSet = new ModSet();
+            StringBuilder builder = new StringBuilder();
 
-            foreach (var repo in sortedRepositories)
+            foreach (var arg in _arguments)
             {
-                modSet.Append(repo);
+                builder.Append($"-{arg.Key}");
+
+                if (!string.IsNullOrWhiteSpace(arg.Value))
+                    builder.Append($"={arg.Value}");
+
+                builder.Append(" ");
             }
 
-            sb.Append(modSet.ToString());
-            return new Server(fileName, sb.ToString());
+            processRunner.Run(_processPath, builder.ToString().TrimEnd());
+            await Task.Delay(ServerStartDelay);
         }
 
-        internal async Task RunAsync(IProcessRunner processRunner)
+        internal void WithArgument(string option, string value = "")
         {
-            processRunner.Run(_processPath, _arguments);
-            await Task.Delay(ServerStartDelay);
+            _arguments[option] = value;
         }
     }
 }

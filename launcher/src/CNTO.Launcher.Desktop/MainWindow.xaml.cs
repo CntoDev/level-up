@@ -82,7 +82,15 @@ namespace UI
             int headlessClients = _repositories.HeadlessClientNumber;
             Log.Information("Number of headless clients is {headlessClients}.", headlessClients);
 
-            Task.Run(() => _launcherService.StartServerAsync(selectedMods.Select(s => new RepositoryId(s)), headlessClients));
+            List<Dlc> dlcs = new List<Dlc>();
+
+            if (_repositories.GM)
+                dlcs.Add(new Dlc("gm"));
+
+            if (_repositories.VN)
+                dlcs.Add(new Dlc("vn"));
+
+            Task.Run(() => _launcherService.StartServerAsync(selectedMods.Select(s => new RepositoryId(s)), dlcs, headlessClients));
         }
     
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

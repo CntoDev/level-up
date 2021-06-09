@@ -12,6 +12,8 @@ namespace CNTO.Launcher
         private List<IMod> _mods = new List<IMod>();
         private List<IMod> _serverMods = new List<IMod>();
 
+        public bool Empty => !_mods.Any() && !_serverMods.Any();
+
         public ModSet Append(Repository repository)
         {
             repository.AppendToModset(this);
@@ -19,17 +21,17 @@ namespace CNTO.Launcher
             return this;
         }
 
-        public override string ToString()
+        public Dictionary<string, string> ExtractArguments()
         {
-            StringBuilder sb = new StringBuilder();
-            
+            Dictionary<string, string> arguments = new Dictionary<string, string>();
+
             if (_mods.Any())
-                sb.AppendFormat(" -mod={0}", string.Join(";", _mods.Select(x => x.GetFullName())));
+                arguments["mod"] = string.Join(";", _mods.Select(x => x.GetFullName()));
 
             if (_serverMods.Any())
-                sb.AppendFormat(" -serverMod={0}", string.Join(";", _serverMods.Select(x => x.GetFullName())));
+                arguments["serverMod"] = string.Join(";", _serverMods.Select(x => x.GetFullName()));
             
-            return sb.ToString();
+            return arguments;            
         }
 
         internal void AddMod(Mod mod) => AddMod(_mods, mod);

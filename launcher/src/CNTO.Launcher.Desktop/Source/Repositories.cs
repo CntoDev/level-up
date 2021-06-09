@@ -24,6 +24,10 @@ namespace UI.Source
 
         public int HeadlessClientNumber { get; set; }
 
+        public bool GM { get; set; }
+
+        public bool VN { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Load(FilesystemRepositoryCollection collection)
