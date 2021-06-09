@@ -6,12 +6,30 @@
         xmlns:local="clr-namespace:UI"
         xmlns:source="clr-namespace:UI.Source"
         mc:Ignorable="d"
-        Title="CNTO Launcher" Height="450" Width="800">
+        Title="CNTO Launcher" Width="600">
     <Grid x:Name="RepositoriesGrid">
         <Grid.Resources>
             <source:Repositories x:Key="Repo"/>
         </Grid.Resources>
-        <ListView Margin="20,60,213,33" ItemsSource="{Binding Source={StaticResource ResourceKey=Repo}, Path=All}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10,0" Orientation="Horizontal">
+            <Label>Headless Clients</Label>
+            <TextBox Name="HeadlessCount" HorizontalAlignment="Left" Width="30" Height="20" Text="{Binding Source={StaticResource ResourceKey=Repo}, Path=HeadlessClientNumber, Mode=TwoWay}" />
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <CheckBox Content="Global Mobilization" Margin="4" IsChecked="{Binding Source={StaticResource ResourceKey=Repo}, Path=GM, Mode=TwoWay}" />
+            <CheckBox Content="Praerie Fire" Margin="4" IsChecked="{Binding Source={StaticResource ResourceKey=Repo}, Path=VN, Mode=TwoWay}" />
+        </StackPanel>        
+        <ListView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource ResourceKey=Repo}, Path=All}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Identity}" Width="100">
@@ -42,8 +60,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label Margin="20,20,0,0" Content="Headless Clients" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <TextBox Name="HeadlessCount" Width="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="120,20,0,0" Text="{Binding Source={StaticResource ResourceKey=Repo}, Path=HeadlessClientNumber, Mode=TwoWay}" />
-        <Button Name="LaunchButton" Content="Launch server" HorizontalAlignment="Right" Height="39" Margin="0,0,29,33" VerticalAlignment="Bottom" Width="130" Click="LaunchButton_Click"/>
+        <Button Grid.Row="3" Grid.ColumnSpan="2" Name="LaunchButton" Content="Launch server" Margin="4" Click="LaunchButton_Click"/>
     </Grid>
 </Window>

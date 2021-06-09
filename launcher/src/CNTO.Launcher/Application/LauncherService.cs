@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CNTO.Launcher.Identity;
 
@@ -38,7 +39,7 @@ namespace CNTO.Launcher.Application
         /// <summary>
         /// Starts the Launcher.
         /// </summary>
-        public void Run ()
+        public void Run()
         {
             IEnumerable<Repository> repositories = _repositoryCollection.All();
             _display.ShowRepositories(repositories);
@@ -48,16 +49,33 @@ namespace CNTO.Launcher.Application
         /// Starts the server with selected repositories.
         /// </summary>
         /// <param name="selectedRepositories">Repositories to start the server with.</param>
-        public async Task StartServerAsync (IEnumerable<RepositoryId> selectedRepositories, int numberOfClients = 0)
+        public async Task StartServerAsync(IEnumerable<RepositoryId> selectedRepositories, IEnumerable<Dlc> dlcs, int numberOfClients = 0)
         {
             IEnumerable<Repository> repositoryMetadata = _repositoryCollection.WithId(selectedRepositories);
-            var server = Server.Build(_launcherParameters, repositoryMetadata);
+
+            var server = new ServerBuilder(_launcherParameters.GamePath)
+                .WithServerDefaults()
+                .WithProfile(_launcherParameters.ProfilePath)
+                .WithName("server")
+                .WithServerConfig($@"{_launcherParameters.ConfigDirectory}\server.cfg")
+                .WithBasicConfig($@"{_launcherParameters.ConfigDirectory}\basic.cfg")
+                .WithRepositoryCollection(repositoryMetadata)
+                .WithDlcCollection(dlcs)
+                .Build();
+
             await server.RunAsync(_processRunner);
 
             for (int i = 0; i < numberOfClients; i++)
             {
-                HeadlessClient headlessClient = new HeadlessClient(_launcherParameters, _processRunner);
-                await headlessClient.StartAsync(repositoryMetadata);
+                var hc = new ServerBuilder(_launcherParameters.GamePath)
+                    .WithHeadlessClientDefaults()
+                    .WithProfile(_launcherParameters.ProfilePath)
+                    .WithPassword(_launcherParameters.ServerPassword)
+                    .WithRepositoryCollection(repositoryMetadata.Where(r => !r.ServerSide))
+                    .WithDlcCollection(dlcs)
+                    .Build();
+
+                await hc.RunAsync(_processRunner);
             }
         }
     }

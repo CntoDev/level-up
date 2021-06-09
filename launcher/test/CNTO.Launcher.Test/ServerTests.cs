@@ -61,7 +61,7 @@ namespace CNTO.Launcher.Test
                 _processRunnerMock.Object
             );
 
-            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") }));
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") }, Enumerable.Empty<Dlc>()));
             _processRunnerMock.Verify();
         }
 
@@ -85,7 +85,7 @@ namespace CNTO.Launcher.Test
                 _processRunnerMock.Object
             );
 
-            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main") }));
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main") }, Enumerable.Empty<Dlc>()));
             _processRunnerMock.Verify();
         }        
     }
