@@ -63,6 +63,7 @@ namespace CNTO.Launcher.Application
                 .WithDlcCollection(dlcs)
                 .Build();
 
+            _processRunner.Kill(_launcherParameters.GamePath);
             await server.RunAsync(_processRunner);
 
             for (int i = 0; i < numberOfClients; i++)
