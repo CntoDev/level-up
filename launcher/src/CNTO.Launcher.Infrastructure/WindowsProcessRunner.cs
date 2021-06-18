@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using Serilog;
 
 namespace CNTO.Launcher.Infrastructure
@@ -10,6 +11,18 @@ namespace CNTO.Launcher.Infrastructure
             Log.Information("Starting process with {process} {arguments}.", processPath, arguments);
             Process process = Process.Start(processPath, arguments);
             Log.Information("Process started.");
+        }
+
+        public void Kill(string processPath)
+        {
+            var processName = Path.GetFileNameWithoutExtension(processPath);
+            var processArray = Process.GetProcessesByName(processName);
+
+            foreach (var proc in processArray)
+            {
+                Log.Information("Killing process {pid}.", proc.Id);
+                proc.Kill();
+            }
         }
     }
 }
