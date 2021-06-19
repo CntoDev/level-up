@@ -32,7 +32,8 @@ namespace CNTO.Launcher
                 builder.Append(" ");
             }
 
-            processRunner.Run(_processPath, builder.ToString().TrimEnd());
+            string arguments = builder.ToString().TrimEnd();
+            processRunner.Run(_processPath, arguments);
             await Task.Delay(ServerStartDelay);
         }
 

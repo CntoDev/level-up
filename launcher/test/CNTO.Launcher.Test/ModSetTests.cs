@@ -21,16 +21,5 @@ namespace CNTO.Launcher.Test
             _devRepo.HasMod("@mod1");
             _devRepo.HasMod("@mod3");
         }
-
-        [Test]
-        public void ModsMerged()
-        {
-            ModSet modSet = new ModSet();
-            modSet.Append(_mainRepo);
-            modSet.Append(_devRepo);
-            string modList = modSet.ToString();
-            
-            Assert.AreEqual(@"c:\cnto\main\@mod2;c:\cnto\main\@mod4;c:\cnto\dev\@mod1;c:\cnto\dev\@mod3", modList);
-        }
     }
 }

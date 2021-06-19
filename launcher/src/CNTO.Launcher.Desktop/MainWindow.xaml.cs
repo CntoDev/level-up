@@ -25,51 +25,26 @@ namespace UI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisplay
+    public partial class MainWindow : Window
     {
         private readonly Repositories _repositories;
         private LauncherService _launcherService;
-        private FilesystemRepositoryCollection _filesystemRepositoryCollection;
+        private IRepositoryCollection _filesystemRepositoryCollection;
+        private IProcessRunner _processRunner;
+        private readonly LauncherParameters _launcherParameters;
 
-        public MainWindow()
+        public MainWindow(IRepositoryCollection filesystemRepositoryCollection, IProcessRunner processRunner, LauncherParameters parameters, LauncherService launcherService)
         {
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
             InitializeComponent();
 
             _repositories = (Repositories)(RepositoriesGrid.Resources["Repo"]);
-            Initialize();
-        }
-
-        public void ShowRepositories(IEnumerable<Repository> repositories)
-        {
-
-        }
-
-        private void Initialize()
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console()
-                .WriteTo.File("launcher-log.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();
-
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddJsonFile(@"appsettings.json");
-            IConfiguration configuration = builder.Build();
-            LauncherParameters launcherParameters = configuration.Get<LauncherParameters>();
-
-            Log.Information("Settings file read.");
-            Log.Information("{@Parameters}", launcherParameters);
-
-            _filesystemRepositoryCollection = new FilesystemRepositoryCollection(launcherParameters.Repositories);
-            _filesystemRepositoryCollection.Load();
+            _filesystemRepositoryCollection = filesystemRepositoryCollection;
+            _processRunner = processRunner;
+            _launcherParameters = parameters;
+            _launcherService = launcherService;
 
             _repositories.Load(_filesystemRepositoryCollection);
-            IDisplay display = this;
-            WindowsProcessRunner windowsProcessRunner = new WindowsProcessRunner();
-
-            _launcherService = new LauncherService(launcherParameters, _filesystemRepositoryCollection, display, windowsProcessRunner);
-            _launcherService.Run();
         }
 
         private void LaunchButton_Click(object sender, RoutedEventArgs e)

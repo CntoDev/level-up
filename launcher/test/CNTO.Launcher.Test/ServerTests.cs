@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace CNTO.Launcher.Test
 {
@@ -15,8 +16,9 @@ namespace CNTO.Launcher.Test
         private Repository _devRepo;
         private LauncherParameters _launcherParameters;
         private Mock<IRepositoryCollection> _collection;
-        private IDisplay _display;
         private Mock<IProcessRunner> _processRunnerMock;
+        private Mock<IExecutionContextStore> _executionContextStoreMock;
+        private Mock<ILogger<LauncherService>> _loggerMock;
 
         [SetUp]
         public void Setup()
@@ -41,52 +43,58 @@ namespace CNTO.Launcher.Test
             _collection.Setup(m => m.All()).Returns(new List<Repository>() { _mainRepo, _devRepo });
             _collection.Setup(m => m.WithId(It.IsAny<IEnumerable<RepositoryId>>())).Returns(new List<Repository>() { _mainRepo, _devRepo });
 
-            var displayMock = new Mock<IDisplay>();
-            _display = displayMock.Object;
-
             _processRunnerMock = new Mock<IProcessRunner>();
         }
 
         [Test]
         public void RunBothRepos()
         {
-            _processRunnerMock.Setup(p => p.Run("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Arma 3\\arma3server_x64.exe",
-                                                "-port 2302 -noSplash -noLand -enableHT -hugePages -profiles=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\profiles -filePatching -name=server -config=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\server.cfg -cfg=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\basic.cfg  -mod=c:\\cnto\\main\\@mod2;c:\\cnto\\main\\@mod4;c:\\cnto\\dev\\@mod1;c:\\cnto\\dev\\@mod3"))
+            string expectedArguments = "-port=2302 -noSplash -noLand -enableHT -hugePages -filePatching -profiles=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\profiles -name=server -config=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\server.cfg -cfg=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\basic.cfg -mod=c:\\cnto\\main\\@mod2;c:\\cnto\\main\\@mod4;c:\\cnto\\dev\\@mod1;c:\\cnto\\dev\\@mod3";
+            _processRunnerMock.Setup(p => p.Run("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Arma 3\\arma3server_x64.exe", expectedArguments))
                 .Verifiable();
+
+            _executionContextStoreMock.Setup(s => s.Store(It.IsAny<StartServerCommand>())).Verifiable();
 
             CNTO.Launcher.Application.LauncherService launcher = new Application.LauncherService(
                 _launcherParameters,
                 _collection.Object,
-                _display,
-                _processRunnerMock.Object
+                _processRunnerMock.Object,
+                _executionContextStoreMock.Object,
+                _loggerMock.Object
             );
 
-            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") }, Enumerable.Empty<Dlc>()));
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main"), new RepositoryId("dev") }, Enumerable.Empty<Dlc>())).Wait();
             _processRunnerMock.Verify();
+            _executionContextStoreMock.Verify();
         }
 
         [Test]
         public void RunMain()
         {
-            _processRunnerMock.Setup(p => p.Run("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Arma 3\\arma3server_x64.exe",
-                                                "-port 2302 -noSplash -noLand -enableHT -hugePages -profiles=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\profiles -filePatching -name=server -config=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\server.cfg -cfg=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\basic.cfg  -mod=c:\\cnto\\main\\@mod1;c:\\cnto\\main\\@mod2;c:\\cnto\\main\\@mod4"))
+            string expectedArguments = "-port=2302 -noSplash -noLand -enableHT -hugePages -filePatching -profiles=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\profiles -name=server -config=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\server.cfg -cfg=C:\\cnto\\dev\\arma-startup-scripts\\configDir\\basic.cfg -mod=c:\\cnto\\main\\@mod1;c:\\cnto\\main\\@mod2;c:\\cnto\\main\\@mod4";
+            _processRunnerMock.Setup(p => p.Run("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Arma 3\\arma3server_x64.exe", expectedArguments))
                 .Verifiable();
 
-            _collection.Setup(m => m.WithId(It.IsAny<IEnumerable<RepositoryId>>())).Returns((IEnumerable<RepositoryId> ids) => {
+            _executionContextStoreMock.Setup(s => s.Store(It.IsAny<StartServerCommand>())).Verifiable();
+
+            _collection.Setup(m => m.WithId(It.IsAny<IEnumerable<RepositoryId>>())).Returns((IEnumerable<RepositoryId> ids) =>
+            {
                 var all = new List<Repository>() { _mainRepo, _devRepo };
-                
+
                 return all.Where(m => ids.Contains(m.RepositoryId));
             });
-            
+
             CNTO.Launcher.Application.LauncherService launcher = new Application.LauncherService(
                 _launcherParameters,
                 _collection.Object,
-                _display,
-                _processRunnerMock.Object
+                _processRunnerMock.Object,
+                _executionContextStoreMock.Object,
+                _loggerMock.Object
             );
 
-            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main") }, Enumerable.Empty<Dlc>()));
+            Task.Run(() => launcher.StartServerAsync(new List<RepositoryId>() { new RepositoryId("main") }, Enumerable.Empty<Dlc>())).Wait();
             _processRunnerMock.Verify();
-        }        
+            _executionContextStoreMock.Verify();
+        }
     }
 }

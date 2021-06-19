@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CNTO.Launcher;
 using CNTO.Launcher.Infrastructure;
 
 namespace UI.Source
@@ -30,7 +31,7 @@ namespace UI.Source
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void Load(FilesystemRepositoryCollection collection)
+        public void Load(IRepositoryCollection collection)
         {
             _repositories = collection.All().Select(c => new RepositoryDto()
             {
