@@ -7,3 +7,5 @@ Start-Container.ps1
 Start-Local.ps1
 
 src/CNTO.Launcher.Desktop/*.txt
+src/CNTO.Launcher.Desktop/ExecutionStore.json
+**/*.jpg
