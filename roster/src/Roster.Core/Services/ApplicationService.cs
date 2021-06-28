@@ -1,21 +1,23 @@
-using Roster.Core.Models;
+using Roster.Core.Domain;
 using Roster.Core.Storage;
+using Roster.Core.Commands;
+using Roster.Core.Mappings;
 
 namespace Roster.Core.Services
 {
     public class ApplicationService
     {
-        private IApplicationStorage _storage;
+        private IApplicationStorage Storage = new MemoryApplicationStorage();
 
         // TODO: replace bool return with exception throwing
-        public bool submitApplicationForm(ApplicationFormDto formData)
+        public bool submitApplicationForm(ApplicationFormCommand formCommand)
         {
-            ApplicationForm form = new ApplicationForm(formData);
+            ApplicationForm form = ApplicationFormMap.FromApplicationFormCommand(formCommand);
             if(form.status == ApplicationFormStatus.Invalid) {
                 return false;
             }
 
-            this._storage.storeApplicationForm(form);
+            Storage.storeApplicationForm(form);
             return true;
         }
     }

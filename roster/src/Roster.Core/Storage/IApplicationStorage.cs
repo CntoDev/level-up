@@ -1,4 +1,4 @@
-using Roster.Core.Models;
+using Roster.Core.Domain;
 
 namespace Roster.Core.Storage
 {
