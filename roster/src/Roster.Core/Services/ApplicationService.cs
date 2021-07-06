@@ -2,6 +2,7 @@ using Roster.Core.Domain;
 using Roster.Core.Storage;
 using Roster.Core.Commands;
 using Roster.Core.Mappings;
+using FluentResults;
 
 namespace Roster.Core.Services
 {
@@ -10,15 +11,15 @@ namespace Roster.Core.Services
         private IApplicationStorage Storage = new MemoryApplicationStorage();
 
         // TODO: replace bool return with exception throwing
-        public bool submitApplicationForm(ApplicationFormCommand formCommand)
+        public Result submitApplicationForm(ApplicationFormCommand formCommand)
         {
             ApplicationForm form = ApplicationFormMap.FromApplicationFormCommand(formCommand);
             if(form.status == ApplicationFormStatus.Invalid) {
-                return false;
+                return Result.Fail("Application form validation failed");
             }
 
             Storage.storeApplicationForm(form);
-            return true;
+            return Result.Ok();
         }
     }
 }

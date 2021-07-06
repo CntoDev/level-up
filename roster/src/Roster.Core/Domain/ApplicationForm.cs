@@ -3,14 +3,6 @@ using System.Collections.Generic;
 
 namespace Roster.Core.Domain
 {
-    public enum ApplicationFormStatus
-    {
-        Pending,
-        Accepted,
-        Rejected,
-        Invalid
-    }
-
     public class ApplicationForm
     {
         public string Nickname { get; private set; }
