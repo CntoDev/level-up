@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Roster.Core.Domain;
+using System.Linq;
 
 namespace Roster.Core
 {
     public class ApplicationFormFactory
     {
-        public ApplicationForm create(ICollection<string> existingNicknames, string nickname, DateTime dateOfBirth, string email)
+        public ApplicationForm Create(ICollection<string> existingNicknames, string nickname, DateTime dateOfBirth, string email)
         {
-            if(existingNicknames.Contains(nickname)) {
+            if(existingNicknames.Any(x => x.Equals(nickname, StringComparison.OrdinalIgnoreCase))) {
                 throw new ArgumentException("Nickname already exists");
             }
 
