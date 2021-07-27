@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Roster.Core.Storage;
 
-namespace Roster.Core.Storage
+namespace Roster.Infrastructure.Storage
 {
     public class MemoryMemberStorage : IMemberStorage
     {
