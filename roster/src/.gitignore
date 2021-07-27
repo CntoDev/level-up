@@ -1,0 +1,17 @@
+/artifacts
+/.vs
+node_modules
+wrap
+lib
+logs
+*.user
+Publish
+net46bin
+obj
+bin
+packages
+Backup
+/UpgradeLog.htm
+/org
+PublishOutput
+**/app.db
