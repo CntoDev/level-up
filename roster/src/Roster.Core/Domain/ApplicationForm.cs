@@ -24,7 +24,7 @@ namespace Roster.Core.Domain
             DateOfBirth = dateOfBirth;
             Email = email;
 
-            if(this.validate()) {
+            if(this.Validate()) {
                 this.status = ApplicationFormStatus.Pending;
             } else {
                 this.status = ApplicationFormStatus.Invalid;
@@ -32,7 +32,7 @@ namespace Roster.Core.Domain
         }
 
         // TODO: implement validation logic
-        public bool validate()
+        public bool Validate()
         {
             return true;
         }

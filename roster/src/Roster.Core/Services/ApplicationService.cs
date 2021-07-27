@@ -1,7 +1,7 @@
 using Roster.Core.Domain;
-using Roster.Core.Storage;
 using Roster.Core.Commands;
 using Roster.Core.Mappings;
+using Roster.Core.Storage;
 using FluentResults;
 using System;
 
@@ -9,22 +9,22 @@ namespace Roster.Core.Services
 {
     public class ApplicationService
     {
-        private IApplicationStorage Storage = new MemoryApplicationStorage();
-        private IMemberStorage MemberStorage = new MemoryMemberStorage();
+        private IApplicationStorage _storage;
+        private IMemberStorage _memberStorage;
 
-        public Result submitApplicationForm(ApplicationFormCommand formCommand)
+        public Result SubmitApplicationForm(ApplicationFormCommand formCommand)
         {
-            var existingNicknames = MemberStorage.GetAllNicknames();
+            var existingNicknames = _memberStorage.GetAllNicknames();
 
             ApplicationFormFactory factory = new ApplicationFormFactory();
             try {
-                ApplicationForm form = factory.create(existingNicknames, formCommand.Nickname, formCommand.DateOfBirth, formCommand.Email);
+                ApplicationForm form = factory.Create(existingNicknames, formCommand.Nickname, formCommand.DateOfBirth, formCommand.Email);
 
-                form = ApplicationFormMap.MergeCommandWithExisting(form, formCommand);
+                form = ApplicationFormMap.Merge(form, formCommand);
 
-                Storage.storeApplicationForm(form);
+                _storage.StoreApplicationForm(form);
                 return Result.Ok();
-            } catch(ArgumentException e) {
+            } catch(ArgumentException) {
                 return Result.Fail("Application form validation failed");
             }
         }
