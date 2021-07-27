@@ -24,8 +24,7 @@ namespace Roster.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
-        private readonly ApplicationService _rosterCoreService;
+        private readonly IEmailSender _emailSender;       
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -38,7 +37,6 @@ namespace Roster.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _rosterCoreService = applicationService;
         }
 
         [BindProperty]
@@ -65,31 +63,6 @@ namespace Roster.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
-            [Required]
-            public string Nickname { get; set; }
-
-            [Required]
-            [Display(Name = "Date of birth")]
-            public DateTime DateOfBirth { get; set; }
-
-            [Display(Name = "Bohemia Interactive nickname")]
-            public string BiNickname { get; set; }
-
-            [Display(Name = "Discord ID")]
-            public string DiscordId { get; set; }
-
-            [Display(Name = "GitHub nickname")]
-            public string GithubNickname { get; set; }
-
-            [Display(Name = "Google e-mail")]
-            public string Gmail { get; set; }
-            
-            [Display(Name = "Steam username")]
-            public string SteamId { get; set; }
-            
-            [Display(Name = "Teamspeak ID")]
-            public string TeamspeakId { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -105,30 +78,6 @@ namespace Roster.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {                
-                var command = new ApplicationFormCommand(Input.Nickname, Input.DateOfBirth, Input.Email)
-                {
-                    BiNickname = Input.BiNickname,
-                    DiscordId = Input.DiscordId,
-                    GithubNickname = Input.GithubNickname,
-                    Gmail = Input.Gmail,
-                    SteamId = Input.SteamId,
-                    TeamspeakId = Input.TeamspeakId
-                };
-
-                _logger.LogInformation("User registering with command {@command}.", command);                
-                var coreResult = _rosterCoreService.submitApplicationForm(command);
-                _logger.LogInformation("Core result is {@coreResult}.", coreResult);
-
-                if (coreResult.IsFailed)
-                {
-                    _logger.LogError("Registration failed with errors {@errors}.", coreResult.Errors);
-                    foreach (var error in coreResult.Errors)
-                        ModelState.AddModelError(string.Empty, error.Message);
-
-                    return Page();
-                }
-
-                _logger.LogInformation("Core registration successful, building IdentityUser.");
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);                
 
@@ -156,11 +105,6 @@ namespace Roster.Web.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
-                }
-                else
-                {
-                    // Identity failed while Core didn't, notify Core?
-                    _logger.LogCritical("Critical failure, Identity for user {user} failed while Core registration succeeded.", Input.Email);
                 }
 
                 foreach (var error in result.Errors)
