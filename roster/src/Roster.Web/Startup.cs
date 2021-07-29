@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Roster.Core.Services;
+using Roster.Core.Storage;
+using Roster.Infrastructure.Storage;
 
 namespace Roster.Web
 {
@@ -37,6 +39,8 @@ namespace Roster.Web
             services.AddRazorPages();
 
             // Roster Core registrations here
+            services.AddScoped<IApplicationStorage, MemoryApplicationStorage>();
+            services.AddScoped<IMemberStorage, MemoryMemberStorage>();
             services.AddScoped<ApplicationService>();
         }
 

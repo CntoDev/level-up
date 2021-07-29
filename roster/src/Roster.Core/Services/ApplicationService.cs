@@ -12,6 +12,12 @@ namespace Roster.Core.Services
         private IApplicationStorage _storage;
         private IMemberStorage _memberStorage;
 
+        public ApplicationService(IApplicationStorage applicationStorage, IMemberStorage memberStorage)
+        {
+            _storage = applicationStorage;
+            _memberStorage = memberStorage;
+        }
+
         public Result SubmitApplicationForm(ApplicationFormCommand formCommand)
         {
             var existingNicknames = _memberStorage.GetAllNicknames();
