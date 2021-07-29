@@ -18,7 +18,7 @@ namespace Roster.Core.Domain
 
         public ApplicationFormStatus status { get; private set; }
 
-        public ApplicationForm(string nickname, DateTime dateOfBirth, string email)
+        internal ApplicationForm(string nickname, DateTime dateOfBirth, string email)
         {
             Nickname = nickname;
             DateOfBirth = dateOfBirth;
