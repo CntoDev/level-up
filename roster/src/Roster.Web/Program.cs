@@ -20,6 +20,7 @@ namespace Roster.Web
                                     LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
+                .WriteTo.File("roster-log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();

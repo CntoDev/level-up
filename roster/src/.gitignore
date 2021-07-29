@@ -15,3 +15,4 @@ Backup
 /org
 PublishOutput
 **/app.db
+*.txt
