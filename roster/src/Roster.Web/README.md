@@ -18,7 +18,7 @@ Open powershell, go to root folder of Roster.Web project and build a project wit
 
 ## Deploy tables into database
 
-In powershell (root folder of Web project) type `dotnet ef database update`
+In powershell (root folder of Web project) type `dotnet ef database update`. If you don't have Entity Framework Tools installed check out this [guide](https://docs.microsoft.com/en-us/ef/core/cli/dotnet#installing-the-tools).
 
 ## Start the application
 
