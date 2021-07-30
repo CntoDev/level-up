@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Roster.Core.Services;
 using Roster.Core.Storage;
 using Roster.Infrastructure.Storage;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace Roster.Web
 {
@@ -31,8 +32,8 @@ namespace Roster.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(
+                    Configuration.GetConnectionString("PostgresConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
