@@ -34,6 +34,8 @@ namespace Roster.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("PostgresConnection")));
+            services.AddDbContext<RosterDbContext>(options => 
+                options.UseNpgsql(Configuration.GetConnectionString("Roster"), o => o.MigrationsAssembly("Roster.Web")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
