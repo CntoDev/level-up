@@ -22,4 +22,4 @@ In powershell (root folder of Web project) type `dotnet ef database update`. If 
 
 ## Start the application
 
-Type `dotnet run` and hopefully your server will start. Monitor the console for any potential issues. Also, log file named roster-log-*.txt should give you more details on any problems. Application is using Serilog for logging.
+Type `dotnet run` and hopefully your server will start. Monitor the console for any potential issues. Also, log file named roster-log-*.txt should give you more details on any problems. Application is using [Serilog](https://serilog.net/) for logging.
