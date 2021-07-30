@@ -12,6 +12,10 @@ Of course, you can put any password you want (POSTGRES_PASSWORD environment vari
 
 Using tool like pgAdmin4 connect to your server and create a new database called `identity`.
 
+## Create roster database
+
+Using tool like pgAdmin4 connect to your server and create a new database called `roster`.
+
 ## Build project
 
 Open powershell, go to root folder of Roster.Web project and build a project with `dotnet build`.
