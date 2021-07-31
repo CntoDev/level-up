@@ -42,7 +42,7 @@ namespace Roster.Web
             services.AddRazorPages();
 
             // Roster Core registrations here
-            services.AddScoped<IApplicationStorage, MemoryApplicationStorage>();
+            services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
             services.AddScoped<IMemberStorage, MemoryMemberStorage>();
             services.AddScoped<ApplicationService>();
         }
