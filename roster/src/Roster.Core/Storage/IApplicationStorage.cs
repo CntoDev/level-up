@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using Roster.Core.Domain;
 
 namespace Roster.Core.Storage
 {
     public interface IApplicationStorage
     {
-        public void StoreApplicationForm(ApplicationForm form);
+        void StoreApplicationForm(ApplicationForm form);
+        IEnumerable<ApplicationForm> GetAll();
+        ApplicationForm GetByNickname(string nickname);
     }
 }
