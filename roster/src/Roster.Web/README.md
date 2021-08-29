@@ -2,11 +2,22 @@
 
 Here is how to get started with the project.
 
+## Prerequisites
+
+1. Docker (for Desktop or native)
+1. .NET 5 SDK
+1. Visual Studio Code
+1. Powershell 7+
+
 ## Install Postgres
 
 `docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=cnto_dev -d postgres`
 
 Of course, you can put any password you want (POSTGRES_PASSWORD environment variable).
+
+## Install RabbitMQ
+
+`docker run --name roster_message_broker -p 5672:5672 -d rabbitmq:3.8-alpine`
 
 ## Create identity database
 
@@ -23,6 +34,9 @@ Open powershell, go to root folder of Roster.Web project and build a project wit
 ## Deploy tables into database
 
 In powershell (root folder of Web project) type `dotnet ef database update`. If you don't have Entity Framework Tools installed check out this [guide](https://docs.microsoft.com/en-us/ef/core/cli/dotnet#installing-the-tools).
+
+1. Once for identity database `dotnet ef database update --context ApplicationDbContext`.
+1. Once for roster database `dotnet ef database update --context RosterDbContext`.
 
 ## Start the application
 

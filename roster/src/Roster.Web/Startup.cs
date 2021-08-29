@@ -16,6 +16,10 @@ using Roster.Core.Services;
 using Roster.Core.Storage;
 using Roster.Infrastructure.Storage;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using MassTransit;
+using Roster.Infrastructure.Consumers;
+using Roster.Core.Events;
+using Roster.Infrastructure.Events;
 
 namespace Roster.Web
 {
@@ -45,6 +49,18 @@ namespace Roster.Web
             services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
             services.AddScoped<IMemberStorage, MemoryMemberStorage>();
             services.AddScoped<ApplicationService>();
+
+            // Add Mass Transit
+            services.AddMassTransit(x => {
+                x.UsingRabbitMq((context, configurator) => {
+                    configurator.ConfigureEndpoints(context);
+                });
+
+                x.AddConsumer<SampleConsumer>();
+            });
+
+            services.AddMassTransitHostedService();
+            services.AddScoped<IEventStore, EventStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
