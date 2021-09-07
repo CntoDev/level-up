@@ -47,7 +47,7 @@ namespace Roster.Web
 
             // Roster Core registrations here
             services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
-            services.AddScoped<IMemberStorage, MemoryMemberStorage>();
+            services.AddScoped<IMemberStorage, DatabaseMemberStorage>();
             services.AddScoped<ApplicationService>();
 
             // Add Mass Transit
@@ -56,7 +56,7 @@ namespace Roster.Web
                     configurator.ConfigureEndpoints(context);
                 });
 
-                x.AddConsumer<SampleConsumer>();
+                x.AddConsumer<ApplicationFormAcceptedConsumer>();
             });
 
             services.AddMassTransitHostedService();

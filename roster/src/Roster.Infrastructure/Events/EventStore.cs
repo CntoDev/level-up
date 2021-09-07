@@ -10,7 +10,7 @@ namespace Roster.Infrastructure.Events {
             _bus = bus;
         }
         
-        public void Publish<T>(T @event) where T: class
+        public void Publish<T>(T @event) where T: class, IEvent
         {
             _bus.Publish<T>(@event);
         }

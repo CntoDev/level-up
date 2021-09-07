@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Roster.Core.Domain;
 
 namespace Roster.Core.Storage
 {
-    public interface IMemberStorage
+    public interface IMemberStorage : IStorage<Member>
     {
-        public ICollection<string> GetAllNicknames();
+        ICollection<string> GetAllNicknames();
     }
 }

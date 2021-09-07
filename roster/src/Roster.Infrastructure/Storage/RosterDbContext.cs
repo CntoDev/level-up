@@ -12,6 +12,8 @@ namespace Roster.Infrastructure.Storage
 
         public DbSet<ApplicationForm> ApplicationForms { get; set; }
 
+        public DbSet<Member> Members { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationForm>()
@@ -19,6 +21,16 @@ namespace Roster.Infrastructure.Storage
             
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsMany<Arma3Dlc>(af => af.OwnedDlcs);
+
+            modelBuilder.Entity<Member>()
+                        .HasKey(m => m.Nickname);
+
+            modelBuilder.Entity<Member>()
+                        .HasIndex(m => m.Email);
+
+            modelBuilder.Entity<Member>()
+                        .Property(m => m.Email)
+                        .IsRequired();
         }
     }
 }
