@@ -31,6 +31,14 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<Member>()
                         .Property(m => m.Email)
                         .IsRequired();
+
+            modelBuilder.Entity<Member>()
+                        .Property("_verificationCode")
+                        .HasColumnName("VerificationCode");
+
+            modelBuilder.Entity<Member>()
+                        .Property("_verificationTime")
+                        .HasColumnName("VerificationTime");                        
         }
     }
 }

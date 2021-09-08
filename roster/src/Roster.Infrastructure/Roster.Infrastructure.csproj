@@ -5,12 +5,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mailjet.Api" Version="2.0.2" />
     <PackageReference Include="MassTransit" Version="7.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.9" />
   </ItemGroup>
 
   <PropertyGroup>

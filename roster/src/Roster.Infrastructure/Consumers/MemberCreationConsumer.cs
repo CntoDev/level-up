@@ -6,13 +6,15 @@ using Roster.Core.Storage;
 
 namespace Roster.Infrastructure.Consumers
 {
-    public class ApplicationFormAcceptedConsumer : IConsumer<ApplicationFormAccepted>
+    public class MemberCreationConsumer : IConsumer<ApplicationFormAccepted>
     {
         private readonly IMemberStorage _memberStorage;
+        private readonly IEventStore _eventStore;
 
-        public ApplicationFormAcceptedConsumer(IMemberStorage memberStorage)
+        public MemberCreationConsumer(IMemberStorage memberStorage, IEventStore eventStore)
         {
             _memberStorage = memberStorage;
+            _eventStore = eventStore;
         }
 
         public Task Consume(ConsumeContext<ApplicationFormAccepted> context)
@@ -32,6 +34,7 @@ namespace Roster.Infrastructure.Consumers
 
             _memberStorage.Add(member);
             _memberStorage.Save();
+            _eventStore.Publish(new MemberCreated(message.Nickname, message.Email));
 
             return Task.CompletedTask;
         }

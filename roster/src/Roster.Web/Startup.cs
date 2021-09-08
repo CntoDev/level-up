@@ -20,6 +20,8 @@ using MassTransit;
 using Roster.Infrastructure.Consumers;
 using Roster.Core.Events;
 using Roster.Infrastructure.Events;
+using Roster.Infrastructure.Configurations;
+using Roster.Infrastructure;
 
 namespace Roster.Web
 {
@@ -38,7 +40,7 @@ namespace Roster.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("PostgresConnection")));
-            services.AddDbContext<RosterDbContext>(options => 
+            services.AddDbContext<RosterDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Roster"), o => o.MigrationsAssembly("Roster.Web")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -50,13 +52,24 @@ namespace Roster.Web
             services.AddScoped<IMemberStorage, DatabaseMemberStorage>();
             services.AddScoped<ApplicationService>();
 
+            // MailJet registrations
+            services.AddSingleton<MailJetOptions>(sp =>
+            {
+                return Configuration.GetSection("MailJet").Get<MailJetOptions>();
+            });
+
+            services.AddSingleton<EmailVerificationService>();
+
             // Add Mass Transit
-            services.AddMassTransit(x => {
-                x.UsingRabbitMq((context, configurator) => {
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, configurator) =>
+                {
                     configurator.ConfigureEndpoints(context);
                 });
 
-                x.AddConsumer<ApplicationFormAcceptedConsumer>();
+                x.AddConsumer<MemberCreationConsumer>();
+                x.AddConsumer<EmailVerificationConsumer>();
             });
 
             services.AddMassTransitHostedService();

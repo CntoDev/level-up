@@ -5,6 +5,9 @@ namespace Roster.Core.Domain
 {
     public class Member : AggregateRoot
     {
+        private string _verificationCode;
+        private DateTime? _verificationTime;
+
         public Member(string nickname, string email)
         {
             Nickname = nickname;
@@ -28,5 +31,19 @@ namespace Roster.Core.Domain
         public string DiscordId { get; set; }
 
         public string TeamspeakId { get; set; }
+
+        public void ChallengeEmail(string verificationCode)
+        {
+            _verificationCode = verificationCode;
+            _verificationTime = DateTime.Now;
+
+            Publish(new EmailChallenged(Nickname, _verificationCode, _verificationTime));
+        }
+
+        public bool VerifyEmail(string verificationCode)
+        {
+            // 1 hour verification time
+            return verificationCode.Equals(_verificationCode) && DateTime.Now.AddHours(-1) < _verificationTime;
+        }
     }
 }

@@ -5,8 +5,13 @@ namespace Roster.Core.Domain
 {
     public abstract class AggregateRoot : IEventSource
     {
-        protected List<IEvent> _events = new List<IEvent>();
+        private List<IEvent> _events = new List<IEvent>();
 
         public IEnumerable<IEvent> Events() => _events;
+
+        protected void Publish(IEvent @event)
+        {
+            _events.Add(@event);
+        }
     }
 }
