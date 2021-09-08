@@ -5,6 +5,11 @@ namespace Roster.Core.Events
 {
     public record ApplicationFormAccepted : IEvent
     {
+        public ApplicationFormAccepted()
+        {
+
+        }
+        
         public ApplicationFormAccepted(ApplicationForm applicationForm) 
         {
             Nickname = applicationForm.Nickname;

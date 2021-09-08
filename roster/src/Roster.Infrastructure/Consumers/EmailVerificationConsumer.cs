@@ -9,7 +9,7 @@ using Roster.Infrastructure.Configurations;
 
 namespace Roster.Infrastructure.Consumers
 {
-    public class EmailVerificationConsumer : IConsumer<ApplicationFormAccepted>
+    public class EmailVerificationConsumer : IConsumer<MemberCreated>
     {
         private readonly EmailVerificationService _emailVerificationService;
         private readonly IMemberStorage _memberStorage;
@@ -22,7 +22,7 @@ namespace Roster.Infrastructure.Consumers
             _eventStore = eventStore;
         }
 
-        public async Task Consume(ConsumeContext<ApplicationFormAccepted> context)
+        public async Task Consume(ConsumeContext<MemberCreated> context)
         {
             var message = context.Message;
             string verificationCode = _emailVerificationService.GenerateCode(message.Nickname);

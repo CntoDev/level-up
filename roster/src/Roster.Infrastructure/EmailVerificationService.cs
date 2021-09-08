@@ -59,21 +59,15 @@ namespace Roster.Infrastructure
 
             var response = await _client.SendTransactionalEmailAsync(email);
 
-            if (response.Messages.Any())
+            if (response.Messages != null && response.Messages.Count() == 1)
             {
-                var message = response.Messages.First();
+                _logger.LogInformation("Verification e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
+                return;
+            }
+                
 
-                if (message.Errors.Any())
-                {
-                    _logger.LogError("Failure sending mail to {email} with message - {@message}", emailAddress, message);
-                    throw new Exception("Failure sending mail.");
-                }
-            }
-            else
-            {
-                _logger.LogError("Failure sending email to {email}. No messages received.", emailAddress);
-                throw new Exception("Failure sending mail.");
-            }
+            _logger.LogError("Failure sending mail to {email} with response - {@response}", emailAddress, response);
+            throw new Exception("Failure sending mail.");
         }
     }
 }
