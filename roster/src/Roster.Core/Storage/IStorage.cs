@@ -7,6 +7,7 @@ namespace Roster.Core.Storage
         void Add(T aggregateRoot);
         void Remove(T aggregateRoot);
         T Find(object key);
+        IEnumerable<T> Search(ISpecification<T> specification);
         void Save();
     }
 }

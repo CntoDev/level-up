@@ -38,5 +38,10 @@ namespace Roster.Infrastructure.Storage
         {
             _rosterDbContext.SaveChanges();
         }
+
+        public IEnumerable<Member> Search(ISpecification<Member> specification)
+        {
+            return _rosterDbContext.Members.Where(specification.Predicate);
+        }
     }
 }

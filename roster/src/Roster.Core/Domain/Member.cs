@@ -7,6 +7,7 @@ namespace Roster.Core.Domain
     {
         private string _verificationCode;
         private DateTime? _verificationTime;
+        private bool _emailVerified;
 
         public Member(string nickname, string email)
         {
@@ -43,7 +44,16 @@ namespace Roster.Core.Domain
         public bool VerifyEmail(string verificationCode)
         {
             // 1 hour verification time
-            return verificationCode.Equals(_verificationCode) && DateTime.Now.AddHours(-1) < _verificationTime;
+            bool isVerified = verificationCode.Equals(_verificationCode) && DateTime.Now.AddHours(-1) < _verificationTime;
+
+            if (isVerified)
+            {
+                _emailVerified = isVerified;
+                Publish(new MemberEmailVerified(Nickname));
+                return true;
+            }
+
+            return false;
         }
     }
 }
