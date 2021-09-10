@@ -5,7 +5,7 @@ namespace Roster.Core.Domain
 {
     public class ApplicationForm
     {
-        public string Nickname { get; private set; }
+        public MemberNickname Nickname { get; private set; }
         public DateTime DateOfBirth { get; private set; }
         public string Email { get; private set; }
         public string BiNickname { get; set; }
@@ -16,9 +16,7 @@ namespace Roster.Core.Domain
         public string TeamspeakId { get; set; }
         public ICollection<Arma3Dlc> OwnedDlcs { get; set; }
 
-        public ApplicationFormStatus status { get; private set; }
-
-        internal ApplicationForm(string nickname, DateTime dateOfBirth, string email)
+        internal ApplicationForm(MemberNickname nickname, DateTime dateOfBirth, string email)
         {
             Nickname = nickname;
             DateOfBirth = dateOfBirth;
