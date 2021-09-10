@@ -27,23 +27,13 @@ namespace Roster.Infrastructure
 
         internal String GenerateCode(string nickname)
         {
-            byte[] salt = new byte[32];
-
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetNonZeroBytes(salt);
-            }
-
-            var r = new Rfc2898DeriveBytes(nickname, salt, 1000);
-            byte[] hash = r.GetBytes(32);
-            IEnumerable<byte> result = salt.Concat(hash);
-
-            return Convert.ToBase64String(result.ToArray());
+            Random random = new Random();
+            return random.Next(int.MaxValue).ToString();
         }
 
         public async Task SendVerificationEmail(string emailAddress, string verificationCode)
         {
-            string link = $"{_options.BaseUrl}/{verificationCode}";
+            string link = $"{_options.BaseUrl}/Roster/Member/Verify/{emailAddress}/{verificationCode}";
 
             MailjetRequest request = new MailjetRequest()
             {
@@ -64,7 +54,6 @@ namespace Roster.Infrastructure
                 _logger.LogInformation("Verification e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
                 return;
             }
-                
 
             _logger.LogError("Failure sending mail to {email} with response - {@response}", emailAddress, response);
             throw new Exception("Failure sending mail.");
