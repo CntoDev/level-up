@@ -6,7 +6,7 @@ namespace Roster.Core.Domain
     {
         public string Email { get; private set;}
 
-        internal EmailAddress(string email)
+        public EmailAddress(string email)
         {
             EmailAddress.Validate(email);
 

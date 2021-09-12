@@ -7,32 +7,20 @@ namespace Roster.Core.Domain
     {
         public MemberNickname Nickname { get; private set; }
         public DateTime DateOfBirth { get; private set; }
-        public string Email { get; private set; }
+        public EmailAddress Email { get; private set; }
         public string BiNickname { get; set; }
         public string SteamId { get; set; }
-        public string Gmail { get; set; }
+        public EmailAddress Gmail { get; set; }
         public string GithubNickname { get; set; }
-        public string DiscordId { get; set; }
+        public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
         public ICollection<Arma3Dlc> OwnedDlcs { get; set; }
 
-        internal ApplicationForm(MemberNickname nickname, DateTime dateOfBirth, string email)
+        internal ApplicationForm(MemberNickname nickname, DateTime dateOfBirth, EmailAddress email)
         {
             Nickname = nickname;
             DateOfBirth = dateOfBirth;
             Email = email;
-
-            if(this.Validate()) {
-                this.status = ApplicationFormStatus.Pending;
-            } else {
-                this.status = ApplicationFormStatus.Invalid;
-            }
-        }
-
-        // TODO: implement validation logic
-        public bool Validate()
-        {
-            return true;
         }
     }
 }
