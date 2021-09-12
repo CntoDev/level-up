@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Roster.Core.Domain;
@@ -27,6 +28,14 @@ namespace Roster.Infrastructure.Storage
         public ICollection<string> GetAllNicknames()
         {
             return _rosterDbContext.Members.Select(m => m.Nickname).ToList();
+        }
+
+        public PaginatedList<Member> Page(ISpecification<Member> filter, Func<Member, object> orderKeySelector, int page, int pageSize)
+        {
+            var filteredMembers = Search(filter);
+            var orderedMembers = filteredMembers.OrderBy(orderKeySelector).AsQueryable();
+
+            return PaginatedList<Member>.Create(orderedMembers, page, pageSize);
         }
 
         public void Remove(Member member)
