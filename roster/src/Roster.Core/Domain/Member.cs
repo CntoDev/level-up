@@ -33,6 +33,8 @@ namespace Roster.Core.Domain
 
         public string TeamspeakId { get; set; }
 
+        public bool EmailVerified => _emailVerified;
+
         public void ChallengeEmail(string verificationCode)
         {
             _verificationCode = verificationCode;
