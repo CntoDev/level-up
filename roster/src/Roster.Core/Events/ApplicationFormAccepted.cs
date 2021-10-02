@@ -12,14 +12,14 @@ namespace Roster.Core.Events
         
         public ApplicationFormAccepted(ApplicationForm applicationForm) 
         {
-            Nickname = applicationForm.Nickname;
+            Nickname = applicationForm.Nickname.Nickname;
             DateOfBirth = applicationForm.DateOfBirth;
-            Email = applicationForm.Email;
+            Email = applicationForm.Email.Email;
             BiNickname = applicationForm.BiNickname;
             SteamId = applicationForm.SteamId;
-            Gmail = applicationForm.Gmail;
+            Gmail = applicationForm.Gmail.Email;
             GithubNickname = applicationForm.GithubNickname;
-            DiscordId = applicationForm.DiscordId;
+            DiscordId = applicationForm.DiscordId.Id;
             TeamspeakId = applicationForm.TeamspeakId;            
         }
 

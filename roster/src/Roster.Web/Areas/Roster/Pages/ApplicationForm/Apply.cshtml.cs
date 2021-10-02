@@ -18,11 +18,11 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
     public class ApplyModel : PageModel
     {
         private string[] _dlcNames = { "Karts", "Helicopters", "Marksmen", "Apex", "Jets", "Malden", "Laws of War", "Tac-Ops", "Tanks", "Contact", "Art of War", "CSLA: Iron Curtain", "Global Mobilization", "S.O.G. Prairie Fire" };
-        private readonly ApplicationService _rosterCoreService;
+        private readonly ApplicationFormService _rosterCoreService;
         private readonly ILogger<ApplyModel> _logger;
         private ICollection<Arma3Dlc> _ownedDlcs;
 
-        public ApplyModel(ApplicationService rosterCoreService, ILogger<ApplyModel> logger)
+        public ApplyModel(ApplicationFormService rosterCoreService, ILogger<ApplyModel> logger)
         {
             _rosterCoreService = rosterCoreService;
             _logger = logger;

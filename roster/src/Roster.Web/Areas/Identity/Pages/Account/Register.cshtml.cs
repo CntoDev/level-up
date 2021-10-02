@@ -31,7 +31,7 @@ namespace Roster.Web.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationService applicationService)
+            ApplicationFormService applicationService)
         {
             _userManager = userManager;
             _signInManager = signInManager;

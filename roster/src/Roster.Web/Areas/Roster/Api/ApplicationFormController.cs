@@ -15,9 +15,9 @@ namespace Roster.Web.Areas.Roster.Api
     {
         private readonly IApplicationStorage _applicationStorage;
         private readonly ILogger<ApplicationFormController> _logger;
-        private readonly ApplicationService _applicationService;
+        private readonly ApplicationFormService _applicationService;
 
-        public ApplicationFormController(IApplicationStorage applicationStorage, ILogger<ApplicationFormController> logger, ApplicationService service)
+        public ApplicationFormController(IApplicationStorage applicationStorage, ILogger<ApplicationFormController> logger, ApplicationFormService service)
         {
             _applicationStorage = applicationStorage;
             _logger = logger;
