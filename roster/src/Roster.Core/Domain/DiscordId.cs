@@ -4,9 +4,9 @@ namespace Roster.Core.Domain
     {
         public string Id { get; private set; }
 
-        internal DiscordId(string discordId)
+        public DiscordId(string id)
         {
-            Id = discordId;
+            Id = id;
         }
     }
 }

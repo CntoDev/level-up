@@ -50,7 +50,8 @@ namespace Roster.Web
             // Roster Core registrations here
             services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
             services.AddScoped<IMemberStorage, DatabaseMemberStorage>();
-            services.AddScoped<ApplicationService>();
+            services.AddScoped<IDiscordValidationService, DummyDiscordValidationService>();
+            services.AddScoped<ApplicationFormService>();
             services.AddScoped<MemberService>();
 
             // MailJet registrations
