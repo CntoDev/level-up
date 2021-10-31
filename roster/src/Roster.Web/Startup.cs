@@ -22,6 +22,8 @@ using Roster.Core.Events;
 using Roster.Infrastructure.Events;
 using Roster.Infrastructure.Configurations;
 using Roster.Infrastructure;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Roster.Web
 {
@@ -37,6 +39,13 @@ namespace Roster.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Logging startup info
+            Log.Information("Configuring services...");
+            Log.Information("ConnectionStrings {roster} {postgres}", Configuration.GetConnectionString("Roster"), Configuration.GetConnectionString("PostgresConnection"));
+            Log.Information("MailJet {@mailjetOptions}", Configuration.GetSection("MailJet").Get<MailJetOptions>());
+            Log.Information("RabbitMq {@rabbitmqOptions}", Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>());
+            #endregion
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     Configuration.GetConnectionString("PostgresConnection")));
@@ -62,10 +71,16 @@ namespace Roster.Web
             services.AddSingleton<EmailVerificationService>();
 
             // Add Mass Transit
+            RabbitMqOptions rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
+
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context, configurator) =>
                 {
+                    configurator.Host(rabbitMqOptions.Host, "/", h => {
+                        h.Username(rabbitMqOptions.Username);
+                        h.Password(rabbitMqOptions.Password);
+                    });
                     configurator.ConfigureEndpoints(context);
                 });
 
