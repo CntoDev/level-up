@@ -9,7 +9,7 @@ namespace Roster.Core.Domain
     {
         public string Nickname { get; private set; }
 
-        internal MemberNickname(string nickname, bool existingMember)
+        public MemberNickname(string nickname, bool existingMember)
         {
             if(!existingMember) {
                 MemberNickname.Validate(nickname, validateLength: true);

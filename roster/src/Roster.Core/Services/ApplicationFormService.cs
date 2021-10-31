@@ -43,8 +43,8 @@ namespace Roster.Core.Services
                 _eventStore.Publish<ApplicationFormSubmitted>(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
                 
                 return Result.Ok();
-            } catch(ArgumentException) {
-                return Result.Fail("Application form validation failed");
+            } catch(ArgumentException ex) {
+                return Result.Fail($"Application form validation failed. {ex.Message}.");
             }
         }
     }

@@ -22,5 +22,7 @@ namespace Roster.Core.Domain
             DateOfBirth = dateOfBirth;
             Email = email;
         }
+
+        private ApplicationForm() {}
     }
 }
