@@ -1,0 +1,43 @@
+@page "{nickname}"
+@model DetailsModel
+
+<h1>Member details</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <dl>
+            <dt>Nickname</dt>
+            <dd>@Model.Member.Nickname</dd>
+
+            <dt>E-mail</dt>
+            <dd>@Model.Member.Email</dd>
+
+            <dt>Discord</dt>
+            <dd>@(Model.Member.DiscordId ?? "NA")</dd>
+
+            <dt>Teamspeak</dt>
+            <dd>@(Model.Member.TeamspeakId ?? "NA")</dd>
+
+            <dt>Steam</dt>
+            <dd>@(Model.Member.SteamId ?? "NA")</dd>
+        </dl>
+    </div>
+    <div class="col-md-4">
+        <dl>
+            <dt>Date of birth</dt>
+            <dd>@Model.Member.DateOfBirth.ToShortDateString()</dd>
+
+            <dt>Bohemia nickname</dt>
+            <dd>@(Model.Member.BiNickname ?? "NA")</dd>
+
+            <dt>Gmail</dt>
+            <dd>@(Model.Member.Gmail ?? "NA")</dd>
+
+            <dt>Github</dt>
+            <dd>@(Model.Member.GithubNickname ?? "NA")</dd>
+
+            <dt>E-mail verified</dt>
+            <dd>@(Model.Member.EmailVerified ? "Yes" : "No")</dd>
+        </dl>
+    </div>
+</div>

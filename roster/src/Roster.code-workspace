@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "Roster.Web"
+		},
+		{
+			"path": "Roster.Core"
+		},
+		{
+			"path": "Roster.Infrastructure"
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,23 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Application forms</h2>
+        <a asp-area="Roster" asp-page="/ApplicationForm/Apply">Apply to CNTO</a>
+    </div>
+    <div class="col-md-4">
+        <h2>Members</h2>
+        <ul>
+            <li>
+                <a asp-area="Roster" asp-page="/Member/Test">Test verification</a>
+            </li>
+            <li>
+                <a asp-area="Roster" asp-page="/Member/List">List members</a>
+            </li>
+        </ul>
+    </div>
+</div>
