@@ -38,3 +38,15 @@
         <li>@dlc.Name</li>
     }
 </ul>
+
+<form method="post">
+    <input type="hidden" asp-for="Nickname" />
+    <div class="mb-3">
+        <label asp-for="InterviewerComment" class="form-label"></label>
+        <input type="text" asp-for="InterviewerComment" class="form-control" />
+    </div>
+    <div class="btn-group">
+        <input type="submit" class="btn btn-outline-primary" value="Accept application" asp-page-handler="accept" />
+        <input type="submit" class="btn btn-outline-primary" value="Reject application" asp-page-handler="reject" />
+    </div>
+</form>

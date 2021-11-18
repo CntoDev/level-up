@@ -6,7 +6,8 @@ namespace Roster.Core.Storage
     public interface IApplicationStorage
     {
         void StoreApplicationForm(ApplicationForm form);
+        void Save();
         IEnumerable<ApplicationForm> GetAll();
-        ApplicationForm GetByNickname(string nickname);
+        ApplicationForm GetByNickname(MemberNickname nickname);
     }
 }

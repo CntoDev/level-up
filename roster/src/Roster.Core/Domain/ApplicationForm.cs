@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Roster.Core.Events;
 
 namespace Roster.Core.Domain
 {
-    public class ApplicationForm
+    public class ApplicationForm : AggregateRoot
     {
         public MemberNickname Nickname { get; private set; }
         public DateTime DateOfBirth { get; private set; }
@@ -15,6 +16,8 @@ namespace Roster.Core.Domain
         public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
         public ICollection<Arma3Dlc> OwnedDlcs { get; set; }
+        public bool Accepted { get; private set; }
+        public string InterviewerComment { get; private set; }
 
         internal ApplicationForm(MemberNickname nickname, DateTime dateOfBirth, EmailAddress email)
         {
@@ -24,5 +27,18 @@ namespace Roster.Core.Domain
         }
 
         private ApplicationForm() {}
+
+        internal void Accept()
+        {
+            Accepted = true;
+            Publish(new ApplicationFormAccepted(this));
+        }
+
+        internal void Reject(string comment)
+        {
+            Accepted = false;
+            InterviewerComment = comment;
+            Publish(new ApplicationFormRejected(Nickname.ToString(), Email.ToString(), comment));
+        }
     }
 }

@@ -69,7 +69,7 @@ namespace Roster.Web
                 return Configuration.GetSection("MailJet").Get<MailJetOptions>();
             });
 
-            services.AddSingleton<EmailVerificationService>();
+            services.AddSingleton<EmailService>();
 
             // Add Mass Transit
             RabbitMqOptions rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
@@ -86,7 +86,7 @@ namespace Roster.Web
                 });
 
                 x.AddConsumer<MemberCreationConsumer>();
-                x.AddConsumer<EmailVerificationConsumer>();
+                x.AddConsumer<EmailSender>();
             });
 
             services.AddMassTransitHostedService();

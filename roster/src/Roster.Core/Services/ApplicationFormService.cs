@@ -15,7 +15,10 @@ namespace Roster.Core.Services
 
         private DiscordIdFactory _discordFactory;
 
-        public ApplicationFormService(IApplicationStorage applicationStorage, IMemberStorage memberStorage, IEventStore eventStore, IDiscordValidationService discordValidator)
+        public ApplicationFormService(IApplicationStorage applicationStorage,
+                                      IMemberStorage memberStorage,
+                                      IEventStore eventStore,
+                                      IDiscordValidationService discordValidator)
         {
             _storage = applicationStorage;
             _memberStorage = memberStorage;
@@ -28,7 +31,8 @@ namespace Roster.Core.Services
             var existingNicknames = _memberStorage.GetAllNicknames();
 
             ApplicationFormBuilder formBuilder = new ApplicationFormBuilder(existingNicknames, _discordFactory);
-            try {
+            try
+            {
                 ApplicationForm form = formBuilder.Create(formCommand.Nickname, formCommand.DateOfBirth, formCommand.Email)
                     .SetBiNickname(formCommand.BiNickname)
                     .SetSteamId(formCommand.SteamId)
@@ -41,11 +45,29 @@ namespace Roster.Core.Services
 
                 _storage.StoreApplicationForm(form);
                 _eventStore.Publish<ApplicationFormSubmitted>(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
-                
+
                 return Result.Ok();
-            } catch(ArgumentException ex) {
+            }
+            catch (ArgumentException ex)
+            {
                 return Result.Fail($"Application form validation failed. {ex.Message}.");
             }
         }
+
+        public void AcceptApplicationForm(MemberNickname nickname)
+        {
+            ApplicationForm applicationForm = _storage.GetByNickname(nickname);
+            applicationForm.Accept();
+            _storage.Save();
+            _eventStore.Publish(applicationForm.Events());
+        }
+
+        public void RejectApplicationForm(MemberNickname nickname, string comment)
+        {
+            ApplicationForm applicationForm = _storage.GetByNickname(nickname);
+            applicationForm.Reject(comment);
+            _storage.Save();
+            _eventStore.Publish(applicationForm.Events());
+        }        
     }
 }

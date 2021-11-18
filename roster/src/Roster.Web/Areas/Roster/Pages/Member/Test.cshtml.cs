@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Roster.Core.Domain;
 using Roster.Core.Events;
 using Roster.Core.Storage;
 
@@ -30,7 +31,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
         public IActionResult OnPost()
         {
             _logger.LogInformation("Accepting form for {nickname}", Nickname);
-            var applicationForm = _applicationStorage.GetByNickname(Nickname);
+            var applicationForm = _applicationStorage.GetByNickname(new MemberNickname(Nickname));
             var applicationFormAccepted = new ApplicationFormAccepted(applicationForm);
             _eventStore.Publish(applicationFormAccepted);
             return Page();

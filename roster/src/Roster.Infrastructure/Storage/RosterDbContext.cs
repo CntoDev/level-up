@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Roster.Core.Domain;
 
 namespace Roster.Infrastructure.Storage

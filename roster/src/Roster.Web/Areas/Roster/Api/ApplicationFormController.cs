@@ -37,7 +37,7 @@ namespace Roster.Web.Areas.Roster.Api
         {
             try
             {
-                ApplicationForm form = _applicationStorage.GetByNickname(nickname);
+                ApplicationForm form = _applicationStorage.GetByNickname(new MemberNickname(nickname));
 
                 if (form != null)
                     return Ok(form);

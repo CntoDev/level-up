@@ -18,10 +18,10 @@ namespace Roster.Infrastructure.Events
             _bus.Publish<T>(@event);
         }
 
-        void IEventStore.Publish<T>(IEnumerable<T> events)
+        void IEventStore.Publish(IEnumerable<IEvent> events)
         {
             foreach (var @event in events)
-                Publish(@event);
+                Publish((dynamic)@event);
         }
     }
 }

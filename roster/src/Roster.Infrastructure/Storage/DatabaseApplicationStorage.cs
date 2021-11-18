@@ -20,14 +20,19 @@ namespace Roster.Infrastructure.Storage
             _rosterDbContext.SaveChanges();
         }
 
+        public void Save()
+        {
+            _rosterDbContext.SaveChanges();
+        }
+
         public IEnumerable<ApplicationForm> GetAll()
         {
             return _rosterDbContext.ApplicationForms.ToList();
         }
 
-        public ApplicationForm GetByNickname(string nickname)
+        public ApplicationForm GetByNickname(MemberNickname nickname)
         {
-            return _rosterDbContext.ApplicationForms.Find(new MemberNickname(nickname));
+            return _rosterDbContext.ApplicationForms.Find(nickname);
         }
     }
 }
