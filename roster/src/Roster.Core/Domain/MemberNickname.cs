@@ -5,16 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace Roster.Core.Domain
 {
-    public class MemberNickname
+    public readonly struct MemberNickname
     {
-        public string Nickname { get; private set; }
+        public string Nickname { get; init; }
 
-        public MemberNickname(string nickname, bool existingMember)
+        public MemberNickname(string nickname)
         {
-            if(!existingMember) {
-                MemberNickname.Validate(nickname, validateLength: true);
-            }
-
+            Validate(nickname, validateLength: true);
             Nickname = nickname;
         }
 
@@ -48,5 +45,7 @@ namespace Roster.Core.Domain
 
             return true;
         }
+
+        public override string ToString() => Nickname;
     }
 }

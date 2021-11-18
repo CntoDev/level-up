@@ -1,0 +1,26 @@
+@page
+@model ListApplicationsModel
+
+<h1>List applications</h1>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nickname</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appForm in Model.ApplicationForms)
+            {
+                <tr>
+                    <td>@appForm.Nickname</td>
+                    <td>@appForm.Email</td>
+                    <td>Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -17,18 +17,15 @@ namespace Roster.Infrastructure.Storage
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            #region MemberNickname
-
-            var memberNicknameConverter = new ValueConverter<MemberNickname, string>(
-                mn => mn.Nickname,
-                v => new MemberNickname(v, true)
-            );
-
-            #endregion
-
             modelBuilder.Entity<ApplicationForm>()
                         .HasKey(af => af.Nickname);
-            
+
+            modelBuilder.Entity<ApplicationForm>()
+                        .Property(af => af.Nickname)
+                        .IsRequired()
+                        .HasConversion<string>(v => v.Nickname, v => new MemberNickname(v))
+                        .HasColumnName("Nickname");
+                        
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsMany<Arma3Dlc>(af => af.OwnedDlcs);
 
@@ -41,10 +38,6 @@ namespace Roster.Infrastructure.Storage
                         .OwnsOne<EmailAddress>(af => af.Gmail)
                         .Property(a => a.Email)
                         .HasColumnName("Gmail");
-
-            modelBuilder.Entity<ApplicationForm>()
-                        .Property(af => af.Nickname)
-                        .HasConversion(memberNicknameConverter);
 
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsOne<DiscordId>(af => af.DiscordId)

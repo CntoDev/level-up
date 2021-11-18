@@ -20,5 +20,7 @@ namespace Roster.Core.Domain
                 
             return true;
         }
+
+        public override string ToString() => Email;
     }
 }
