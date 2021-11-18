@@ -1,0 +1,40 @@
+@page
+@using Roster.Core.Domain
+@model DetailsModel
+@{
+    ApplicationForm form = Model.ApplicationForm;
+
+    string Format(string input) => string.IsNullOrWhiteSpace(input) ? "N/A" : input;
+}
+
+<h1>Details</h1>
+
+<dl>
+    <dt>Nickname</dt>
+    <dd>@form.Nickname</dd>
+    <dt>e-mail</dt>
+    <dd>@form.Email</dd>
+    <dt>Date of birth</dt>
+    <dd>@form.DateOfBirth.ToShortDateString()</dd>
+    <dt>Bohemia Interactive nickname</dt>
+    <dd>@Format(form.BiNickname)</dd>
+    <dt>Discord id</dt>
+    <dd>@Format(form.DiscordId?.ToString())</dd>
+    <dt>GitHub nickname</dt>
+    <dd>@Format(form.GithubNickname)</dd>
+    <dt>Google e-mail</dt>
+    <dd>@Format(form.Gmail?.ToString())</dd>
+    <dt>Steam username</dt>
+    <dd>@Format(form.SteamId)</dd>
+    <dt>Teamspeak id</dt>
+    <dd>@Format(form.TeamspeakId)</dd>
+</dl>
+
+<h2>Owned DLC</h2>
+
+<ul>
+    @foreach (var dlc in form.OwnedDlcs)
+    {
+        <li>@dlc.Name</li>
+    }
+</ul>

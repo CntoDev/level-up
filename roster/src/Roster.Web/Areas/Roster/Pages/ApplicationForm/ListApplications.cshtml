@@ -18,7 +18,7 @@
                 <tr>
                     <td>@appForm.Nickname</td>
                     <td>@appForm.Email</td>
-                    <td>Details</td>
+                    <td><a asp-area="Roster" asp-page="/ApplicationForm/Details" asp-route-nickname=@appForm.Nickname>Details</a></td>
                 </tr>
             }
         </tbody>

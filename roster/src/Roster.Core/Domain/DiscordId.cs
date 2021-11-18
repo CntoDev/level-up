@@ -8,5 +8,10 @@ namespace Roster.Core.Domain
         {
             Id = id;
         }
+
+        public override string ToString()
+        {
+            return Id;
+        }
     }
 }

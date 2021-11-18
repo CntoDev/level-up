@@ -27,7 +27,7 @@ namespace Roster.Infrastructure.Storage
 
         public ApplicationForm GetByNickname(string nickname)
         {
-            return _rosterDbContext.ApplicationForms.Find(nickname);
+            return _rosterDbContext.ApplicationForms.Find(new MemberNickname(nickname));
         }
     }
 }
