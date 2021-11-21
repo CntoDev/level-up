@@ -24,6 +24,7 @@ using Roster.Infrastructure.Configurations;
 using Roster.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Roster.Web.Security;
 
 namespace Roster.Web
 {
@@ -91,6 +92,8 @@ namespace Roster.Web
 
             services.AddMassTransitHostedService();
             services.AddScoped<IEventStore, EventStore>();
+
+            services.AddAuthorization(options => PolicyFactory.BuildPolicies(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

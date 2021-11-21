@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Roster.Core.Storage;
+using Roster.Web.Security;
 using Domain = Roster.Core.Domain;
 
 namespace Roster.Web.Areas.Roster.Pages.Member
 {
+    [Authorize(Policy = Policy.ViewMembers)]
     public class DetailsModel : PageModel
     {
         private readonly IMemberStorage _memberStorage;
