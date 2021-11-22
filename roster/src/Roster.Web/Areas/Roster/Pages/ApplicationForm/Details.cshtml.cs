@@ -1,14 +1,17 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Roster.Core.Domain;
 using Roster.Core.Services;
 using Roster.Core.Storage;
+using Roster.Web.Security;
 using Domain = Roster.Core.Domain;
 
 namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 {
+    [Authorize(Policy = Policy.AcceptMembers)]
     public class DetailsModel : PageModel
     {
         private readonly IApplicationStorage _storage;
@@ -37,7 +40,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
             ApplicationForm = _storage.GetByNickname(new Domain.MemberNickname(nickname));
             return Page();
         }
-
+        
         public IActionResult OnPostAccept()
         {
             _service.AcceptApplicationForm(new MemberNickname(Nickname));

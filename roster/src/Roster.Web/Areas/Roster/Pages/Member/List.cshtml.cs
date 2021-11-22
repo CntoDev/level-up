@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Roster.Core.Storage;
+using Roster.Web.Security;
 using Domain = Roster.Core.Domain;
 
 namespace Roster.Web.Areas.Roster.Pages.Member
 {
+    [Authorize(Policy = Policy.ViewMembers)]
     public class ListModel : PageModel
     {
         private const int PageSize = 20;
