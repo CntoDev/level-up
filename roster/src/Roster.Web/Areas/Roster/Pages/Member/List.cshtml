@@ -3,15 +3,12 @@
 
 <h1>Members</h1>
 
-<div class="row mb-2">
+<div class="col-md-4 mb-2">
     <form method="post">
-        <div class="mb-1">
-            <label asp-for="FilterName" class="form-label">Nickname</label>
+        <div class="input-group">
             <input asp-for="FilterName" class="form-control" placeholder="Search by nickname...">
-        </div>
-        <div class="mb-1">
-            <input type="submit" value="Search" class="btn btn-primary" />
-        </div>
+            <input type="submit" value="Search" class="btn btn-outline-secondary" />
+        </div>        
     </form>
 </div>
 
@@ -33,18 +30,18 @@
     </table>
     <nav>
         <ul class="pagination">
-            @if(@Model.Results.HasNextPage) {
+            @if(@Model.Results.HasPreviousPage) {
                 <li class="page-item">
                     <a class="page-link" asp-area="Roster" asp-page="/Member/List" asp-route-pageindex="@(Model.Results.PageIndex-1)"
                     asp-route-filtername="@Model.FilterName">Previous</a>
                 </li>
             }
-            @if(@Model.Results.HasPreviousPage) {
+            @if(@Model.Results.HasNextPage) {
                 <li class="page-item"><a class="page-link" asp-area="Roster" asp-page="/Member/List"
                     asp-route-pageindex="@(Model.Results.PageIndex+1)" asp-route-filtername="@Model.FilterName">Next</a>
                 </li>
             }
         </ul>
-        <p>Page @Model.Results.PageIndex of @Model.Results.TotalPages. Total @Model.Results.Count results.</p>
+        <p>Page @Model.Results.PageIndex of @Model.Results.TotalPages.</p>
     </nav>
 </div>

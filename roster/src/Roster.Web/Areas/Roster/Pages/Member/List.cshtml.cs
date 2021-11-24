@@ -10,7 +10,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
     [Authorize(Policy = Policy.ViewMembers)]
     public class ListModel : PageModel
     {
-        private const int PageSize = 20;
+        private const int PageSize = 10;
 
         private readonly IMemberStorage _memberStorage;
 
