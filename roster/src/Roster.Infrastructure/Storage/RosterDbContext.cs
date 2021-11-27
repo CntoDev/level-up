@@ -14,6 +14,8 @@ namespace Roster.Infrastructure.Storage
 
         public DbSet<Member> Members { get; set; }
 
+        public DbSet<Dlc> Dlcs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationForm>()
@@ -64,6 +66,15 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<Member>()
                         .Property("_emailVerified")
                         .HasColumnName("EmailVerified");
+
+            modelBuilder.Entity<Dlc>()
+                        .HasKey(d => d.DlcName);
+
+            modelBuilder.Entity<Dlc>()
+                        .Property(d => d.DlcName)
+                        .IsRequired()
+                        .HasConversion<string>(dlc => dlc.Name, name => new DlcName(name))
+                        .HasColumnName("Name");
         }
     }
 }

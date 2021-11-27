@@ -6,23 +6,10 @@ using Roster.Core.Storage;
 
 namespace Roster.Infrastructure.Storage
 {
-    public class DatabaseMemberStorage : IMemberStorage
+    public class DatabaseMemberStorage: Storage<Member>, IMemberStorage
     {
-        private readonly RosterDbContext _rosterDbContext;
-
-        public DatabaseMemberStorage(RosterDbContext rosterDbContext)
+        public DatabaseMemberStorage(RosterDbContext rosterDbContext) : base(rosterDbContext)
         {
-            _rosterDbContext = rosterDbContext;
-        }
-
-        public void Add(Member member)
-        {
-            _rosterDbContext.Add(member);
-        }
-
-        public Member Find(object key)
-        {
-            return _rosterDbContext.Members.Find(key);
         }
 
         public ICollection<string> GetAllNicknames()
@@ -36,21 +23,6 @@ namespace Roster.Infrastructure.Storage
             var orderedMembers = filteredMembers.OrderBy(orderKeySelector).AsQueryable();
 
             return PaginatedList<Member>.Create(orderedMembers, page, pageSize);
-        }
-
-        public void Remove(Member member)
-        {
-            _rosterDbContext.Members.Remove(member);
-        }
-
-        public void Save()
-        {
-            _rosterDbContext.SaveChanges();
-        }
-
-        public IEnumerable<Member> Search(ISpecification<Member> specification)
-        {
-            return _rosterDbContext.Members.Where(specification.Predicate);
         }
     }
 }
