@@ -77,7 +77,7 @@ namespace Roster.Core
             return this;
         }
 
-        public ApplicationFormBuilder SetOwnedDlcs(ICollection<Arma3Dlc> dlcs)
+        public ApplicationFormBuilder SetOwnedDlcs(ICollection<OwnedDlc> dlcs)
         {
             _applicationForm.OwnedDlcs = dlcs;
 

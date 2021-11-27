@@ -15,7 +15,7 @@ namespace Roster.Core.Domain
         public string GithubNickname { get; set; }
         public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
-        public ICollection<Arma3Dlc> OwnedDlcs { get; set; }
+        public ICollection<OwnedDlc> OwnedDlcs { get; set; }
         public bool Accepted { get; private set; }
         public string InterviewerComment { get; private set; }
 

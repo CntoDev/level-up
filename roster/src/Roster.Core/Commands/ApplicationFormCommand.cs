@@ -15,7 +15,7 @@ namespace Roster.Core.Commands
         public string GithubNickname { get; set; }
         public string DiscordId { get; set; }
         public string TeamspeakId { get; set; }
-        public ICollection<Arma3Dlc> OwnedDlcs { get; set; }
+        public ICollection<OwnedDlc> OwnedDlcs { get; set; }
 
         public ApplicationFormCommand(string nickname, DateTime dateOfBirth, string email)
         {

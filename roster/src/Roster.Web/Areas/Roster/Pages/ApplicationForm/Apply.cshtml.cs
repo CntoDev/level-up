@@ -20,13 +20,13 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         private string[] _dlcNames = { "Karts", "Helicopters", "Marksmen", "Apex", "Jets", "Malden", "Laws of War", "Tac-Ops", "Tanks", "Contact", "Art of War", "CSLA: Iron Curtain", "Global Mobilization", "S.O.G. Prairie Fire" };
         private readonly ApplicationFormService _rosterCoreService;
         private readonly ILogger<ApplyModel> _logger;
-        private ICollection<Arma3Dlc> _ownedDlcs;
+        private ICollection<OwnedDlc> _ownedDlcs;
 
         public ApplyModel(ApplicationFormService rosterCoreService, ILogger<ApplyModel> logger)
         {
             _rosterCoreService = rosterCoreService;
             _logger = logger;
-            _ownedDlcs = new List<Arma3Dlc>();
+            _ownedDlcs = new List<OwnedDlc>();
 
             Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
         }
@@ -82,7 +82,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
             }
             set
             {
-                _ownedDlcs = value.Select(x => new Arma3Dlc() { Name = x })
+                _ownedDlcs = value.Select(x => new OwnedDlc() { Name = x })
                                   .ToList();
             }
         }
