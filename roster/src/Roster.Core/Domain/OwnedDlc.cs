@@ -1,6 +1,6 @@
 namespace Roster.Core.Domain
 {
-    public class Arma3Dlc
+    public class OwnedDlc
     {
         public string Name { get; set; }
     }

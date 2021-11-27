@@ -26,7 +26,7 @@ namespace Roster.Infrastructure.Storage
                         .HasColumnName("Nickname");
                         
             modelBuilder.Entity<ApplicationForm>()
-                        .OwnsMany<Arma3Dlc>(af => af.OwnedDlcs);
+                        .OwnsMany<OwnedDlc>(af => af.OwnedDlcs);
 
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsOne<EmailAddress>(af => af.Email)
