@@ -9,5 +9,6 @@ namespace Roster.Core.Storage
         T Find(object key);
         IEnumerable<T> Search(ISpecification<T> specification);
         void Save();
+        IEnumerable<T> All();
     }
 }

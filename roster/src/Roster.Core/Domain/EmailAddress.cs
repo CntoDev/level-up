@@ -16,7 +16,8 @@ namespace Roster.Core.Domain
         // Validate email address format.
         public static bool Validate(string email)
         {
-            new MailAddress(email);
+            if (!string.IsNullOrEmpty(email))
+                new MailAddress(email);
                 
             return true;
         }

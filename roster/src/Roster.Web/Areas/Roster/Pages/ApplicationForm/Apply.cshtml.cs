@@ -11,24 +11,28 @@ using System.Collections.Generic;
 using Roster.Core.Domain;
 using Roster.Web.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Roster.Core.Storage;
 
 namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 {
     [AllowAnonymous]
     public class ApplyModel : PageModel
     {
-        private string[] _dlcNames = { "Karts", "Helicopters", "Marksmen", "Apex", "Jets", "Malden", "Laws of War", "Tac-Ops", "Tanks", "Contact", "Art of War", "CSLA: Iron Curtain", "Global Mobilization", "S.O.G. Prairie Fire" };
+        private string[] _dlcNames;
         private readonly ApplicationFormService _rosterCoreService;
+        private readonly IDlcStorage _dlcStorage;
         private readonly ILogger<ApplyModel> _logger;
         private ICollection<OwnedDlc> _ownedDlcs;
 
-        public ApplyModel(ApplicationFormService rosterCoreService, ILogger<ApplyModel> logger)
+        public ApplyModel(
+            ApplicationFormService rosterCoreService,
+            IDlcStorage dlcStorage,
+            ILogger<ApplyModel> logger)
         {
             _rosterCoreService = rosterCoreService;
+            _dlcStorage = dlcStorage;
             _logger = logger;
             _ownedDlcs = new List<OwnedDlc>();
-
-            Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
         }
 
         [Required]
@@ -92,6 +96,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         public IActionResult OnGet()
         {
             DateOfBirth = DateTime.Now.Date;
+            FetchLinkedData();
             return Page();
         }
 
@@ -124,7 +129,14 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 
             }
 
+            FetchLinkedData();
             return Page();
+        }
+    
+        private void FetchLinkedData()
+        {
+            _dlcNames = _dlcStorage.All().Select(dlc => dlc.DlcName.Name).ToArray();
+            Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
         }
     }
 }
