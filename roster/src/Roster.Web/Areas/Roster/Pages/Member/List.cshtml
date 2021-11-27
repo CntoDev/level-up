@@ -23,7 +23,7 @@
             @foreach (var member in Model.Results)
             {
                 <tr>
-                    <td>@member.Nickname</td>
+                    <td><a asp-area="Roster" asp-page="/Member/Details" asp-route-nickname="@member.Nickname">@member.Nickname</a></td>
                 </tr>
             }
         </tbody>
