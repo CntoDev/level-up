@@ -4,6 +4,5 @@ COPY . /app
 WORKDIR /app
 
 EXPOSE 80
-EXPOSE 443
 
 ENTRYPOINT ["dotnet", "Roster.Web.dll"]
