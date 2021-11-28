@@ -121,6 +121,28 @@ namespace Roster.Web
                 app.UseHsts();
             }
 
+            // Location enforcing to https if https request because of http issues on production server (something is blocking http traffic)
+            app.Use(async (context, next) => {
+                context.Response.OnStarting(() => {
+                    int statusCode = context.Response.StatusCode;
+
+                    if (statusCode == 301 || statusCode == 302) {
+                        string locationUrl = context.Response.Headers["Location"];
+                        Log.Information($"Redirecting scheme {context.Request.Scheme} to {locationUrl}");
+
+                        if (locationUrl.Contains("http:")) {
+                            locationUrl = locationUrl.Replace("http:","https:");
+                            Log.Warning($"Fixing scheme to {locationUrl}");
+                            context.Response.Headers["Location"] = locationUrl;
+                        }
+                    }
+
+                    return Task.CompletedTask;
+                });
+
+                await next.Invoke();
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
