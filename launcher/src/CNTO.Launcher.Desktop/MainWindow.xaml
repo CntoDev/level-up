@@ -28,6 +28,7 @@
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
             <CheckBox Content="Global Mobilization" Margin="4" IsChecked="{Binding Source={StaticResource ResourceKey=Repo}, Path=GM, Mode=TwoWay}" />
             <CheckBox Content="Praerie Fire" Margin="4" IsChecked="{Binding Source={StaticResource ResourceKey=Repo}, Path=VN, Mode=TwoWay}" />
+            <CheckBox Content="CSLA" Margin="4" IsChecked="{Binding Source={StaticResource ResourceKey=Repo}, Path=CSLA, Mode=TwoWay}" />
         </StackPanel>        
         <ListView Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource ResourceKey=Repo}, Path=All}">
             <ListView.View>

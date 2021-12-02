@@ -29,6 +29,8 @@ namespace UI.Source
 
         public bool VN { get; set; }
 
+        public bool CSLA { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void Load(IRepositoryCollection collection)
