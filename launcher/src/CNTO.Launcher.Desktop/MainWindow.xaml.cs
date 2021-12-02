@@ -65,6 +65,9 @@ namespace UI
             if (_repositories.VN)
                 dlcs.Add(new Dlc("vn"));
 
+            if (_repositories.CSLA)
+                dlcs.Add(new Dlc("csla"));
+
             Task.Run(() => _launcherService.StartServerAsync(selectedMods.Select(s => new RepositoryId(s)), dlcs, headlessClients));
         }
     
