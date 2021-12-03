@@ -19,7 +19,7 @@ namespace Roster.Core.Events
             SteamId = applicationForm.SteamId;
             Gmail = applicationForm.Gmail.Email;
             GithubNickname = applicationForm.GithubNickname;
-            DiscordId = applicationForm.DiscordId.Id;
+            DiscordId = applicationForm.DiscordId?.Id;
             TeamspeakId = applicationForm.TeamspeakId;            
         }
 

@@ -33,6 +33,8 @@ namespace Roster.Core.Domain
 
         public string TeamspeakId { get; set; }
 
+        public RankId RankId { get; private set; }
+
         public bool EmailVerified => _emailVerified;
 
         public void ChallengeEmail(string verificationCode)
@@ -56,6 +58,17 @@ namespace Roster.Core.Domain
             }
 
             return false;
+        }
+
+        public void Promote(object recruit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Promote(RankId rankId)
+        {
+            RankId = rankId;
+            Publish(new MemberPromoted(Nickname, RankId.Id));
         }
     }
 }

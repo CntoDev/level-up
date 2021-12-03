@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Roster.Infrastructure.Storage;
@@ -9,9 +10,10 @@ using Roster.Infrastructure.Storage;
 namespace Roster.Web.Migrations.RosterDb
 {
     [DbContext(typeof(RosterDbContext))]
-    partial class RosterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211203185731_PromoteMember")]
+    partial class PromoteMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,18 +119,15 @@ namespace Roster.Web.Migrations.RosterDb
 
             modelBuilder.Entity("Roster.Core.Domain.Rank", b =>
                 {
-                    b.Property<int>("_id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("Id")
                         .HasColumnType("integer")
-                        .HasColumnName("Id")
-                        .HasIdentityOptions(1L, null, null, null, null, null)
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnName("Id");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("_id");
+                    b.HasKey("Id");
 
                     b.ToTable("Ranks");
                 });

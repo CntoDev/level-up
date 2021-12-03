@@ -1,0 +1,11 @@
+﻿START TRANSACTION;
+
+CREATE SEQUENCE "RankId" AS integer START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE NO CYCLE;
+
+ALTER TABLE "Ranks" ALTER COLUMN "Id" SET DEFAULT (nextval('"RankId"'));
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20211203191714_PromoteMember2', '5.0.9');
+
+COMMIT;
+

@@ -33,9 +33,11 @@ namespace Roster.Infrastructure.Consumers
                 GithubNickname = message.GithubNickname,
                 Gmail = message.Gmail,
                 SteamId = message.SteamId,
-                TeamspeakId = message.TeamspeakId
+                TeamspeakId = message.TeamspeakId,                
             };
 
+            member.Promote(RankId.Recruit);
+            
             _memberStorage.Add(member);
             _memberStorage.Save();
             _eventStore.Publish(new MemberCreated(message.Nickname, message.Email));

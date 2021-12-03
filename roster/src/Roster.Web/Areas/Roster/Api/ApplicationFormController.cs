@@ -53,7 +53,7 @@ namespace Roster.Web.Areas.Roster.Api
 
         [HttpPost]
         [Route("application-forms/submit")]
-        public IActionResult PostApplicationForm([FromBody]ApplicationFormCommand command)
+        public IActionResult SubmitApplicationForm([FromBody]ApplicationFormCommand command)
         {
             var result = _applicationService.SubmitApplicationForm(command);
 
@@ -62,5 +62,21 @@ namespace Roster.Web.Areas.Roster.Api
 
             return Problem(result.ToString());
         }
+
+        [HttpPost]
+        [Route("application-forms/accept")]
+        public IActionResult AcceptApplicationForm(AcceptApplicationFormCommand command)
+        {
+            _applicationService.AcceptApplicationForm(new MemberNickname(command.Nickname));
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("application-forms/reject")]
+        public IActionResult RejectApplicationForm(RejectApplicationFormCommand command)
+        {
+            _applicationService.RejectApplicationForm(new MemberNickname(command.Nickname), command.Reason);
+            return Ok();
+        }        
     }
 }

@@ -16,6 +16,8 @@ namespace Roster.Infrastructure.Storage
 
         public DbSet<Dlc> Dlcs { get; set; }
 
+        public DbSet<Rank> Ranks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationForm>()
@@ -67,6 +69,11 @@ namespace Roster.Infrastructure.Storage
                         .Property("_emailVerified")
                         .HasColumnName("EmailVerified");
 
+            modelBuilder.Entity<Member>()
+                        .Property(m => m.RankId)
+                        .HasConversion<int>(rank => rank.Id, id => new RankId(id))
+                        .HasColumnName("RankId");
+
             modelBuilder.Entity<Dlc>()
                         .HasKey(d => d.DlcName);
 
@@ -75,6 +82,19 @@ namespace Roster.Infrastructure.Storage
                         .IsRequired()
                         .HasConversion<string>(dlc => dlc.Name, name => new DlcName(name))
                         .HasColumnName("Name");
+
+            modelBuilder.Entity<Rank>()
+                        .HasKey("_id");
+
+            modelBuilder.Entity<Rank>()
+                        .Property("_id")
+                        .IsRequired()
+                        .HasColumnName("Id")
+                        .HasIdentityOptions(startValue: 1);
+
+            modelBuilder.Entity<Rank>()
+                        .Property(r => r.Name)
+                        .IsRequired();
         }
     }
 }
