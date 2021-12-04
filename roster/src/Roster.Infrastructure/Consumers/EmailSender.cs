@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using MassTransit;
+using Roster.Core.Domain;
 using Roster.Core.Events;
 using Roster.Core.Storage;
 using Roster.Infrastructure.Configurations;
@@ -9,10 +10,10 @@ namespace Roster.Infrastructure.Consumers
     public class EmailSender : IConsumer<MemberCreated>, IConsumer<ApplicationFormRejected>, IConsumer<ApplicationFormSubmitted>
     {
         private readonly EmailService _emailService;
-        private readonly IMemberStorage _memberStorage;
+        private readonly IStorage<Member> _memberStorage;
         private readonly IEventStore _eventStore;
 
-        public EmailSender(MailJetOptions options, IMemberStorage memberStorage, IEventStore eventStore, EmailService emailVerificationService)
+        public EmailSender(MailJetOptions options, IStorage<Member> memberStorage, IEventStore eventStore, EmailService emailVerificationService)
         {
             _memberStorage = memberStorage;
             _emailService = emailVerificationService;

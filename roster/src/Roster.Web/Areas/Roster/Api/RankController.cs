@@ -10,9 +10,9 @@ namespace Roster.Web.Areas.Roster.Api
     [ApiController]
     public class RankController : ControllerBase
     {
-        private readonly IRankStorage _rankStorage;
+        private readonly IStorage<Rank> _rankStorage;
 
-        public RankController(IRankStorage rankStorage)
+        public RankController(IStorage<Rank> rankStorage)
         {
             _rankStorage = rankStorage;
         }

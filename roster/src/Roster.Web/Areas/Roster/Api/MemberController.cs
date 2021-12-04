@@ -13,14 +13,14 @@ namespace Roster.Web.Areas.Roster.Api
     [ApiController]
     public class MemberController : ControllerBase
     {
-        private readonly IMemberStorage _memberStorage;
-        private readonly IRankStorage _rankStorage;
+        private readonly IStorage<Member> _memberStorage;
+        private readonly IQuerySource _querySource;
         private readonly MemberService _memberService;
 
-        public MemberController(IMemberStorage memberStorage, IRankStorage rankStorage, MemberService memberService)
+        public MemberController(IStorage<Member> memberStorage, IQuerySource querySource, MemberService memberService)
         {
             _memberStorage = memberStorage;
-            _rankStorage = rankStorage;
+            _querySource = querySource;
             _memberService = memberService;
         }
 
@@ -28,18 +28,14 @@ namespace Roster.Web.Areas.Roster.Api
         [Route("members")]
         public IActionResult GetMembers()
         {
-            var members = from m in _memberStorage.All().ToList()
-                          join r in _rankStorage.All().ToList()
+            var members = from m in _querySource.Members.ToList()
+                          join r in _querySource.Ranks.ToList()
                           on m.RankId equals r.Id into rank
                           from item in rank.DefaultIfEmpty()
                           select new
                           {
                               Member = m,
-                              Rank = new
-                              {
-                                  Id = item?.Id.Id,
-                                  Name = item?.Name
-                              }
+                              Rank = item
                           };
 
             return Ok(members);

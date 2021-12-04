@@ -4,33 +4,34 @@ using Roster.Core.Storage;
 using FluentResults;
 using System;
 using Roster.Core.Events;
+using System.Linq;
 
 namespace Roster.Core.Services
 {
     public class ApplicationFormService
     {
-        private IApplicationStorage _storage;
-        private IMemberStorage _memberStorage;
+        private IQuerySource _querySource;
+        private IStorage<ApplicationForm> _storage;
         private IEventStore _eventStore;
 
         private DiscordIdFactory _discordFactory;
 
-        public ApplicationFormService(IApplicationStorage applicationStorage,
-                                      IMemberStorage memberStorage,
+        public ApplicationFormService(IQuerySource querySource,
+                                      IStorage<ApplicationForm> storage,
                                       IEventStore eventStore,
                                       IDiscordValidationService discordValidator)
         {
-            _storage = applicationStorage;
-            _memberStorage = memberStorage;
+            _querySource = querySource;
+            _storage = storage;
             _eventStore = eventStore;
             _discordFactory = new DiscordIdFactory(discordValidator);
         }
 
         public Result SubmitApplicationForm(ApplicationFormCommand formCommand)
         {
-            var existingNicknames = _memberStorage.GetAllNicknames();
-
+            var existingNicknames = _querySource.Members.Select(m => m.Nickname).ToList();
             ApplicationFormBuilder formBuilder = new ApplicationFormBuilder(existingNicknames, _discordFactory);
+
             try
             {
                 ApplicationForm form = formBuilder.Create(formCommand.Nickname, formCommand.DateOfBirth, formCommand.Email)
@@ -43,7 +44,8 @@ namespace Roster.Core.Services
                     .SetOwnedDlcs(formCommand.OwnedDlcs)
                     .Build();
 
-                _storage.StoreApplicationForm(form);
+                _storage.Add(form);
+                _storage.Save();
                 _eventStore.Publish<ApplicationFormSubmitted>(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
 
                 return Result.Ok();
@@ -56,7 +58,7 @@ namespace Roster.Core.Services
 
         public void AcceptApplicationForm(MemberNickname nickname)
         {
-            ApplicationForm applicationForm = _storage.GetByNickname(nickname);
+            ApplicationForm applicationForm = _storage.Find(nickname);
             applicationForm.Accept();
             _storage.Save();
             _eventStore.Publish(applicationForm.Events());
@@ -64,7 +66,7 @@ namespace Roster.Core.Services
 
         public void RejectApplicationForm(MemberNickname nickname, string comment)
         {
-            ApplicationForm applicationForm = _storage.GetByNickname(nickname);
+            ApplicationForm applicationForm = _storage.Find(nickname);
             applicationForm.Reject(comment);
             _storage.Save();
             _eventStore.Publish(applicationForm.Events());

@@ -10,9 +10,9 @@ namespace Roster.Web.Areas.Roster.Pages.Member
     [Authorize(Policy = Policy.ViewMembers)]
     public class DetailsModel : PageModel
     {
-        private readonly IMemberStorage _memberStorage;
+        private readonly IStorage<Domain.Member> _memberStorage;
 
-        public DetailsModel(IMemberStorage memberStorage)
+        public DetailsModel(IStorage<Domain.Member> memberStorage)
         {
             _memberStorage = memberStorage;
         }

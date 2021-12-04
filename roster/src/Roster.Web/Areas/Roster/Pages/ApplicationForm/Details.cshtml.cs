@@ -14,11 +14,11 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
     [Authorize(Policy = Policy.AcceptMembers)]
     public class DetailsModel : PageModel
     {
-        private readonly IApplicationStorage _storage;
+        private readonly IStorage<Domain.ApplicationForm> _storage;
         private readonly ApplicationFormService _service;
         private readonly ILogger<DetailsModel> _logger;
 
-        public DetailsModel(IApplicationStorage storage, ApplicationFormService service, ILogger<DetailsModel> logger)
+        public DetailsModel(IStorage<Domain.ApplicationForm> storage, ApplicationFormService service, ILogger<DetailsModel> logger)
         {
             _storage = storage;
             _service = service;
@@ -37,7 +37,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         public IActionResult OnGet(string nickname)
         {
             Nickname = nickname;
-            ApplicationForm = _storage.GetByNickname(new Domain.MemberNickname(nickname));
+            ApplicationForm = _storage.QueryOne(f => f.Nickname.Equals(new MemberNickname(nickname)));
             return Page();
         }
         

@@ -11,9 +11,9 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
     [Authorize(Policy = Policy.ViewApplications)]
     public class ListApplicationsModel : PageModel
     {
-        private readonly IApplicationStorage _storage;
+        private readonly IStorage<Domain.ApplicationForm> _storage;
 
-        public ListApplicationsModel(IApplicationStorage storage)
+        public ListApplicationsModel(IStorage<Domain.ApplicationForm> storage)
         {
             _storage = storage;
         }
@@ -22,7 +22,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 
         public IActionResult OnGet()
         {
-            ApplicationForms = _storage.GetAll();
+            ApplicationForms = _storage.All();
             return Page();
         }
     }

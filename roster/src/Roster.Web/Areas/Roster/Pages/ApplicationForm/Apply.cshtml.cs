@@ -20,17 +20,17 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
     {
         private string[] _dlcNames;
         private readonly ApplicationFormService _rosterCoreService;
-        private readonly IDlcStorage _dlcStorage;
+        private readonly IQuerySource _querySource;
         private readonly ILogger<ApplyModel> _logger;
         private ICollection<OwnedDlc> _ownedDlcs;
 
         public ApplyModel(
             ApplicationFormService rosterCoreService,
-            IDlcStorage dlcStorage,
+            IQuerySource querySource,
             ILogger<ApplyModel> logger)
         {
             _rosterCoreService = rosterCoreService;
-            _dlcStorage = dlcStorage;
+            _querySource = querySource;
             _logger = logger;
             _ownedDlcs = new List<OwnedDlc>();
         }
@@ -135,7 +135,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
     
         private void FetchLinkedData()
         {
-            _dlcNames = _dlcStorage.All().Select(dlc => dlc.DlcName.Name).ToArray();
+            _dlcNames = _querySource.Dlcs.Select(dlc => dlc.DlcName.Name).ToArray();
             Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
         }
     }

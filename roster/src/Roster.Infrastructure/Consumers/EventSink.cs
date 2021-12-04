@@ -12,9 +12,9 @@ namespace Roster.Infrastructure.Consumers
         IConsumer<ApplicationFormAccepted>, IConsumer<ApplicationFormRejected>, IConsumer<ApplicationFormSubmitted>, IConsumer<EmailChallenged>,
         IConsumer<MemberCreated>, IConsumer<MemberEmailVerified>, IConsumer<MemberPromoted>
     {
-        private readonly IEventStateStorage _storage;
+        private readonly IStorage<EventState> _storage;
 
-        public EventSink(IEventStateStorage storage)
+        public EventSink(IStorage<EventState> storage)
         {
             _storage = storage;
         }

@@ -10,14 +10,14 @@ namespace Roster.Core.Services
 {
     public class MemberService
     {
-        private readonly IMemberStorage _memberStorage;
-        private readonly IRankStorage _rankStorage;
+        private readonly IStorage<Member> _memberStorage;
+        private readonly IQuerySource _querySource;
         private readonly IEventStore _eventStore;
 
-        public MemberService(IMemberStorage memberStorage, IRankStorage rankStorage, IEventStore eventStore)
+        public MemberService(IStorage<Member> memberStorage, IQuerySource querySource, IEventStore eventStore)
         {
             _memberStorage = memberStorage;
-            _rankStorage = rankStorage;
+            _querySource = querySource;
             _eventStore = eventStore;
         }
 
@@ -40,7 +40,9 @@ namespace Roster.Core.Services
         {
             try {
                 Member member = _memberStorage.Find(promoteMemberCommand.Nickname);
-                Rank rank = _rankStorage.Find(promoteMemberCommand.RankId);
+                RankId rankId = new RankId(promoteMemberCommand.RankId);
+                Rank rank = _querySource.Ranks.ToList().First(r => r.Id.Equals(rankId));
+                
                 member.Promote(rank.Id);
                 _memberStorage.Save();
                 _eventStore.Publish(member.Events());

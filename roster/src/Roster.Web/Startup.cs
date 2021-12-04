@@ -60,12 +60,9 @@ namespace Roster.Web
             services.AddRazorPages();
 
             // Roster Core registrations here
-            services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
-            services.AddScoped<IMemberStorage, DatabaseMemberStorage>();
-            services.AddScoped<IRankStorage, DatabaseRankStorage>();
-            services.AddScoped<IDlcStorage, DatabaseDlcStorage>();
-            services.AddScoped<IEventStateStorage, DatabaseEventStateStorage>();
-            
+            services.AddScoped<IQuerySource, RosterDbContext>();
+            services.AddScoped(typeof(IStorage<>), typeof(Storage<>));
+
             services.AddScoped<IDiscordValidationService, DummyDiscordValidationService>();
             services.AddScoped<ApplicationFormService>();
             services.AddScoped<MemberService>();

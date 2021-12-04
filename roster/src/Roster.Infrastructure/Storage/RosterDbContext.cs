@@ -1,9 +1,11 @@
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Roster.Core.Domain;
+using Roster.Core.Storage;
 
 namespace Roster.Infrastructure.Storage
 {
-    public class RosterDbContext : DbContext
+    public class RosterDbContext : DbContext, IQuerySource
     {
         public RosterDbContext(DbContextOptions<RosterDbContext> options) : base(options)
         {
@@ -19,6 +21,16 @@ namespace Roster.Infrastructure.Storage
         public DbSet<Rank> Ranks { get; set; }
 
         public DbSet<EventState> EventStates { get; set; }
+
+        IQueryable<ApplicationForm> IQuerySource.ApplicationForms => ApplicationForms;
+
+        IQueryable<Member> IQuerySource.Members => Members;
+
+        IQueryable<Rank> IQuerySource.Ranks => Ranks;
+
+        IQueryable<Dlc> IQuerySource.Dlcs => Dlcs;
+
+        IQueryable<EventState> IQuerySource.EventStates => EventStates;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

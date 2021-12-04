@@ -12,9 +12,9 @@ namespace Roster.Web.Areas.Roster.Pages.Member
     {
         private const int PageSize = 10;
 
-        private readonly IMemberStorage _memberStorage;
+        private readonly IStorage<Domain.Member> _memberStorage;
 
-        public ListModel(IMemberStorage memberStorage)
+        public ListModel(IStorage<Domain.Member> memberStorage)
         {
             _memberStorage = memberStorage;
         }

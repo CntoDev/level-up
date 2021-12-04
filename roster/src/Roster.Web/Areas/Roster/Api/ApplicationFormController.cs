@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,11 +14,11 @@ namespace Roster.Web.Areas.Roster.Api
     [ApiController]
     public class ApplicationFormController : ControllerBase
     {
-        private readonly IApplicationStorage _applicationStorage;
+        private readonly IStorage<ApplicationForm> _applicationStorage;
         private readonly ILogger<ApplicationFormController> _logger;
         private readonly ApplicationFormService _applicationService;
 
-        public ApplicationFormController(IApplicationStorage applicationStorage, ILogger<ApplicationFormController> logger, ApplicationFormService service)
+        public ApplicationFormController(IStorage<ApplicationForm> applicationStorage, ILogger<ApplicationFormController> logger, ApplicationFormService service)
         {
             _applicationStorage = applicationStorage;
             _logger = logger;
@@ -28,7 +29,7 @@ namespace Roster.Web.Areas.Roster.Api
         [Route("application-forms")]
         public IEnumerable<ApplicationForm> GetApplicationForms()
         {
-            return _applicationStorage.GetAll();
+            return _applicationStorage.All();
         }
 
         [HttpGet]
@@ -37,7 +38,7 @@ namespace Roster.Web.Areas.Roster.Api
         {
             try
             {
-                ApplicationForm form = _applicationStorage.GetByNickname(new MemberNickname(nickname));
+                ApplicationForm form = _applicationStorage.QueryOne(f => f.Nickname.Equals(new MemberNickname(nickname)));
 
                 if (form != null)
                     return Ok(form);
