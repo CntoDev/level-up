@@ -18,6 +18,8 @@ namespace Roster.Infrastructure.Storage
 
         public DbSet<Rank> Ranks { get; set; }
 
+        public DbSet<EventState> EventStates { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ApplicationForm>()
@@ -95,6 +97,9 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<Rank>()
                         .Property(r => r.Name)
                         .IsRequired();
+
+            modelBuilder.Entity<EventState>()
+                        .HasKey(es => es.Id);
         }
     }
 }

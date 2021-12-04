@@ -63,8 +63,10 @@ namespace Roster.Web
             services.AddScoped<IApplicationStorage, DatabaseApplicationStorage>();
             services.AddScoped<IMemberStorage, DatabaseMemberStorage>();
             services.AddScoped<IRankStorage, DatabaseRankStorage>();
-            services.AddScoped<IDiscordValidationService, DummyDiscordValidationService>();
             services.AddScoped<IDlcStorage, DatabaseDlcStorage>();
+            services.AddScoped<IEventStateStorage, DatabaseEventStateStorage>();
+            
+            services.AddScoped<IDiscordValidationService, DummyDiscordValidationService>();
             services.AddScoped<ApplicationFormService>();
             services.AddScoped<MemberService>();
 
@@ -92,6 +94,7 @@ namespace Roster.Web
 
                 x.AddConsumer<MemberCreationConsumer>();
                 x.AddConsumer<EmailSender>();
+                x.AddConsumer<EventSink>();
             });
 
             services.AddMassTransitHostedService();

@@ -1,7 +1,4 @@
 using System.Threading.Tasks;
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using Mailjet.Client.TransactionalEmails;
 using MassTransit;
 using Roster.Core.Events;
 using Roster.Core.Storage;
