@@ -12,6 +12,6 @@ namespace Roster.Infrastructure.Configurations
 
         public string Subject { get; set; }
 
-        public object BaseUrl { get; set; }
+        public string BaseUrl { get; set; }
     }
 }
