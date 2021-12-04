@@ -51,5 +51,13 @@ namespace Roster.Core.Services
                 return Result.Fail(ex.Message);
             }
         }
+
+        public void AcceptMember(ApplicationFormAccepted message)
+        {
+            Member member = Member.Accept(message);
+            _memberStorage.Add(member);
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }        
     }
 }

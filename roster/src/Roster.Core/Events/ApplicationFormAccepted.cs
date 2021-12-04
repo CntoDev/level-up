@@ -17,7 +17,7 @@ namespace Roster.Core.Events
             Email = applicationForm.Email.Email;
             BiNickname = applicationForm.BiNickname;
             SteamId = applicationForm.SteamId;
-            Gmail = applicationForm.Gmail.Email;
+            Gmail = applicationForm.Gmail?.Email;
             GithubNickname = applicationForm.GithubNickname;
             DiscordId = applicationForm.DiscordId?.Id;
             TeamspeakId = applicationForm.TeamspeakId;            

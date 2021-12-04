@@ -15,9 +15,42 @@ namespace Roster.Core.Domain
             Email = email;
         }
 
+        public static Member Accept(ApplicationFormAccepted message)
+        {
+            DateTime joinDate = DateTime.UtcNow;
+
+            Member member = new Member(message.Nickname, message.Email)
+            {
+                BiNickname = message.BiNickname,
+                DateOfBirth = message.DateOfBirth,
+                DiscordId = message.DiscordId,
+                GithubNickname = message.GithubNickname,
+                Gmail = message.Gmail,
+                SteamId = message.SteamId,
+                TeamspeakId = message.TeamspeakId,
+                JoinDate = joinDate
+            };
+
+            member.Publish(new MemberCreated(message.Nickname,
+                                             message.Email,
+                                             message.BiNickname,
+                                             message.DateOfBirth,
+                                             message.DiscordId,
+                                             message.GithubNickname,
+                                             message.Gmail,
+                                             message.SteamId,
+                                             message.TeamspeakId,
+                                             joinDate));
+
+            member.Promote(RankId.Recruit);
+            return member;
+        }        
+
         public string Nickname { get; }
 
         public DateTime DateOfBirth { get; set; }
+
+        public DateTime JoinDate { get; private set; }
 
         public string Email { get; }
 
@@ -68,7 +101,7 @@ namespace Roster.Core.Domain
         public void Promote(RankId rankId)
         {
             RankId = rankId;
-            Publish(new MemberPromoted(Nickname, RankId.Id));
+            Publish(new MemberPromoted(Nickname, RankId.Id, DateTime.UtcNow));
         }
     }
 }
