@@ -60,6 +60,22 @@ namespace Roster.Core.Services
             _memberStorage.Add(member);
             _memberStorage.Save();
             _eventStore.Publish(member.Events());
-        }        
+        }
+
+        public void CheckMods(CheckModsCommand command)
+        {
+            Member member = _memberStorage.Find(command.Nickname);
+            member.CheckMods();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
+
+        public void CompleteBootcamp(CompleteBootcampCommand command)
+        {
+            Member member = _memberStorage.Find(command.Nickname);
+            member.CompleteBootcamp();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
     }
 }

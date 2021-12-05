@@ -7,26 +7,17 @@
     <div class="col-md-4">
         <dl>
             <dt>Nickname</dt>
-            <dd>@Model.Member.Nickname</dd>
+            <dd>@Model.Member.Nickname <span class="badge bg-secondary">@Model.RankName</span></dd>
+
+            <dt>Date of birth</dt>
+            <dd>@Model.Member.DateOfBirth.ToShortDateString()</dd>
 
             <dt>E-mail</dt>
             <dd>@Model.Member.Email</dd>
-
-            <dt>Discord</dt>
-            <dd>@(Model.Member.DiscordId ?? "NA")</dd>
-
-            <dt>Teamspeak</dt>
-            <dd>@(Model.Member.TeamspeakId ?? "NA")</dd>
-
-            <dt>Steam</dt>
-            <dd>@(Model.Member.SteamId ?? "NA")</dd>
         </dl>
     </div>
     <div class="col-md-4">
         <dl>
-            <dt>Date of birth</dt>
-            <dd>@Model.Member.DateOfBirth.ToShortDateString()</dd>
-
             <dt>Bohemia nickname</dt>
             <dd>@(Model.Member.BiNickname ?? "NA")</dd>
 
@@ -40,4 +31,53 @@
             <dd>@(Model.Member.EmailVerified ? "Yes" : "No")</dd>
         </dl>
     </div>
+    <div class="col-md-4">
+        <dl>
+            <dt>Discord</dt>
+            <dd>@(Model.Member.DiscordId ?? "NA")</dd>
+
+            <dt>Teamspeak</dt>
+            <dd>@(Model.Member.TeamspeakId ?? "NA")</dd>
+
+            <dt>Steam</dt>
+            <dd>@(Model.Member.SteamId ?? "NA")</dd>
+        </dl>        
+    </div>
+</div>
+<div class="row">
+    <h2>Recruitment process</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Process Id</th>
+                <th>Recruitment start date</th>
+                <th>Mods checked date</th>
+                <th>Bootcamp completion date</th>
+                <th>Attended enough events</th>
+                <th>Trial passed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var recruitment in Model.RecruitmentSagas)
+            {
+                <tr>
+                    <td>@recruitment.CorrelationId</td>
+                    <td>@recruitment.RecruitmentStartDate</td>
+                    <td>@recruitment.ModsCheckDate</td>
+                    <td>@recruitment.BootcampCompletionDate</td>
+                    <td>@recruitment.EnoughAttendedEvents</td>
+                    <td>@recruitment.TrialSucceeded</td>                        
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <form method="post">
+        <input type="hidden" asp-for="Nickname" />
+        <div class="btn-group">
+            <input type="submit" class="btn btn-outline-primary" value="Mods check done" asp-page-handler="modschecked" />
+            <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />
+        </div>
+    </form>    
 </div>

@@ -1,12 +1,9 @@
 using System.Threading.Tasks;
 using MassTransit;
-using Microsoft.Extensions.Logging;
-using Roster.Core.Domain;
 using Roster.Core.Events;
 using Roster.Core.Services;
-using Roster.Core.Storage;
 
-namespace Roster.Infrastructure.Consumers
+namespace Roster.Core.Consumers
 {
     public class MemberCreationConsumer : IConsumer<ApplicationFormAccepted>
     {

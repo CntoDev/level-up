@@ -31,6 +31,8 @@ namespace Roster.Core.Domain
                 JoinDate = joinDate
             };
 
+            Guid recruitmentSagaId = Guid.NewGuid();
+
             member.Publish(new MemberCreated(message.Nickname,
                                              message.Email,
                                              message.BiNickname,
@@ -40,11 +42,14 @@ namespace Roster.Core.Domain
                                              message.Gmail,
                                              message.SteamId,
                                              message.TeamspeakId,
-                                             joinDate));
+                                             joinDate,
+                                             recruitmentSagaId));
 
+            member.StartRecruitmentWindow(recruitmentSagaId);
+            member.StartAssessmentWindow(recruitmentSagaId);
             member.Promote(RankId.Recruit);
             return member;
-        }        
+        }
 
         public string Nickname { get; }
 
@@ -93,15 +98,34 @@ namespace Roster.Core.Domain
             return false;
         }
 
-        public void Promote(object recruit)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Promote(RankId rankId)
         {
             RankId = rankId;
             Publish(new MemberPromoted(Nickname, RankId.Id, DateTime.UtcNow));
         }
+    
+        public void CheckMods()
+        {
+            Publish(new ModsChecked(Nickname));
+        }
+
+        public void CompleteBootcamp()
+        {
+            Publish(new BootcampCompleted(Nickname));
+        }  
+    
+        private void StartRecruitmentWindow(Guid recruitmentSagaId)
+        {
+            RecruitmentSettings recruitmentSettings = RecruitmentSettings.Instance;
+            DateTime recruitmentWindowEndDate = JoinDate.AddDays(recruitmentSettings.RecruitmentWindowDays);
+            Publish(new RecruitTrialExpired(Nickname, recruitmentSettings.RecruitmentWindowDays, recruitmentWindowEndDate, recruitmentSagaId));
+        }
+
+        private void StartAssessmentWindow(Guid recruitmentSagaId)
+        {
+            RecruitmentSettings recruitmentSettings = RecruitmentSettings.Instance;
+            DateTime assessmentWindowEndDate = JoinDate.AddDays(recruitmentSettings.ModsAssesmentWindowDays);
+            Publish(new RecruitAssessmentExpired(Nickname, recruitmentSettings.ModsAssesmentWindowDays, assessmentWindowEndDate, recruitmentSagaId));
+        }        
     }
 }

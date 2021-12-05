@@ -1,4 +1,5 @@
 using System;
+using MassTransit;
 
 namespace Roster.Core.Events
 {
@@ -11,5 +12,6 @@ namespace Roster.Core.Events
                                 string Gmail,
                                 string SteamId,
                                 string TeamspeakId,
-                                DateTime JoinDate) : IEvent;
+                                DateTime JoinDate,
+                                Guid CorrelationId) : IEvent, CorrelatedBy<Guid>;
 }

@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Roster.Web.Data;
 using Microsoft.Extensions.Configuration;
@@ -15,18 +10,19 @@ using Microsoft.Extensions.Hosting;
 using Roster.Core.Services;
 using Roster.Core.Storage;
 using Roster.Infrastructure.Storage;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using MassTransit;
 using Roster.Infrastructure.Consumers;
 using Roster.Core.Events;
 using Roster.Infrastructure.Events;
 using Roster.Infrastructure.Configurations;
 using Roster.Infrastructure;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using Roster.Web.Security;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Http;
+using Roster.Core.Consumers;
+using Roster.Core.Domain;
+using Roster.Core.Sagas;
+using MassTransit.EntityFrameworkCoreIntegration;
 
 namespace Roster.Web
 {
@@ -50,10 +46,12 @@ namespace Roster.Web
             #endregion
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("PostgresConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("PostgresConnection")));
             services.AddDbContext<RosterDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Roster"), o => o.MigrationsAssembly("Roster.Web")));
+            services.AddDbContext<ProcessDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("Roster"), o => o.MigrationsAssembly("Roster.Web")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -61,6 +59,7 @@ namespace Roster.Web
 
             // Roster Core registrations here
             services.AddScoped<IQuerySource, RosterDbContext>();
+            services.AddScoped<IProcessSource, ProcessDbContext>();
             services.AddScoped(typeof(IStorage<>), typeof(Storage<>));
 
             services.AddScoped<IDiscordValidationService, DummyDiscordValidationService>();
@@ -78,32 +77,46 @@ namespace Roster.Web
             // Add Mass Transit
             RabbitMqOptions rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
+            // Application settings
+            RecruitmentSettings recruitmentSettings = Configuration.GetSection("Recruitment").Get<RecruitmentSettings>();
+
             services.AddMassTransit(x =>
             {
+                x.AddDelayedMessageScheduler();
+
                 x.UsingRabbitMq((context, configurator) =>
                 {
-                    configurator.Host(rabbitMqOptions.Host, "/", h => {
+                    configurator.UseDelayedMessageScheduler();
+                    configurator.Host(rabbitMqOptions.Host, "/", h =>
+                    {
                         h.Username(rabbitMqOptions.Username);
                         h.Password(rabbitMqOptions.Password);
                     });
                     configurator.ConfigureEndpoints(context);
                 });
 
+                // Add consumers
                 x.AddConsumer<MemberCreationConsumer>();
                 x.AddConsumer<EmailSender>();
-                x.AddConsumer<EventSink>();
+
+                // Add sagas
+                x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>
+                {
+                    r.ExistingDbContext<ProcessDbContext>();
+                    r.LockStatementProvider = new PostgresLockStatementProvider();
+                });
             });
 
             services.AddMassTransitHostedService();
             services.AddScoped<IEventStore, EventStore>();
 
             services.AddAuthorization(options => PolicyFactory.BuildPolicies(options));
-            
+
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-            });            
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,16 +136,20 @@ namespace Roster.Web
             }
 
             // Location enforcing to https if https request because of http issues on production server (something is blocking http traffic)
-            app.Use(async (context, next) => {
-                context.Response.OnStarting(() => {
+            app.Use(async (context, next) =>
+            {
+                context.Response.OnStarting(() =>
+                {
                     int statusCode = context.Response.StatusCode;
 
-                    if (statusCode == 301 || statusCode == 302) {
+                    if (statusCode == 301 || statusCode == 302)
+                    {
                         string locationUrl = context.Response.Headers["Location"];
                         Log.Information($"Redirecting scheme {context.Request.Scheme} to {locationUrl}");
 
-                        if (locationUrl.Contains("http:")) {
-                            locationUrl = locationUrl.Replace("http:","https:");
+                        if (locationUrl.Contains("http:"))
+                        {
+                            locationUrl = locationUrl.Replace("http:", "https:");
                             Log.Warning($"Fixing scheme to {locationUrl}");
                             context.Response.Headers["Location"] = locationUrl;
                         }
