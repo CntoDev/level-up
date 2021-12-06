@@ -112,7 +112,7 @@ namespace Roster.Core.Domain
         public void CompleteBootcamp()
         {
             Publish(new BootcampCompleted(Nickname));
-        }  
+        }
     
         private void StartRecruitmentWindow(Guid recruitmentSagaId)
         {

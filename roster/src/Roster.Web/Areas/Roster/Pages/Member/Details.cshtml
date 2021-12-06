@@ -73,6 +73,11 @@
     </table>
 </div>
 <div class="row">
+    @if (Model.OneClickAssessment) {
+        <div class="alert alert-warning" role="alert">
+            One click mod assessment is turned on. Clicking on either <i>Mods check done</i> or <i>Bootcamp done</i> will mark both assessments as completed.
+        </div>
+    }
     <form method="post">
         <input type="hidden" asp-for="Nickname" />
         <div class="btn-group">

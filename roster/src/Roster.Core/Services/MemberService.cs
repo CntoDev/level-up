@@ -62,17 +62,26 @@ namespace Roster.Core.Services
             _eventStore.Publish(member.Events());
         }
 
-        public void CheckMods(CheckModsCommand command)
+        public void CheckMods(string nickname)
         {
-            Member member = _memberStorage.Find(command.Nickname);
+            Member member = _memberStorage.Find(nickname);
             member.CheckMods();
             _memberStorage.Save();
             _eventStore.Publish(member.Events());
         }
 
-        public void CompleteBootcamp(CompleteBootcampCommand command)
+        public void CompleteBootcamp(string nickname)
         {
-            Member member = _memberStorage.Find(command.Nickname);
+            Member member = _memberStorage.Find(nickname);
+            member.CompleteBootcamp();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
+
+        public void CompleteAssessment(string nickname)
+        {
+            Member member = _memberStorage.Find(nickname);
+            member.CheckMods();
             member.CompleteBootcamp();
             _memberStorage.Save();
             _eventStore.Publish(member.Events());

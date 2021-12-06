@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MassTransit;
 using Roster.Core.Domain;
 using Roster.Core.Events;
@@ -36,8 +37,14 @@ namespace Roster.Infrastructure.Events
 
         void IEventStore.Publish(IEnumerable<IEvent> events)
         {
-            foreach (var @event in events)
-                Publish((dynamic)@event);
+            Task.Run(async () =>
+            {
+                foreach (var @event in events)
+                {
+                    Publish((dynamic)@event);
+                    await Task.Delay(500);
+                }
+            });
         }
     }
 }

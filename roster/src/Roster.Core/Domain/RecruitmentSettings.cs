@@ -10,5 +10,6 @@ namespace Roster.Core.Domain
         public int RecruitmentWindowDays { get; set; }
         public int ModsAssesmentWindowDays { get; set; }
         public int MinimalAttendance { get; set; }
+        public bool OneClickAssessment { get; set; }
     }
 }

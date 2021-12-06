@@ -35,6 +35,8 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public IEnumerable<Saga.RecruitmentSaga> RecruitmentSagas { get; set; }
 
+        public bool OneClickAssessment => Domain.RecruitmentSettings.Instance.OneClickAssessment;
+
         [BindProperty]
         public string Nickname { get; set; }
 
@@ -49,8 +51,12 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public async Task<IActionResult> OnPostModsCheckedAsync()
         {
-            _memberService.CheckMods(new CheckModsCommand(Nickname));
-            await Task.Delay(1000);
+            if (OneClickAssessment)
+                _memberService.CompleteAssessment(Nickname);
+            else
+                _memberService.CheckMods(Nickname);
+
+            await Task.Delay(3000);
             RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(Nickname));
             Member = _memberStorage.Find(Nickname);
             RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
@@ -59,8 +65,12 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public async Task<IActionResult> OnPostBootcampDoneAsync()
         {
-            _memberService.CompleteBootcamp(new CompleteBootcampCommand(Nickname));
-            await Task.Delay(1000);
+            if (OneClickAssessment)
+                _memberService.CompleteAssessment(Nickname);
+            else
+                _memberService.CompleteBootcamp(Nickname);
+
+            await Task.Delay(3000);
             RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(Nickname));
             Member = _memberStorage.Find(Nickname);
             RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
