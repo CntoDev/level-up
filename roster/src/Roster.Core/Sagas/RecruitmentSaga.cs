@@ -12,11 +12,15 @@ namespace Roster.Core.Sagas
         Observes<ModsChecked, RecruitmentSaga>,
         Observes<BootcampCompleted, RecruitmentSaga>,
         Observes<EnoughEventsAttended, RecruitmentSaga>,
-        Orchestrates<RecruitTrialExpired>
+        Observes<AutomaticDischargeToggled, RecruitmentSaga>,
+        Orchestrates<RecruitTrialExpired>,
+        Orchestrates<RecruitAssessmentExpired>
     {
         public Guid CorrelationId { get; set; }
 
         public string Nickname { get; set; }
+
+        public bool AutomaticDischarge { get; set; }
 
         public DateTime? RecruitmentStartDate { get; set; }
 
@@ -34,15 +38,21 @@ namespace Roster.Core.Sagas
 
         Expression<Func<RecruitmentSaga, EnoughEventsAttended, bool>> Observes<EnoughEventsAttended, RecruitmentSaga>.CorrelationExpression => (saga, message) => saga.Nickname.Equals(message.Nickname);
 
+        Expression<Func<RecruitmentSaga, AutomaticDischargeToggled, bool>> Observes<AutomaticDischargeToggled, RecruitmentSaga>.CorrelationExpression => (saga, message) => saga.Nickname.Equals(message.Nickname);
+
         public Task Consume(ConsumeContext<MemberCreated> context)
         {
             Nickname = context.Message.Nickname;
             RecruitmentStartDate = context.Message.JoinDate;
+            AutomaticDischarge = true;
             return Task.CompletedTask;
         }
 
         public Task Consume(ConsumeContext<ModsChecked> context)
         {
+            if (ModsCheckDate != null)
+                return Task.CompletedTask;
+
             ModsCheckDate = DateTime.UtcNow;
             bool trialSuccess = IsTrialSuccessfull();
 
@@ -57,6 +67,9 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<BootcampCompleted> context)
         {
+            if (BootcampCompletionDate != null)
+                return Task.CompletedTask;
+
             BootcampCompletionDate = DateTime.UtcNow;
             bool trialSuccess = IsTrialSuccessfull();
 
@@ -69,6 +82,23 @@ namespace Roster.Core.Sagas
             return Task.CompletedTask;
         }
 
+        public Task Consume(ConsumeContext<AutomaticDischargeToggled> context)
+        {
+            AutomaticDischarge = !AutomaticDischarge;
+
+            // if recruit's time is up and interviewer turned on automatic discharge, goodbye recruit
+            bool shouldDischarge = (AutomaticDischarge, TrialSucceeded) switch
+            {
+                (true, false) => true,
+                _ => false
+            };
+
+            if (shouldDischarge)
+                context.Publish(new RecruitDischarged(Nickname));
+
+            return Task.CompletedTask;
+        }
+
         public Task Consume(ConsumeContext<RecruitTrialExpired> context)
         {
             if (TrialSucceeded.HasValue)
@@ -76,11 +106,18 @@ namespace Roster.Core.Sagas
 
             TrialSucceeded = IsTrialSuccessfull();
 
-            if (TrialSucceeded ?? false)
+            if (TrialSucceeded.Value)
                 context.Publish(new RecruitPromoted(context.Message.Nickname));
-            else
+            else if (AutomaticDischarge)
                 context.Publish(new RecruitDischarged(context.Message.Nickname));
 
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<RecruitAssessmentExpired> context)
+        {
+            // Think this one should be immediate discharge, recruit failed to do mod check + bootcamp in two weeks
+            context.Publish(new RecruitDischarged(Nickname));
             return Task.CompletedTask;
         }
 
@@ -95,7 +132,7 @@ namespace Roster.Core.Sagas
                 context.Publish(new RecruitPromoted(context.Message.Nickname));
             }
 
-            return Task.CompletedTask;            
+            return Task.CompletedTask;
         }
 
         private bool IsTrialSuccessfull()

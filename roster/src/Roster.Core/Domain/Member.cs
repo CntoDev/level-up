@@ -98,6 +98,11 @@ namespace Roster.Core.Domain
             return false;
         }
 
+        public void ToggleAutomaticDischarge()
+        {
+            Publish(new AutomaticDischargeToggled(Nickname));
+        }
+
         public void Promote(RankId rankId)
         {
             RankId = rankId;

@@ -86,5 +86,13 @@ namespace Roster.Core.Services
             _memberStorage.Save();
             _eventStore.Publish(member.Events());
         }
+
+        public void ToggleAutomaticDischarge(string nickname)
+        {
+            Member member = _memberStorage.Find(nickname);
+            member.ToggleAutomaticDischarge();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
     }
 }

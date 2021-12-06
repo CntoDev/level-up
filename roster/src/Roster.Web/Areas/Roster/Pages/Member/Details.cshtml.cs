@@ -37,6 +37,10 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public bool OneClickAssessment => Domain.RecruitmentSettings.Instance.OneClickAssessment;
 
+        public bool AutomaticDischargeEnabled { get;set; }
+
+        public string AutomaticDischargeLabel { get;set; }
+
         [BindProperty]
         public string Nickname { get; set; }
 
@@ -46,6 +50,14 @@ namespace Roster.Web.Areas.Roster.Pages.Member
             RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(nickname));
             Nickname = Member.Nickname;
             RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
+                
+            (AutomaticDischargeEnabled, AutomaticDischargeLabel) = RecruitmentSagas.LastOrDefault()?.AutomaticDischarge switch
+            {
+                null => (false, ""),
+                true => (true, "Switch discharge to manual"),
+                false => (true, "Switch discharge to automatic")
+            };
+
             return Page();
         }
 
@@ -57,10 +69,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
                 _memberService.CheckMods(Nickname);
 
             await Task.Delay(3000);
-            RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(Nickname));
-            Member = _memberStorage.Find(Nickname);
-            RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
-            return Page();
+            return RedirectToPage(new { nickname = Nickname });
         }
 
         public async Task<IActionResult> OnPostBootcampDoneAsync()
@@ -71,10 +80,14 @@ namespace Roster.Web.Areas.Roster.Pages.Member
                 _memberService.CompleteBootcamp(Nickname);
 
             await Task.Delay(3000);
-            RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(Nickname));
-            Member = _memberStorage.Find(Nickname);
-            RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
-            return Page();
+            return RedirectToPage(new { nickname = Nickname });
+        }
+
+        public async Task<IActionResult> OnPostToggleAutomaticDischargeAsync()
+        {
+            _memberService.ToggleAutomaticDischarge(Nickname);
+            await Task.Delay(3000);
+            return RedirectToPage(new { nickname = Nickname });
         }
     }
 }
