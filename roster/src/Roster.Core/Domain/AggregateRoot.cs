@@ -3,9 +3,9 @@ using Roster.Core.Events;
 
 namespace Roster.Core.Domain
 {
-    public abstract class AggregateRoot : IEventSource
+    public abstract class AggregateRoot
     {
-        private List<IEvent> _events = new List<IEvent>();
+        private readonly List<IEvent> _events = new();
 
         public IEnumerable<IEvent> Events() => _events;
 

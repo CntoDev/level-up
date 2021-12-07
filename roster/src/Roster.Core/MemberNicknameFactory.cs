@@ -7,7 +7,7 @@ namespace Roster.Core
 {
     public class MemberNicknameFactory
     {
-        public MemberNickname CreateForApplicant(ICollection<string> existingNicknames, string nickname)
+        public static MemberNickname CreateForApplicant(ICollection<string> existingNicknames, string nickname)
         {
             if(existingNicknames.Any(x => x.Equals(nickname, StringComparison.OrdinalIgnoreCase))) {
                 throw new ArgumentException("Nickname already exists");

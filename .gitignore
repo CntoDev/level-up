@@ -16,3 +16,6 @@ __pycache__
 
 # Docker
 docker-build
+
+# Visual Studio
+.vs

@@ -54,14 +54,6 @@ namespace Roster.Core.Sagas
                 return Task.CompletedTask;
 
             ModsCheckDate = DateTime.UtcNow;
-            bool trialSuccess = IsTrialSuccessfull();
-
-            if (trialSuccess)
-            {
-                TrialSucceeded = trialSuccess;
-                context.Publish(new RecruitPromoted(context.Message.Nickname));
-            }
-
             return Task.CompletedTask;
         }
 
@@ -71,14 +63,6 @@ namespace Roster.Core.Sagas
                 return Task.CompletedTask;
 
             BootcampCompletionDate = DateTime.UtcNow;
-            bool trialSuccess = IsTrialSuccessfull();
-
-            if (trialSuccess)
-            {
-                TrialSucceeded = trialSuccess;
-                context.Publish(new RecruitPromoted(context.Message.Nickname));
-            }
-
             return Task.CompletedTask;
         }
 
@@ -128,7 +112,7 @@ namespace Roster.Core.Sagas
 
             if (trialSuccess)
             {
-                TrialSucceeded = trialSuccess;
+                TrialSucceeded = true;
                 context.Publish(new RecruitPromoted(context.Message.Nickname));
             }
 

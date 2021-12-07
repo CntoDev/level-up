@@ -4,7 +4,7 @@ namespace Roster.Core.Domain
 {
     public class EmailAddress
     {
-        public string Email { get; private set;}
+        public string Email { get; }
 
         public EmailAddress(string email)
         {
@@ -14,12 +14,10 @@ namespace Roster.Core.Domain
         }
 
         // Validate email address format.
-        public static bool Validate(string email)
+        private static void Validate(string email)
         {
             if (!string.IsNullOrEmpty(email))
-                new MailAddress(email);
-                
-            return true;
+                _ = new MailAddress(email);
         }
 
         public override string ToString() => Email;

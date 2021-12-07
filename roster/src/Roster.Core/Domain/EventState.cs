@@ -8,10 +8,12 @@ namespace Roster.Core.Domain
     {
         public static EventState CreateFromEvent<T>(T @event) where T : IEvent
         {
-            EventState eventState = new EventState();
-            eventState.EventDate = DateTime.UtcNow;
-            eventState.EventType = typeof(T).Name;
-            eventState.Json = JsonConvert.SerializeObject(@event);
+            EventState eventState = new()
+            {
+                EventDate = DateTime.UtcNow,
+                EventType = typeof(T).Name,
+                Json = JsonConvert.SerializeObject(@event)
+            };
             return eventState;
         }
 

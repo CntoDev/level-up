@@ -1,4 +1,3 @@
-using FluentResults;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,19 +6,19 @@ namespace Roster.Core.Domain
 {
     public readonly struct MemberNickname
     {
-        public string Nickname { get; init; }
+        public string Nickname { get; }
 
         public MemberNickname(string nickname)
         {
-            Validate(nickname, validateLength: true);
+            Validate(nickname);
             Nickname = nickname;
         }
 
         // Validate nickname based on community spec. For reference, check the Interview Handbook.
-        public static bool Validate(string nickname, bool validateLength = true)
+        private static void Validate(string nickname)
         {
             // Maximum length is 10 characters.
-            if(nickname.Length < 1 && nickname.Length > 10) {
+            if(nickname.Length is < 1 or > 10) {
                 throw new ArgumentException("Nickname must be between 1 and 10 characters long");
             }
             // Maximum 1 whitespace.
@@ -27,12 +26,12 @@ namespace Roster.Core.Domain
                 throw new ArgumentException("Nickname cannot contain more than 1 whitespaces");
             }
             // Only letters are allowed.
-            Regex lettersOnly = new Regex("^[a-zA-Z]*$");
+            Regex lettersOnly = new("^[a-zA-Z]*$");
             if(!lettersOnly.IsMatch(nickname)) {
                 throw new ArgumentException("Nickname cannot contain numbers or symbols");
             }
             // If longer than 3 characters, cannot be all caps.
-            Regex capsLetters = new Regex("^[A-Z]*$");
+            Regex capsLetters = new("^[A-Z]*$");
             if(nickname.Length > 3 && capsLetters.IsMatch(nickname)) {
                 throw new ArgumentException("Nickname cannot be all caps if longer than three characters");
             }
@@ -42,8 +41,6 @@ namespace Roster.Core.Domain
                     throw new ArgumentException("First letter must be capitalised");
                 }
             }
-
-            return true;
         }
 
         public override string ToString() => Nickname;

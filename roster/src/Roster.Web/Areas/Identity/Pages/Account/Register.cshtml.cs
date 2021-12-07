@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Roster.Core.Commands;
 using Roster.Core.Services;
 
 namespace Roster.Web.Areas.Identity.Pages.Account

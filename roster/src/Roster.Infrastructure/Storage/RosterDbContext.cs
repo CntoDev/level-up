@@ -40,24 +40,24 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<ApplicationForm>()
                         .Property(af => af.Nickname)
                         .IsRequired()
-                        .HasConversion<string>(v => v.Nickname, v => new MemberNickname(v))
+                        .HasConversion(v => v.Nickname, v => new MemberNickname(v))
                         .HasColumnName("Nickname");
                         
             modelBuilder.Entity<ApplicationForm>()
-                        .OwnsMany<OwnedDlc>(af => af.OwnedDlcs);
+                        .OwnsMany(af => af.OwnedDlcs);
 
             modelBuilder.Entity<ApplicationForm>()
-                        .OwnsOne<EmailAddress>(af => af.Email)
+                        .OwnsOne(af => af.Email)
                         .Property(a => a.Email)
                         .HasColumnName("Email");
 
             modelBuilder.Entity<ApplicationForm>()
-                        .OwnsOne<EmailAddress>(af => af.Gmail)
+                        .OwnsOne(af => af.Gmail)
                         .Property(a => a.Email)
                         .HasColumnName("Gmail");
 
             modelBuilder.Entity<ApplicationForm>()
-                        .OwnsOne<DiscordId>(af => af.DiscordId)
+                        .OwnsOne(af => af.DiscordId)
                         .Property(d => d.Id)
                         .HasColumnName("DiscordId");
 
@@ -85,7 +85,7 @@ namespace Roster.Infrastructure.Storage
 
             modelBuilder.Entity<Member>()
                         .Property(m => m.RankId)
-                        .HasConversion<int>(rank => rank.Id, id => new RankId(id))
+                        .HasConversion(rank => rank.Id, id => new RankId(id))
                         .HasColumnName("RankId");
 
             modelBuilder.Entity<Dlc>()
@@ -94,7 +94,7 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<Dlc>()
                         .Property(d => d.DlcName)
                         .IsRequired()
-                        .HasConversion<string>(dlc => dlc.Name, name => new DlcName(name))
+                        .HasConversion(dlc => dlc.Name, name => new DlcName(name))
                         .HasColumnName("Name");
 
             modelBuilder.Entity<Rank>()

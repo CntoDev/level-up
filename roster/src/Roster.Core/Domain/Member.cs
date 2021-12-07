@@ -9,7 +9,7 @@ namespace Roster.Core.Domain
         private DateTime? _verificationTime;
         private bool _emailVerified;
 
-        public Member(string nickname, string email)
+        private Member(string nickname, string email)
         {
             Nickname = nickname;
             Email = email;
@@ -19,7 +19,7 @@ namespace Roster.Core.Domain
         {
             DateTime joinDate = DateTime.UtcNow;
 
-            Member member = new Member(message.Nickname, message.Email)
+            Member member = new(message.Nickname, message.Email)
             {
                 BiNickname = message.BiNickname,
                 DateOfBirth = message.DateOfBirth,
@@ -53,23 +53,23 @@ namespace Roster.Core.Domain
 
         public string Nickname { get; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; private init; }
 
-        public DateTime JoinDate { get; private set; }
+        public DateTime JoinDate { get; init; }
 
         public string Email { get; }
 
-        public string BiNickname { get; set; }
+        public string BiNickname { get; init; }
 
-        public string SteamId { get; set; }
+        public string SteamId { get; init; }
 
-        public string Gmail { get; set; }
+        public string Gmail { get; init; }
 
-        public string GithubNickname { get; set; }
+        public string GithubNickname { get; init; }
 
-        public string DiscordId { get; set; }
+        public string DiscordId { get; init; }
 
-        public string TeamspeakId { get; set; }
+        public string TeamspeakId { get; init; }
 
         public RankId RankId { get; private set; }
 
@@ -90,7 +90,7 @@ namespace Roster.Core.Domain
 
             if (isVerified)
             {
-                _emailVerified = isVerified;
+                _emailVerified = true;
                 Publish(new MemberEmailVerified(Nickname));
                 return true;
             }
