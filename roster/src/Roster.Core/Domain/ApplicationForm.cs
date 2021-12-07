@@ -6,9 +6,9 @@ namespace Roster.Core.Domain
 {
     public class ApplicationForm : AggregateRoot
     {
-        public MemberNickname Nickname { get; private set; }
-        public DateTime DateOfBirth { get; private set; }
-        public EmailAddress Email { get; private set; }
+        public MemberNickname Nickname { get; }
+        public DateTime DateOfBirth { get; }
+        public EmailAddress Email { get; }
         public string BiNickname { get; set; }
         public string SteamId { get; set; }
         public EmailAddress Gmail { get; set; }

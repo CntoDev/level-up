@@ -67,7 +67,7 @@ namespace Roster.Web
             services.AddScoped<MemberService>();
 
             // MailJet registrations
-            services.AddSingleton<MailJetOptions>(sp =>
+            services.AddSingleton(sp =>
             {
                 return Configuration.GetSection("MailJet").Get<MailJetOptions>();
             });

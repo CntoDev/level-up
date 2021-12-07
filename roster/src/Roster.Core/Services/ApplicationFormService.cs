@@ -10,11 +10,11 @@ namespace Roster.Core.Services
 {
     public class ApplicationFormService
     {
-        private IQuerySource _querySource;
-        private IStorage<ApplicationForm> _storage;
-        private IEventStore _eventStore;
+        private readonly IQuerySource _querySource;
+        private readonly IStorage<ApplicationForm> _storage;
+        private readonly IEventStore _eventStore;
 
-        private DiscordIdFactory _discordFactory;
+        private readonly DiscordIdFactory _discordFactory;
 
         public ApplicationFormService(IQuerySource querySource,
                                       IStorage<ApplicationForm> storage,
@@ -30,7 +30,7 @@ namespace Roster.Core.Services
         public Result SubmitApplicationForm(ApplicationFormCommand formCommand)
         {
             var existingNicknames = _querySource.Members.Select(m => m.Nickname).ToList();
-            ApplicationFormBuilder formBuilder = new ApplicationFormBuilder(existingNicknames, _discordFactory);
+            ApplicationFormBuilder formBuilder = new(existingNicknames, _discordFactory);
 
             try
             {
@@ -46,7 +46,7 @@ namespace Roster.Core.Services
 
                 _storage.Add(form);
                 _storage.Save();
-                _eventStore.Publish<ApplicationFormSubmitted>(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
+                _eventStore.Publish(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
 
                 return Result.Ok();
             }

@@ -6,16 +6,16 @@ namespace Roster.Core.Commands
 {
     public class ApplicationFormCommand
     {
-        public string Nickname { get; private set; }
-        public DateTime DateOfBirth { get; private set; }
-        public string Email { get; private set; }
-        public string BiNickname { get; set; }
-        public string SteamId { get; set; }
-        public string Gmail { get; set; }
-        public string GithubNickname { get; set; }
-        public string DiscordId { get; set; }
-        public string TeamspeakId { get; set; }
-        public ICollection<OwnedDlc> OwnedDlcs { get; set; }
+        public string Nickname { get; }
+        public DateTime DateOfBirth { get; }
+        public string Email { get; }
+        public string BiNickname { get; init; }
+        public string SteamId { get; init; }
+        public string Gmail { get; init; }
+        public string GithubNickname { get; init; }
+        public string DiscordId { get; init; }
+        public string TeamspeakId { get; init; }
+        public ICollection<OwnedDlc> OwnedDlcs { get; init; }
 
         public ApplicationFormCommand(string nickname, DateTime dateOfBirth, string email)
         {

@@ -40,7 +40,7 @@ namespace Roster.Core.Services
         {
             try {
                 Member member = _memberStorage.Find(promoteMemberCommand.Nickname);
-                RankId rankId = new RankId(promoteMemberCommand.RankId);
+                RankId rankId = new(promoteMemberCommand.RankId);
                 Rank rank = _querySource.Ranks.ToList().First(r => r.Id.Equals(rankId));
                 
                 member.Promote(rank.Id);

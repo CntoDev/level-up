@@ -5,7 +5,7 @@ namespace Roster.Core
 {
     public class DiscordIdFactory
     {
-        private IDiscordValidationService _validator;
+        private readonly IDiscordValidationService _validator;
 
         public DiscordIdFactory(IDiscordValidationService validator)
         {

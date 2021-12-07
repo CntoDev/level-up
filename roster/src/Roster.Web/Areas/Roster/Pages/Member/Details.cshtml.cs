@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Roster.Core.Commands;
 using Roster.Core.Services;
 using Roster.Core.Storage;
 using Roster.Web.Security;

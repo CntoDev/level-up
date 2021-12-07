@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Mailjet.Client.TransactionalEmails;
 using Microsoft.Extensions.Logging;
-using Roster.Core.Events;
 using Roster.Infrastructure.Configurations;
 
 namespace Roster.Infrastructure
@@ -27,7 +24,7 @@ namespace Roster.Infrastructure
 
         internal String GenerateCode(string nickname)
         {
-            Random random = new Random();
+            Random random = new();
             return random.Next(int.MaxValue).ToString();
         }
 
@@ -35,7 +32,7 @@ namespace Roster.Infrastructure
         {
             string link = $"{_options.BaseUrl}/Roster/Member/Verify/{emailAddress}/{verificationCode}";
 
-            MailjetRequest request = new MailjetRequest()
+            MailjetRequest request = new()
             {
                 Resource = Send.Resource
             };
@@ -60,7 +57,7 @@ namespace Roster.Infrastructure
 
         public async Task SendApplicationConfirmation(string nickname, string emailAddress)
         {
-            MailjetRequest request = new MailjetRequest()
+            MailjetRequest request = new()
             {
                 Resource = Send.Resource
             };
@@ -85,7 +82,7 @@ namespace Roster.Infrastructure
 
         public async Task SendRejectionEmail(string nickname, string emailAddress, string reason)
         {
-            MailjetRequest request = new MailjetRequest()
+            MailjetRequest request = new()
             {
                 Resource = Send.Resource
             };

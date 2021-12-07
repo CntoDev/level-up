@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Roster.Web.Security

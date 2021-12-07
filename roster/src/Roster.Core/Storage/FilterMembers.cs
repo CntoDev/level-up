@@ -4,7 +4,7 @@ namespace Roster.Core.Storage
 {
     public class FilterMembers : ISpecification<Member>
     {
-        private string _nickname;
+        private readonly string _nickname;
 
         public FilterMembers(string nickname)
         {

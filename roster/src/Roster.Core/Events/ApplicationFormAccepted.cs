@@ -5,11 +5,6 @@ namespace Roster.Core.Events
 {
     public record ApplicationFormAccepted : IEvent
     {
-        public ApplicationFormAccepted()
-        {
-
-        }
-        
         public ApplicationFormAccepted(ApplicationForm applicationForm) 
         {
             Nickname = applicationForm.Nickname.Nickname;
@@ -23,22 +18,22 @@ namespace Roster.Core.Events
             TeamspeakId = applicationForm.TeamspeakId;            
         }
 
-        public string Nickname { get; init; }
+        public string Nickname { get; }
 
-        public DateTime DateOfBirth { get; init; }
+        public DateTime DateOfBirth { get; }
 
-        public string Email { get; init; }
+        public string Email { get; }
 
-        public string BiNickname { get; init; }
+        public string BiNickname { get; }
 
-        public string SteamId { get; init; }
+        public string SteamId { get; }
 
-        public string Gmail { get; init; }
+        public string Gmail { get; }
 
-        public string GithubNickname { get; init; }
+        public string GithubNickname { get; }
 
-        public string DiscordId { get; init; }
+        public string DiscordId { get; }
 
-        public string TeamspeakId { get; init; }
+        public string TeamspeakId { get; }
     }
 }

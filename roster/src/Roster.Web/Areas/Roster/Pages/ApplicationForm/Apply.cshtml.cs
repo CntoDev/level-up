@@ -104,7 +104,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         {
             if (ModelState.IsValid)
             {
-                ApplicationFormCommand formCommand = new ApplicationFormCommand(Nickname, DateOfBirth, Email)
+                ApplicationFormCommand formCommand = new(Nickname, DateOfBirth, Email)
                 {
                     BiNickname = BiNickname,
                     DiscordId = DiscordId,

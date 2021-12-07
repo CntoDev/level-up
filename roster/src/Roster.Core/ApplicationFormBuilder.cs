@@ -7,11 +7,11 @@ namespace Roster.Core
     public class ApplicationFormBuilder
     {
         private ApplicationForm _applicationForm;
-        private ICollection<string> _existingNicknames;
+        private readonly ICollection<string> _existingNicknames;
 
-        private MemberNicknameFactory _nicknameFactory;
+        private readonly MemberNicknameFactory _nicknameFactory;
 
-        private DiscordIdFactory _discordFactory;
+        private readonly DiscordIdFactory _discordFactory;
 
         public ApplicationFormBuilder(ICollection<string> existingNicknames, DiscordIdFactory discordFactory)
         {
@@ -27,8 +27,8 @@ namespace Roster.Core
 
         public ApplicationFormBuilder Create(string nicknameRaw, DateTime dateOfBirth, string emailRaw)
         {
-            MemberNickname nickname = _nicknameFactory.CreateForApplicant(_existingNicknames, nicknameRaw);
-            EmailAddress email = new EmailAddress(emailRaw);
+            MemberNickname nickname = MemberNicknameFactory.CreateForApplicant(_existingNicknames, nicknameRaw);
+            EmailAddress email = new(emailRaw);
 
             _applicationForm = new ApplicationForm(nickname, dateOfBirth, email);
 

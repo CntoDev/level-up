@@ -25,12 +25,12 @@ namespace Roster.Infrastructure.Events
             if (@event is IScheduledEvent)
             {
                 IScheduledEvent scheduledEvent = (IScheduledEvent)@event;
-                _messageScheduler.SchedulePublish<T>(scheduledEvent.ScheduledForDate, @event);
+                _messageScheduler.SchedulePublish(scheduledEvent.ScheduledForDate, @event);
             }
             else
-                _bus.Publish<T>(@event);
+                _bus.Publish(@event);
 
-            EventState eventState = EventState.CreateFromEvent<T>(@event);
+            EventState eventState = EventState.CreateFromEvent(@event);
             _storage.Add(eventState);
             _storage.Save();
         }
