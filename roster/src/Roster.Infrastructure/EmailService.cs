@@ -1,15 +1,14 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Mailjet.Client;
-using Mailjet.Client.Resources;
 using Mailjet.Client.TransactionalEmails;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 using Roster.Infrastructure.Configurations;
 
 namespace Roster.Infrastructure
 {
-    public class EmailService
+    public class EmailService : IEmailSender
     {
         private readonly MailJetOptions _options;
         private readonly MailjetClient _client;
@@ -22,20 +21,9 @@ namespace Roster.Infrastructure
             _logger = logger;
         }
 
-        internal String GenerateCode(string nickname)
-        {
-            Random random = new();
-            return random.Next(int.MaxValue).ToString();
-        }
-
         public async Task SendVerificationEmail(string emailAddress, string verificationCode)
         {
             string link = $"{_options.BaseUrl}/Roster/Member/Verify/{emailAddress}/{verificationCode}";
-
-            MailjetRequest request = new()
-            {
-                Resource = Send.Resource
-            };
 
             var email = new TransactionalEmailBuilder()
                 .WithFrom(new SendContact(_options.FromEmail, _options.FromName))
@@ -46,7 +34,7 @@ namespace Roster.Infrastructure
 
             var response = await _client.SendTransactionalEmailAsync(email);
 
-            if (response.Messages != null && response.Messages.Count() == 1)
+            if (response.Messages is { Length : 1 })
             {
                 _logger.LogInformation("Verification e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
                 return;
@@ -57,11 +45,6 @@ namespace Roster.Infrastructure
 
         public async Task SendApplicationConfirmation(string nickname, string emailAddress)
         {
-            MailjetRequest request = new()
-            {
-                Resource = Send.Resource
-            };
-
             var email = new TransactionalEmailBuilder()
                 .WithFrom(new SendContact(_options.FromEmail, _options.FromName))
                 .WithSubject("Application received")
@@ -71,7 +54,7 @@ namespace Roster.Infrastructure
 
             var response = await _client.SendTransactionalEmailAsync(email);            
             
-            if (response.Messages != null && response.Messages.Count() == 1)
+            if (response.Messages is { Length : 1 })
             {
                 _logger.LogInformation("Application submission e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
                 return;
@@ -82,11 +65,6 @@ namespace Roster.Infrastructure
 
         public async Task SendRejectionEmail(string nickname, string emailAddress, string reason)
         {
-            MailjetRequest request = new()
-            {
-                Resource = Send.Resource
-            };
-
             var email = new TransactionalEmailBuilder()
                 .WithFrom(new SendContact(_options.FromEmail, _options.FromName))
                 .WithSubject("Application rejected")
@@ -96,13 +74,39 @@ namespace Roster.Infrastructure
 
             var response = await _client.SendTransactionalEmailAsync(email);            
             
-            if (response.Messages != null && response.Messages.Count() == 1)
+            if (response.Messages is { Length : 1 })
             {
                 _logger.LogInformation("Rejection e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
                 return;
             }
 
             _logger.LogError("Failure sending mail to {email} with response - {@response}", emailAddress, response);
+        }
+
+        public async Task SendEmailAsync(string emailAddress, string subject, string htmlMessage)
+        {
+            var transactionalEmail = new TransactionalEmailBuilder()
+                .WithFrom(new SendContact(_options.FromEmail, _options.FromName))
+                .WithSubject(subject)
+                .WithHtmlPart(htmlMessage)
+                .WithTo(new SendContact(emailAddress))
+                .Build();
+
+            var response = await _client.SendTransactionalEmailAsync(transactionalEmail);
+
+            if (response.Messages is { Length : 1 })
+            {
+                _logger.LogInformation("Verification e-mail successfully sent to {email}. Response was {@response}.", emailAddress, response);
+                return;
+            }
+
+            _logger.LogError("Failure sending mail to {email} with response - {@response}", emailAddress, response);
+        }
+
+        internal static string GenerateCode()
+        {
+            Random random = new();
+            return random.Next(int.MaxValue).ToString();
         }
     }
 }

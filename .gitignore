@@ -1,5 +1,6 @@
 # IDE metadata
 .vscode/
+.vs/
 
 # Storage
 mongo/
@@ -19,3 +20,10 @@ docker-build
 
 # Visual Studio
 .vs
+
+# Binaries
+**/wwwroot/images/
+
+# Resharper Code Inspection
+resharper.xml
+

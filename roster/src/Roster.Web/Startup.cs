@@ -23,6 +23,7 @@ using Roster.Core.Consumers;
 using Roster.Core.Domain;
 using Roster.Core.Sagas;
 using MassTransit.EntityFrameworkCoreIntegration;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Roster.Web
 {
@@ -57,6 +58,9 @@ namespace Roster.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
 
+            // Identity
+            services.AddSingleton<IEmailSender, EmailService>();
+
             // Roster Core registrations here
             services.AddScoped<IQuerySource, RosterDbContext>();
             services.AddScoped<IProcessSource, ProcessDbContext>();
@@ -67,10 +71,7 @@ namespace Roster.Web
             services.AddScoped<MemberService>();
 
             // MailJet registrations
-            services.AddSingleton(sp =>
-            {
-                return Configuration.GetSection("MailJet").Get<MailJetOptions>();
-            });
+            services.AddSingleton(sp => Configuration.GetSection("MailJet").Get<MailJetOptions>());
 
             services.AddSingleton<EmailService>();
 
