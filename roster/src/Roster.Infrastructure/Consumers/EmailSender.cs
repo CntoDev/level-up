@@ -3,7 +3,6 @@ using MassTransit;
 using Roster.Core.Domain;
 using Roster.Core.Events;
 using Roster.Core.Storage;
-using Roster.Infrastructure.Configurations;
 
 namespace Roster.Infrastructure.Consumers
 {
@@ -13,7 +12,7 @@ namespace Roster.Infrastructure.Consumers
         private readonly IStorage<Member> _memberStorage;
         private readonly IEventStore _eventStore;
 
-        public EmailSender(MailJetOptions options, IStorage<Member> memberStorage, IEventStore eventStore, EmailService emailVerificationService)
+        public EmailSender(IStorage<Member> memberStorage, IEventStore eventStore, EmailService emailVerificationService)
         {
             _memberStorage = memberStorage;
             _emailService = emailVerificationService;
@@ -23,7 +22,7 @@ namespace Roster.Infrastructure.Consumers
         public async Task Consume(ConsumeContext<MemberCreated> context)
         {
             var message = context.Message;
-            string verificationCode = _emailService.GenerateCode(message.Nickname);
+            string verificationCode = EmailService.GenerateCode();
 
             // save verification code to storage
             var member = _memberStorage.Find(message.Nickname);
