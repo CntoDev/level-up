@@ -42,7 +42,10 @@ namespace Roster.Infrastructure.Storage
                         .IsRequired()
                         .HasConversion(v => v.Nickname, v => new MemberNickname(v))
                         .HasColumnName("Nickname");
-                        
+
+            modelBuilder.Entity<ApplicationForm>()
+                        .Property(af => af.DateOfBirth);
+
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsMany(af => af.OwnedDlcs);
 

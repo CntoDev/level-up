@@ -1,0 +1,11 @@
+@model Roster.Core.Domain.ApplicationForm
+
+@switch (Model.Accepted)
+{
+    case true: <span class='badge bg-success'>Accepted</span>
+        break;
+    case false: <span class='badge bg-danger'>Rejected</span>
+        break;
+    default: <span class='badge bg-secondary'>Unprocessed</span>
+        break;
+}

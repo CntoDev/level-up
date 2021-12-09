@@ -16,8 +16,9 @@ namespace Roster.Core.Domain
         public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
         public ICollection<OwnedDlc> OwnedDlcs { get; set; }
-        public bool Accepted { get; private set; }
+        public bool? Accepted { get; private set; }
         public string InterviewerComment { get; private set; }
+        public bool Processed => Accepted.HasValue;
 
         internal ApplicationForm(MemberNickname nickname, DateTime dateOfBirth, EmailAddress email)
         {
@@ -26,16 +27,22 @@ namespace Roster.Core.Domain
             Email = email;
         }
 
-        private ApplicationForm() {}
+        private ApplicationForm() { }
 
         internal void Accept()
         {
+            if (Processed)
+                return;
+
             Accepted = true;
             Publish(new ApplicationFormAccepted(this));
         }
 
         internal void Reject(string comment)
         {
+            if (Processed)
+                return;
+            
             Accepted = false;
             InterviewerComment = comment;
             Publish(new ApplicationFormRejected(Nickname.ToString(), Email.ToString(), comment));

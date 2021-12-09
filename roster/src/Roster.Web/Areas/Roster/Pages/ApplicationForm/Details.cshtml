@@ -1,52 +1,70 @@
 @page
 @using Roster.Core.Domain
 @model DetailsModel
+
 @{
     ApplicationForm form = Model.ApplicationForm;
 
     string Format(string input) => string.IsNullOrWhiteSpace(input) ? "N/A" : input;
 }
 
-<h1>Details</h1>
+<h1>Application details</h1>
 
+<div class="row">
+    <div class="col">
+        <dl>
+            <dt>Nickname</dt>
+            <dd>@form.Nickname <partial name="_ApplicationProcess" for="ApplicationForm" /></dd>
+            <dt>Discord id</dt>
+            <dd>@Format(form.DiscordId?.ToString())</dd>
+            <dt>Google e-mail</dt>
+            <dd>@Format(form.Gmail?.ToString())</dd>
+
+        </dl>
+    </div>
+    <div class="col">
+        <dl>
+            <dt>e-mail</dt>
+            <dd>@form.Email</dd>
+            <dt>Teamspeak id</dt>
+            <dd>@Format(form.TeamspeakId)</dd>
+            <dt>Bohemia Interactive nickname</dt>
+            <dd>@Format(form.BiNickname)</dd>
+        </dl>
+    </div>
+    <div class="col">
+        <dl>
+            <dt>Date of birth</dt>
+            <dd>@form.DateOfBirth.ToShortDateString()</dd>
+            <dt>Steam username</dt>
+            <dd>@Format(form.SteamId)</dd>
+            <dt>GitHub nickname</dt>
+            <dd>@Format(form.GithubNickname)</dd>                      
+        </dl>
+    </div>
+</div>
 <dl>
-    <dt>Nickname</dt>
-    <dd>@form.Nickname</dd>
-    <dt>e-mail</dt>
-    <dd>@form.Email</dd>
-    <dt>Date of birth</dt>
-    <dd>@form.DateOfBirth.ToShortDateString()</dd>
-    <dt>Bohemia Interactive nickname</dt>
-    <dd>@Format(form.BiNickname)</dd>
-    <dt>Discord id</dt>
-    <dd>@Format(form.DiscordId?.ToString())</dd>
-    <dt>GitHub nickname</dt>
-    <dd>@Format(form.GithubNickname)</dd>
-    <dt>Google e-mail</dt>
-    <dd>@Format(form.Gmail?.ToString())</dd>
-    <dt>Steam username</dt>
-    <dd>@Format(form.SteamId)</dd>
-    <dt>Teamspeak id</dt>
-    <dd>@Format(form.TeamspeakId)</dd>
-</dl>
 
-<h2>Owned DLC</h2>
+    <h2>Owned DLC</h2>
 
-<ul>
-    @foreach (var dlc in form.OwnedDlcs)
+    <ul>
+        @foreach (var dlc in form.OwnedDlcs)
+        {
+            <li>@dlc.Name</li>
+        }
+    </ul>
+
+    @if (!form.Processed)
     {
-        <li>@dlc.Name</li>
+        <form method="post">
+            <input type="hidden" asp-for="Nickname" />
+            <div class="mb-3">
+                <label asp-for="InterviewerComment" class="form-label"></label>
+                <input type="text" asp-for="InterviewerComment" class="form-control" />
+            </div>
+            <div class="btn-group">
+                <input type="submit" class="btn btn-outline-primary" value="Accept application" asp-page-handler="accept" />
+                <input type="submit" class="btn btn-outline-primary" value="Reject application" asp-page-handler="reject" />
+            </div>
+        </form>
     }
-</ul>
-
-<form method="post">
-    <input type="hidden" asp-for="Nickname" />
-    <div class="mb-3">
-        <label asp-for="InterviewerComment" class="form-label"></label>
-        <input type="text" asp-for="InterviewerComment" class="form-control" />
-    </div>
-    <div class="btn-group">
-        <input type="submit" class="btn btn-outline-primary" value="Accept application" asp-page-handler="accept" />
-        <input type="submit" class="btn btn-outline-primary" value="Reject application" asp-page-handler="reject" />
-    </div>
-</form>
