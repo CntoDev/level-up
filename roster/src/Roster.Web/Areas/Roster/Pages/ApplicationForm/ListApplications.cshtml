@@ -10,6 +10,7 @@
                 <th>Nickname</th>
                 <th>Email</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,7 @@
                 <tr>
                     <td>@appForm.Nickname</td>
                     <td>@appForm.Email</td>
+                    <td><partial name="_ApplicationProcess" for="@appForm" /></td>
                     <td><a asp-area="Roster" asp-page="/ApplicationForm/Details" asp-route-nickname=@appForm.Nickname>Details</a></td>
                 </tr>
             }
