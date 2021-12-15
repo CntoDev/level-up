@@ -35,7 +35,7 @@ namespace Roster.Core.Domain
                 return;
 
             Accepted = true;
-            Publish(ApplicationFormAccepted.CreateFromApplicationForm(this));
+            Publish(BuildEvent(this));
         }
 
         internal void Reject(string comment)
@@ -46,6 +46,21 @@ namespace Roster.Core.Domain
             Accepted = false;
             InterviewerComment = comment;
             Publish(new ApplicationFormRejected(Nickname.ToString(), Email.ToString(), comment));
+        }
+
+        public static ApplicationFormAccepted BuildEvent(ApplicationForm applicationForm)
+        {
+            return new ApplicationFormAccepted(
+                applicationForm.Nickname.Nickname,
+                applicationForm.DateOfBirth,
+                applicationForm.Email.Email,
+                applicationForm.BiNickname,
+                applicationForm.SteamId,
+                applicationForm.Gmail?.Email,
+                applicationForm.GithubNickname,
+                applicationForm.DiscordId?.Id,
+                applicationForm.TeamspeakId
+            );
         }
     }
 }

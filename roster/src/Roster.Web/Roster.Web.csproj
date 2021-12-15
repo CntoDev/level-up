@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Roster.Core.Events\Roster.Core.Events.csproj" />
     <ProjectReference Include="..\Roster.Core\Roster.Core.csproj" />
     <ProjectReference Include="..\Roster.Infrastructure\Roster.Infrastructure.csproj" />
   </ItemGroup>

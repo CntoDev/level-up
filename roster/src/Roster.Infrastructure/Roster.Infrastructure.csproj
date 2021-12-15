@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\Roster.Core.Events\Roster.Core.Events.csproj" />
     <ProjectReference Include="..\Roster.Core\Roster.Core.csproj" />
   </ItemGroup>
 
