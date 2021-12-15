@@ -32,7 +32,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
         {
             _logger.LogInformation("Accepting form for {nickname}", Nickname);
             var applicationForm = _applicationStorage.QueryOne(f => f.Nickname.Equals(new Domain.MemberNickname(Nickname)));
-            var applicationFormAccepted = ApplicationFormAccepted.CreateFromApplicationForm(applicationForm);
+            var applicationFormAccepted = Domain.ApplicationForm.BuildEvent(applicationForm);
             _eventStore.Publish(applicationFormAccepted);
             return Page();
         }
