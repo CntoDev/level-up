@@ -16,3 +16,4 @@ Backup
 PublishOutput
 **/app.db
 *.txt
+appsettings.Development.json

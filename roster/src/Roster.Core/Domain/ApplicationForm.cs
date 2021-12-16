@@ -35,7 +35,7 @@ namespace Roster.Core.Domain
                 return;
 
             Accepted = true;
-            Publish(new ApplicationFormAccepted(this));
+            Publish(ApplicationFormAccepted.CreateFromApplicationForm(this));
         }
 
         internal void Reject(string comment)
