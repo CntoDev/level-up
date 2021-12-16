@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Saga;
 using Roster.Core.Events;
+using Serilog;
 
 namespace Roster.Core.Sagas
 {

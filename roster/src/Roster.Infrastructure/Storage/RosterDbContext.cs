@@ -52,16 +52,19 @@ namespace Roster.Infrastructure.Storage
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsOne(af => af.Email)
                         .Property(a => a.Email)
+                        .IsRequired()
                         .HasColumnName("Email");
 
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsOne(af => af.Gmail)
                         .Property(a => a.Email)
+                        .IsRequired()
                         .HasColumnName("Gmail");
 
             modelBuilder.Entity<ApplicationForm>()
                         .OwnsOne(af => af.DiscordId)
                         .Property(d => d.Id)
+                        .IsRequired()
                         .HasColumnName("DiscordId");
 
             modelBuilder.Entity<Member>()

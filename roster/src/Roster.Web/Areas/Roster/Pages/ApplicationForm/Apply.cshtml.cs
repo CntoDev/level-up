@@ -95,7 +95,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 
         public IActionResult OnGet()
         {
-            DateOfBirth = DateTime.Now.Date;
+            DateOfBirth = DateTime.UtcNow.Date;
             FetchLinkedData();
             return Page();
         }

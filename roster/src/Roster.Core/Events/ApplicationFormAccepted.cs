@@ -5,35 +5,40 @@ namespace Roster.Core.Events
 {
     public record ApplicationFormAccepted : IEvent
     {
-        public ApplicationFormAccepted(ApplicationForm applicationForm) 
+        public static ApplicationFormAccepted CreateFromApplicationForm(ApplicationForm applicationForm) 
         {
-            Nickname = applicationForm.Nickname.Nickname;
-            DateOfBirth = applicationForm.DateOfBirth;
-            Email = applicationForm.Email.Email;
-            BiNickname = applicationForm.BiNickname;
-            SteamId = applicationForm.SteamId;
-            Gmail = applicationForm.Gmail?.Email;
-            GithubNickname = applicationForm.GithubNickname;
-            DiscordId = applicationForm.DiscordId?.Id;
-            TeamspeakId = applicationForm.TeamspeakId;            
+            ApplicationFormAccepted @event = new ApplicationFormAccepted()
+            {
+                Nickname = applicationForm.Nickname.Nickname,
+                DateOfBirth = applicationForm.DateOfBirth,
+                Email = applicationForm.Email.Email,
+                BiNickname = applicationForm.BiNickname,
+                SteamId = applicationForm.SteamId,
+                Gmail = applicationForm.Gmail?.Email,
+                GithubNickname = applicationForm.GithubNickname,
+                DiscordId = applicationForm.DiscordId?.Id,
+                TeamspeakId = applicationForm.TeamspeakId          
+            };
+
+            return @event;
         }
 
-        public string Nickname { get; }
+        public string Nickname { get; init; }
 
-        public DateTime DateOfBirth { get; }
+        public DateTime DateOfBirth { get; init; }
 
-        public string Email { get; }
+        public string Email { get; init; }
 
-        public string BiNickname { get; }
+        public string BiNickname { get; init; }
 
-        public string SteamId { get; }
+        public string SteamId { get; init; }
 
-        public string Gmail { get; }
+        public string Gmail { get; init; }
 
-        public string GithubNickname { get; }
+        public string GithubNickname { get; init; }
 
-        public string DiscordId { get; }
+        public string DiscordId { get; init; }
 
-        public string TeamspeakId { get; }
+        public string TeamspeakId { get; init; }
     }
 }

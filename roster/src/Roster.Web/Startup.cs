@@ -44,6 +44,7 @@ namespace Roster.Web
             Log.Information("ConnectionStrings {roster} {postgres}", Configuration.GetConnectionString("Roster"), Configuration.GetConnectionString("PostgresConnection"));
             Log.Information("MailJet {@mailjetOptions}", Configuration.GetSection("MailJet").Get<MailJetOptions>());
             Log.Information("RabbitMq {@rabbitmqOptions}", Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>());
+            Log.Information("Recruitment {@recruitment}", Configuration.GetSection("Recruitment").Get<RecruitmentSettings>());
             #endregion
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -105,7 +106,7 @@ namespace Roster.Web
                 x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>
                 {
                     r.ExistingDbContext<ProcessDbContext>();
-                    r.LockStatementProvider = new PostgresLockStatementProvider();
+                    r.LockStatementProvider = new LockStatementProvider();
                 });
             });
 

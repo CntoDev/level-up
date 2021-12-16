@@ -78,7 +78,7 @@ namespace Roster.Core.Domain
         public void ChallengeEmail(string verificationCode)
         {
             _verificationCode = verificationCode;
-            _verificationTime = DateTime.Now;
+            _verificationTime = DateTime.UtcNow;
 
             Publish(new EmailChallenged(Nickname, _verificationCode, _verificationTime));
         }
@@ -86,7 +86,7 @@ namespace Roster.Core.Domain
         public bool VerifyEmail(string verificationCode)
         {
             // 1 hour verification time
-            bool isVerified = verificationCode.Equals(_verificationCode) && DateTime.Now.AddHours(-1) < _verificationTime;
+            bool isVerified = verificationCode.Equals(_verificationCode) && DateTime.UtcNow.AddHours(-1) < _verificationTime;
 
             if (isVerified)
             {

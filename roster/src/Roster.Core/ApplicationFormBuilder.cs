@@ -29,8 +29,8 @@ namespace Roster.Core
         {
             MemberNickname nickname = MemberNicknameFactory.CreateForApplicant(_existingNicknames, nicknameRaw);
             EmailAddress email = new(emailRaw);
-
-            _applicationForm = new ApplicationForm(nickname, dateOfBirth, email);
+            DateTime utcDateOfBirth = new DateTime(dateOfBirth.Ticks, DateTimeKind.Utc);
+            _applicationForm = new ApplicationForm(nickname, utcDateOfBirth , email);
 
             return this;
         }
