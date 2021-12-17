@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Roster.Core.Events;
 
 namespace Roster.Core.Domain
@@ -8,11 +9,13 @@ namespace Roster.Core.Domain
         private string _verificationCode;
         private DateTime? _verificationTime;
         private bool _emailVerified;
+        private List<MemberDischarge> _memberDischarges;
 
         private Member(string nickname, string email)
         {
             Nickname = nickname;
             Email = email;
+            _memberDischarges = new();
         }
 
         public static Member Accept(ApplicationFormAccepted message)
@@ -118,7 +121,12 @@ namespace Roster.Core.Domain
         {
             Publish(new BootcampCompleted(Nickname));
         }
-    
+
+        public void Discharge(string reason)
+        {
+            _memberDischarges.Add(new MemberDischarge(DateTime.UtcNow, reason));
+        }
+
         private void StartRecruitmentWindow(Guid recruitmentSagaId)
         {
             RecruitmentSettings recruitmentSettings = RecruitmentSettings.Instance;
