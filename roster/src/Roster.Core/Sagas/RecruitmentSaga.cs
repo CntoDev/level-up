@@ -17,6 +17,9 @@ namespace Roster.Core.Sagas
         Orchestrates<RecruitTrialExpired>,
         Orchestrates<RecruitAssessmentExpired>
     {
+        const string FailedAssessment = "Recruit failed to pass mods check or bootcamp in time.";
+        const string TrialExpired = "Recruit trial has expired.";
+
         public Guid CorrelationId { get; set; }
 
         public string Nickname { get; set; }
@@ -79,7 +82,7 @@ namespace Roster.Core.Sagas
             };
 
             if (shouldDischarge)
-                context.Publish(new RecruitDischarged(Nickname));
+                context.Publish(new RecruitDischarged(Nickname, TrialExpired));
 
             return Task.CompletedTask;
         }
@@ -94,7 +97,7 @@ namespace Roster.Core.Sagas
             if (TrialSucceeded.Value)
                 context.Publish(new RecruitPromoted(context.Message.Nickname));
             else if (AutomaticDischarge)
-                context.Publish(new RecruitDischarged(context.Message.Nickname));
+                context.Publish(new RecruitDischarged(context.Message.Nickname, TrialExpired));
 
             return Task.CompletedTask;
         }
@@ -102,7 +105,7 @@ namespace Roster.Core.Sagas
         public Task Consume(ConsumeContext<RecruitAssessmentExpired> context)
         {
             // Think this one should be immediate discharge, recruit failed to do mod check + bootcamp in two weeks
-            context.Publish(new RecruitDischarged(Nickname));
+            context.Publish(new RecruitDischarged(Nickname, FailedAssessment));
             return Task.CompletedTask;
         }
 
