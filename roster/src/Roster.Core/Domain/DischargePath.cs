@@ -1,6 +1,6 @@
 namespace Roster.Core.Domain
 {
-    enum DischargePath
+    public enum DischargePath
     {
         RecruitmentFailed = 0,
         SelfDischarge = 1,

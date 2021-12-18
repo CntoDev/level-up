@@ -78,6 +78,8 @@ namespace Roster.Core.Domain
 
         public bool EmailVerified => _emailVerified;
 
+        public IEnumerable<MemberDischarge> MemberDischarges => _memberDischarges;
+
         public void ChallengeEmail(string verificationCode)
         {
             _verificationCode = verificationCode;

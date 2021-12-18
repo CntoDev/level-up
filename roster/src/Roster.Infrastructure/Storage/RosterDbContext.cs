@@ -94,6 +94,13 @@ namespace Roster.Infrastructure.Storage
                         .HasConversion(rank => rank.Id, id => new RankId(id))
                         .HasColumnName("RankId");
 
+            modelBuilder.Entity<Member>()
+                        .OwnsMany(m => m.MemberDischarges, b => {
+                            b.Property(md => md.DateOfDischarge);
+                            b.Property(md => md.DischargePath);
+                            b.Property(md => md.Comment);
+                        });
+
             modelBuilder.Entity<Dlc>()
                         .HasKey(d => d.DlcName);
 

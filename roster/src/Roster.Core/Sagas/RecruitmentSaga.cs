@@ -82,7 +82,7 @@ namespace Roster.Core.Sagas
             };
 
             if (shouldDischarge)
-                context.Publish(new DischargeRecruit(Nickname, TrialExpired));
+                context.Send(new DischargeRecruit(Nickname, TrialExpired));
 
             return Task.CompletedTask;
         }
@@ -97,7 +97,7 @@ namespace Roster.Core.Sagas
             if (TrialSucceeded.Value)
                 context.Publish(new RecruitPromoted(context.Message.Nickname));
             else if (AutomaticDischarge)
-                context.Publish(new DischargeRecruit(context.Message.Nickname, TrialExpired));
+                context.Send(new DischargeRecruit(context.Message.Nickname, TrialExpired));
 
             return Task.CompletedTask;
         }
@@ -105,7 +105,7 @@ namespace Roster.Core.Sagas
         public Task Consume(ConsumeContext<RecruitAssessmentExpired> context)
         {
             // Think this one should be immediate discharge, recruit failed to do mod check + bootcamp in two weeks
-            context.Publish(new DischargeRecruit(Nickname, FailedAssessment));
+            context.Send(new DischargeRecruit(Nickname, FailedAssessment));
             return Task.CompletedTask;
         }
 

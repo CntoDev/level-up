@@ -24,6 +24,7 @@ using Roster.Core.Domain;
 using Roster.Core.Sagas;
 using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System;
 
 namespace Roster.Web
 {
@@ -85,6 +86,9 @@ namespace Roster.Web
             services.AddMassTransit(x =>
             {
                 x.AddDelayedMessageScheduler();
+
+                // send endpoint conventions
+                EndpointConvention.Map<DischargeRecruit>(new Uri("queue:discharge-processing"));
 
                 x.UsingRabbitMq((context, configurator) =>
                 {

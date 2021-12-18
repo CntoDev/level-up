@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Roster.Infrastructure.Storage;
@@ -11,9 +12,10 @@ using Roster.Infrastructure.Storage;
 namespace Roster.Web.Migrations.RosterDb
 {
     [DbContext(typeof(RosterDbContext))]
-    partial class RosterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211218081113_DischargeSystem")]
+    partial class DischargeSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

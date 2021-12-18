@@ -2,8 +2,10 @@ using System;
 
 namespace Roster.Core.Domain
 {
-    struct MemberDischarge
+    public record MemberDischarge
     {
+        private MemberDischarge() { }
+        
         internal MemberDischarge(DateTime dateOfDischarge, DischargePath dischargePath, string comment)
         {
             DateOfDischarge = dateOfDischarge;
@@ -11,10 +13,10 @@ namespace Roster.Core.Domain
             Comment = comment;
         }
 
-        internal DateTime DateOfDischarge { get; }
-        
-        internal DischargePath DischargePath { get; }
+        public DateTime DateOfDischarge { get; }
 
-        internal string Comment { get; }
+        public DischargePath DischargePath { get; }
+
+        public string Comment { get; }
     }
 }
