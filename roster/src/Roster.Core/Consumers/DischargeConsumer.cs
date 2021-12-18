@@ -6,7 +6,7 @@ using Roster.Core.Storage;
 
 namespace Roster.Core.Consumers
 {
-    public class DischargeConsumer : IConsumer<RecruitDischarged>
+    public class DischargeConsumer : IConsumer<DischargeRecruit>
     {
         private readonly IStorage<Member> _storage;
 
@@ -15,7 +15,7 @@ namespace Roster.Core.Consumers
             _storage = storage;    
         }
 
-        public Task Consume(ConsumeContext<RecruitDischarged> context)
+        public Task Consume(ConsumeContext<DischargeRecruit> context)
         {
             var message = context.Message;
             var member = _storage.Find(message.Nickname);
