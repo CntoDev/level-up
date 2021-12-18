@@ -24,6 +24,8 @@ docker-build
 
 # Binaries
 **/wwwroot/images/
+bin
+obj
 
 # Resharper Code Inspection
 resharper.xml
