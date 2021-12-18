@@ -102,5 +102,13 @@ namespace Roster.Core.Services
             _memberStorage.Save();
             _eventStore.Publish(member.Events());
         }
+
+        public void Rejoin(string nickname)
+        {
+            Member member = _memberStorage.Find(nickname);
+            member.Rejoin();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
     }
 }

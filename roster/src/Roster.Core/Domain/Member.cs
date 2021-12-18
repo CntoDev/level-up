@@ -89,7 +89,7 @@ namespace Roster.Core.Domain
                 return string.Empty;
 
             var memberDischarge = _memberDischarges.LastOrDefault();
-            
+
             if (memberDischarge is MemberDischarge)
                 return $"Discharged on {memberDischarge.DateOfDischarge} for {memberDischarge.DischargePath}.";
             else
@@ -119,6 +119,33 @@ namespace Roster.Core.Domain
             return false;
         }
 
+        public void Rejoin()
+        {
+            if (!Discharged)
+                throw new InvalidOperationException("Member was not discharged.");
+
+            var lastDischarge = _memberDischarges.Last();
+
+            if (lastDischarge.DischargePath == DischargePath.BreachOfRegulations)
+                throw new InvalidOperationException("Member discharged for break of regulations cannot rejoin.");
+
+            Discharged = false;
+
+            if (lastDischarge.IsAlumni)
+            {
+                Promote(RankId.Reservist); // Alumni becomes a reservist immediately
+                Publish(new MemberRejoined(Nickname, true, Guid.NewGuid()));
+            }
+            else
+            {
+                Guid recruitmentSagaId = Guid.NewGuid();
+                StartRecruitmentWindow(recruitmentSagaId);
+                StartAssessmentWindow(recruitmentSagaId);
+                Promote(RankId.Recruit);                
+                Publish(new MemberRejoined(Nickname, false, Guid.NewGuid()));
+            }
+        }
+
         public void ToggleAutomaticDischarge()
         {
             Publish(new AutomaticDischargeToggled(Nickname));
@@ -129,7 +156,7 @@ namespace Roster.Core.Domain
             RankId = rankId;
             Publish(new MemberPromoted(Nickname, RankId.Id, DateTime.UtcNow));
         }
-    
+
         public void CheckMods()
         {
             Publish(new ModsChecked(Nickname));
@@ -149,12 +176,21 @@ namespace Roster.Core.Domain
         {
             if (Discharged)
                 throw new InvalidOperationException("Member already discharged.");
-            
+
             Discharged = true;
             DateTime dischargeDate = DateTime.UtcNow;
-            _memberDischarges.Add(new MemberDischarge(dischargeDate, dischargePath, comment));
+            
+            bool alumni = dischargePath switch
+            {
+                DischargePath.BreachOfRegulations => false,
+                DischargePath.LackOfActivity => false,
+                DischargePath.RecruitmentFailed => false,
+                DischargePath.SelfDischarge => true,
+                _ => false
+            };
 
-            Publish(new MemberDischarged(Nickname, dischargeDate, (int)dischargePath, comment));
+            _memberDischarges.Add(new MemberDischarge(dischargeDate, dischargePath, alumni, comment));
+            Publish(new MemberDischarged(Nickname, dischargeDate, (int)dischargePath, alumni, comment));
         }
 
         private void StartRecruitmentWindow(Guid recruitmentSagaId)
@@ -169,6 +205,6 @@ namespace Roster.Core.Domain
             RecruitmentSettings recruitmentSettings = RecruitmentSettings.Instance;
             DateTime assessmentWindowEndDate = JoinDate.AddDays(recruitmentSettings.ModsAssesmentWindowDays);
             Publish(new RecruitAssessmentExpired(Nickname, recruitmentSettings.ModsAssesmentWindowDays, assessmentWindowEndDate, recruitmentSagaId));
-        }        
+        }
     }
 }

@@ -96,5 +96,11 @@ namespace Roster.Web.Areas.Roster.Pages.Member
         {
             return RedirectToPage("Discharge", new { nickname = Nickname });
         }
+
+        public IActionResult OnPostRejoin()
+        {
+            _memberService.Rejoin(Nickname);
+            return RedirectToPage(new { nickname = Nickname });
+        }
     }
 }

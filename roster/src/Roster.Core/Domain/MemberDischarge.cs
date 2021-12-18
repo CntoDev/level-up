@@ -6,16 +6,19 @@ namespace Roster.Core.Domain
     {
         private MemberDischarge() { }
         
-        internal MemberDischarge(DateTime dateOfDischarge, DischargePath dischargePath, string comment)
+        internal MemberDischarge(DateTime dateOfDischarge, DischargePath dischargePath, bool isAlumni, string comment)
         {
             DateOfDischarge = dateOfDischarge;
             DischargePath = dischargePath;
+            IsAlumni = isAlumni;
             Comment = comment;
         }
 
         public DateTime DateOfDischarge { get; }
 
         public DischargePath DischargePath { get; }
+
+        public bool IsAlumni { get; }
 
         public string Comment { get; }
     }
