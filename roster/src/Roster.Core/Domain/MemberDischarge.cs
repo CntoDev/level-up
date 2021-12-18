@@ -2,16 +2,19 @@ using System;
 
 namespace Roster.Core.Domain
 {
-    public struct MemberDischarge
+    struct MemberDischarge
     {
-        public MemberDischarge(DateTime dateOfDischarge, string reason)
+        internal MemberDischarge(DateTime dateOfDischarge, DischargePath dischargePath, string comment)
         {
             DateOfDischarge = dateOfDischarge;
-            Reason = reason;
+            DischargePath = dischargePath;
+            Comment = comment;
         }
 
-        public DateTime DateOfDischarge { get; }
+        internal DateTime DateOfDischarge { get; }
         
-        public string Reason { get; }
+        internal DischargePath DischargePath { get; }
+
+        internal string Comment { get; }
     }
 }

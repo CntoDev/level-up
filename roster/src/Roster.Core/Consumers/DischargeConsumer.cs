@@ -19,7 +19,7 @@ namespace Roster.Core.Consumers
         {
             var message = context.Message;
             var member = _storage.Find(message.Nickname);
-            member.Discharge(message.Reason);
+            member.DischargeRecruit(message.Reason);
             _storage.Save();
             return Task.CompletedTask;
         }

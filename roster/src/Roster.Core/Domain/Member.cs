@@ -122,9 +122,9 @@ namespace Roster.Core.Domain
             Publish(new BootcampCompleted(Nickname));
         }
 
-        public void Discharge(string reason)
+        public void DischargeRecruit(string reason)
         {
-            _memberDischarges.Add(new MemberDischarge(DateTime.UtcNow, reason));
+            _memberDischarges.Add(new MemberDischarge(DateTime.UtcNow, DischargePath.RecruitmentFailed, reason));
         }
 
         private void StartRecruitmentWindow(Guid recruitmentSagaId)
