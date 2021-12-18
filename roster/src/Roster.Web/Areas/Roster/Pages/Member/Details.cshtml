@@ -3,6 +3,8 @@
 
 <h1>Member details</h1>
 
+<p>@Model.DischargeState</p>
+
 <div class="row">
     <div class="col-md-4">
         <dl>
@@ -88,10 +90,11 @@
         <input type="hidden" asp-for="Nickname" />
         <div class="btn-group">
             <input type="submit" class="btn btn-outline-primary" value="Mods check done" asp-page-handler="modschecked" />
-            <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />
+            <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />            
             @if (Model.AutomaticDischargeEnabled) {
-                <input type="submit" class="btn btn-danger" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
+                <input type="submit" class="btn btn-warning" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
             }            
+            <input type="submit" class="btn btn-danger" value="Discharge" asp-page-handler="discharge" />                        
         </div>
     </form>    
 </div>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Roster.Core.Events;
 
 namespace Roster.Core.Domain
@@ -76,9 +77,24 @@ namespace Roster.Core.Domain
 
         public RankId RankId { get; private set; }
 
+        public bool Discharged { get; private set; }
+
         public bool EmailVerified => _emailVerified;
 
         public IEnumerable<MemberDischarge> MemberDischarges => _memberDischarges;
+
+        public string LastDischarge()
+        {
+            if (_memberDischarges is null)
+                return string.Empty;
+
+            var memberDischarge = _memberDischarges.LastOrDefault();
+            
+            if (memberDischarge is MemberDischarge)
+                return $"Discharged on {memberDischarge.DateOfDischarge} for {memberDischarge.DischargePath}.";
+            else
+                return string.Empty;
+        }
 
         public void ChallengeEmail(string verificationCode)
         {
@@ -126,7 +142,19 @@ namespace Roster.Core.Domain
 
         public void DischargeRecruit(string reason)
         {
-            _memberDischarges.Add(new MemberDischarge(DateTime.UtcNow, DischargePath.RecruitmentFailed, reason));
+            Discharge(DischargePath.RecruitmentFailed, reason);
+        }
+
+        public void Discharge(DischargePath dischargePath, string comment)
+        {
+            if (Discharged)
+                throw new InvalidOperationException("Member already discharged.");
+            
+            Discharged = true;
+            DateTime dischargeDate = DateTime.UtcNow;
+            _memberDischarges.Add(new MemberDischarge(dischargeDate, dischargePath, comment));
+
+            Publish(new MemberDischarged(Nickname, dischargeDate, (int)dischargePath, comment));
         }
 
         private void StartRecruitmentWindow(Guid recruitmentSagaId)
