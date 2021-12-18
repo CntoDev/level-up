@@ -36,6 +36,14 @@ namespace Roster.Core.Services
             return isVerified;
         }
 
+        public void Discharge(string nickname, DischargePath dischargePath, string comment)
+        {
+            Member member = _memberStorage.Find(nickname);
+            member.Discharge(dischargePath, comment);
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
+
         public Result PromoteMember(PromoteMemberCommand promoteMemberCommand)
         {
             try {

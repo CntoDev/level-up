@@ -32,6 +32,8 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public string RankName { get; set; }
 
+        public string DischargeState { get; set; }
+
         public IEnumerable<Saga.RecruitmentSaga> RecruitmentSagas { get; set; }
 
         public bool OneClickAssessment => Domain.RecruitmentSettings.Instance.OneClickAssessment;
@@ -49,6 +51,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
             RecruitmentSagas = _processSource.RecruitmentSagas.Where(rs => rs.Nickname.Equals(nickname));
             Nickname = Member.Nickname;
             RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
+            DischargeState = Member.LastDischarge();
                 
             (AutomaticDischargeEnabled, AutomaticDischargeLabel) = RecruitmentSagas.LastOrDefault()?.AutomaticDischarge switch
             {
@@ -87,6 +90,11 @@ namespace Roster.Web.Areas.Roster.Pages.Member
             _memberService.ToggleAutomaticDischarge(Nickname);
             await Task.Delay(3000);
             return RedirectToPage(new { nickname = Nickname });
+        }
+
+        public IActionResult OnPostDischarge()
+        {
+            return RedirectToPage("Discharge", new { nickname = Nickname });
         }
     }
 }
