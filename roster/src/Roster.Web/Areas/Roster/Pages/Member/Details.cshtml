@@ -3,7 +3,10 @@
 
 <h1>Member details</h1>
 
-<p>@Model.DischargeState</p>
+@if (Model.Member.Discharged)
+{
+    <p class="text-danger">@Model.DischargeState</p>
+}
 
 <div class="row">
     <div class="col-md-4">
@@ -94,7 +97,11 @@
             @if (Model.AutomaticDischargeEnabled) {
                 <input type="submit" class="btn btn-warning" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
             }            
-            <input type="submit" class="btn btn-danger" value="Discharge" asp-page-handler="discharge" />                        
+            @if (!Model.Member.Discharged) {
+                <input type="submit" class="btn btn-danger" value="Discharge" asp-page-handler="discharge" />
+            } else {
+                <input type="submit" class="btn btn-primary" value="Rejoin" asp-page-handler="rejoin" />
+            }
         </div>
     </form>    
 </div>

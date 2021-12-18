@@ -10,6 +10,7 @@ namespace Roster.Core.Sagas
 {
     public class RecruitmentSaga : ISaga,
         InitiatedBy<MemberCreated>,
+        InitiatedBy<MemberRejoined>,
         Observes<ModsChecked, RecruitmentSaga>,
         Observes<BootcampCompleted, RecruitmentSaga>,
         Observes<EnoughEventsAttended, RecruitmentSaga>,
@@ -106,6 +107,26 @@ namespace Roster.Core.Sagas
         {
             // Think this one should be immediate discharge, recruit failed to do mod check + bootcamp in two weeks
             context.Send(new DischargeRecruit(Nickname, FailedAssessment));
+            return Task.CompletedTask;
+        }
+
+        public Task Consume(ConsumeContext<MemberRejoined> context)
+        {
+            var message = context.Message;
+            Nickname = message.Nickname;
+
+            if (message.Alumni)
+            {    
+                RecruitmentStartDate = ModsCheckDate = BootcampCompletionDate = DateTime.UtcNow;
+                EnoughAttendedEvents = true;
+                TrialSucceeded = true;
+            }
+            else
+            {
+                RecruitmentStartDate = DateTime.UtcNow;
+                AutomaticDischarge = true;
+            }
+
             return Task.CompletedTask;
         }
 

@@ -98,6 +98,7 @@ namespace Roster.Infrastructure.Storage
                         .OwnsMany(m => m.MemberDischarges, b => {
                             b.Property(md => md.DateOfDischarge);
                             b.Property(md => md.DischargePath);
+                            b.Property(md => md.IsAlumni);
                             b.Property(md => md.Comment);
                         });
 
