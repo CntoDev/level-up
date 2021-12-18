@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using Roster.Core.Domain;
 using Roster.Core.Events;
 using Roster.Core.Storage;
@@ -11,28 +12,28 @@ namespace Roster.Infrastructure.Events
     {
         private readonly IBus _bus;
         private readonly IMessageScheduler _messageScheduler;
-        private readonly IStorage<EventState> _storage;
+        private readonly ILogger<EventStore> _logger;
 
-        public EventStore(IBus bus, IMessageScheduler messageScheduler, IStorage<EventState> storage)
+        public EventStore(IBus bus, IMessageScheduler messageScheduler, ILogger<EventStore> logger)
         {
             _bus = bus;
             _messageScheduler = messageScheduler;
-            _storage = storage;
+            _logger = logger;
         }
 
         public void Publish<T>(T @event) where T : class, IEvent
         {
             if (@event is IScheduledEvent)
             {
-                IScheduledEvent scheduledEvent = (IScheduledEvent)@event;
+                IScheduledEvent scheduledEvent = (IScheduledEvent)@event;                
                 _messageScheduler.SchedulePublish(scheduledEvent.ScheduledForDate, @event);
+                _logger.LogInformation("Published scheduled event {@event} for {date}", scheduledEvent, scheduledEvent.ScheduledForDate);
             }
             else
+            {
                 _bus.Publish(@event);
-
-            EventState eventState = EventState.CreateFromEvent(@event);
-            _storage.Add(eventState);
-            _storage.Save();
+                _logger.LogInformation("Published event {@event}", @event);
+            }
         }
 
         void IEventStore.Publish(IEnumerable<IEvent> events)
