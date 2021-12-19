@@ -38,9 +38,22 @@ namespace Roster.Web.Areas.Roster.Pages.Member
 
         public bool OneClickAssessment => Domain.RecruitmentSettings.Instance.OneClickAssessment;
 
-        public bool AutomaticDischargeEnabled { get;set; }
+        public bool AutomaticDischargeEnabled { get; set; }
 
-        public string AutomaticDischargeLabel { get;set; }
+        public string AutomaticDischargeLabel { get; set; }
+
+        public bool InRecruitment
+        {
+            get
+            {
+                var lastRecruitmentSaga = RecruitmentSagas.LastOrDefault();
+
+                if (lastRecruitmentSaga is null)
+                    return false;
+                else
+                    return !lastRecruitmentSaga.IsSagaFinished();
+            }
+        }
 
         [BindProperty]
         public string Nickname { get; set; }
@@ -52,7 +65,7 @@ namespace Roster.Web.Areas.Roster.Pages.Member
             Nickname = Member.Nickname;
             RankName = _querySource.Ranks.ToList().First(r => r.Id.Equals(Member.RankId)).Name;
             DischargeState = Member.LastDischarge();
-                
+
             (AutomaticDischargeEnabled, AutomaticDischargeLabel) = RecruitmentSagas.LastOrDefault()?.AutomaticDischarge switch
             {
                 null => (false, ""),
@@ -88,6 +101,13 @@ namespace Roster.Web.Areas.Roster.Pages.Member
         public async Task<IActionResult> OnPostToggleAutomaticDischargeAsync()
         {
             _memberService.ToggleAutomaticDischarge(Nickname);
+            await Task.Delay(3000);
+            return RedirectToPage(new { nickname = Nickname });
+        }
+
+        public async Task<IActionResult> OnPostEnoughEventsAttended()
+        {
+            _memberService.AttendEnoughEvents(Nickname);
             await Task.Delay(3000);
             return RedirectToPage(new { nickname = Nickname });
         }

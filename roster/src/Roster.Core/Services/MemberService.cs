@@ -95,6 +95,14 @@ namespace Roster.Core.Services
             _eventStore.Publish(member.Events());
         }
 
+        public void AttendEnoughEvents(string nickname)
+        {
+            Member member = _memberStorage.Find(nickname);
+            member.AttendEnoughEvents();
+            _memberStorage.Save();
+            _eventStore.Publish(member.Events());
+        }
+
         public void ToggleAutomaticDischarge(string nickname)
         {
             Member member = _memberStorage.Find(nickname);

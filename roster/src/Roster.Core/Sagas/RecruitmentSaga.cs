@@ -55,6 +55,9 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<ModsChecked> context)
         {
+            if (IsSagaFinished())
+                return Task.CompletedTask;
+
             if (ModsCheckDate != null)
                 return Task.CompletedTask;
 
@@ -64,6 +67,9 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<BootcampCompleted> context)
         {
+            if (IsSagaFinished())
+                return Task.CompletedTask;
+
             if (BootcampCompletionDate != null)
                 return Task.CompletedTask;
 
@@ -73,6 +79,9 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<AutomaticDischargeToggled> context)
         {
+            if (IsSagaFinished())
+                return Task.CompletedTask;
+
             AutomaticDischarge = !AutomaticDischarge;
 
             // if recruit's time is up and interviewer turned on automatic discharge, goodbye recruit
@@ -90,6 +99,8 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<RecruitTrialExpired> context)
         {
+            Log.Information("Recruit {nickname} trial expired.", context.Message.Nickname);
+
             if (TrialSucceeded.HasValue)
                 return Task.CompletedTask;
 
@@ -105,7 +116,13 @@ namespace Roster.Core.Sagas
 
         public Task Consume(ConsumeContext<RecruitAssessmentExpired> context)
         {
+            if (ModsCheckDate.HasValue && BootcampCompletionDate.HasValue)
+                return Task.CompletedTask; // do nothing
+
+            Log.Information("Recruit assessment failed for {nickname}.", context.Message.Nickname);
+
             // Think this one should be immediate discharge, recruit failed to do mod check + bootcamp in two weeks
+            TrialSucceeded = false;
             context.Send(new DischargeRecruit(Nickname, FailedAssessment));
             return Task.CompletedTask;
         }
@@ -132,6 +149,9 @@ namespace Roster.Core.Sagas
 
         Task IConsumer<EnoughEventsAttended>.Consume(ConsumeContext<EnoughEventsAttended> context)
         {
+            if (IsSagaFinished())
+                return Task.CompletedTask;
+
             EnoughAttendedEvents = true;
             bool trialSuccess = IsTrialSuccessfull();
 
@@ -143,6 +163,8 @@ namespace Roster.Core.Sagas
 
             return Task.CompletedTask;
         }
+
+        public bool IsSagaFinished() => TrialSucceeded != null;        
 
         private bool IsTrialSuccessfull()
         {

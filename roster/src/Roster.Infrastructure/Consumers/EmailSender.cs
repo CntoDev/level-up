@@ -21,30 +21,39 @@ namespace Roster.Infrastructure.Consumers
 
         public async Task Consume(ConsumeContext<MemberCreated> context)
         {
-            var message = context.Message;
-            string verificationCode = EmailService.GenerateCode();
+            if (RecruitmentSettings.Instance.SendMail)
+            {
+                var message = context.Message;
+                string verificationCode = EmailService.GenerateCode();
 
-            // save verification code to storage
-            var member = _memberStorage.Find(message.Nickname);
-            member.ChallengeEmail(verificationCode);
-            _memberStorage.Save();
+                // save verification code to storage
+                var member = _memberStorage.Find(message.Nickname);
+                member.ChallengeEmail(verificationCode);
+                _memberStorage.Save();
 
-            await _emailService.SendVerificationEmail(message.Email, verificationCode);
+                await _emailService.SendVerificationEmail(message.Email, verificationCode);
 
-            // publish events after checking response
-            _eventStore.Publish(member.Events());
+                // publish events after checking response
+                _eventStore.Publish(member.Events());
+            }
         }
 
         public async Task Consume(ConsumeContext<ApplicationFormRejected> context)
         {
-            var message = context.Message;
-            await _emailService.SendRejectionEmail(message.Nickname, message.Email, message.Reason);
+            if (RecruitmentSettings.Instance.SendMail)
+            {
+                var message = context.Message;
+                await _emailService.SendRejectionEmail(message.Nickname, message.Email, message.Reason);
+            }
         }
 
         public async Task Consume(ConsumeContext<ApplicationFormSubmitted> context)
         {
-            var message = context.Message;
-            await _emailService.SendApplicationConfirmation(message.Nickname, message.Email);
+            if (RecruitmentSettings.Instance.SendMail)
+            {
+                var message = context.Message;
+                await _emailService.SendApplicationConfirmation(message.Nickname, message.Email);
+            }
         }
     }
 }

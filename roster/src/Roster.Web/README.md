@@ -17,7 +17,7 @@ Of course, you can put any password you want (POSTGRES_PASSWORD environment vari
 
 ## Install RabbitMQ
 
-`docker run --name roster_message_broker -p 5672:5672 -p 15672:15672 -d rabbitmq:3.9.5-management-alpine`
+`docker run --name roster_message_broker -p 5672:5672 -p 15672:15672 -d masstransit/rabbitmq`
 
 ## Create identity database
 

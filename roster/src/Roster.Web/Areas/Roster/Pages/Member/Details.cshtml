@@ -92,8 +92,12 @@
     <form method="post">
         <input type="hidden" asp-for="Nickname" />
         <div class="btn-group">
-            <input type="submit" class="btn btn-outline-primary" value="Mods check done" asp-page-handler="modschecked" />
-            <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />            
+            @if (Model.InRecruitment)
+            {
+                <input type="submit" class="btn btn-outline-primary" value="Mods check done" asp-page-handler="modschecked" />
+                <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />            
+                <input type="submit" class="btn btn-outline-primary" value="Events attended" asp-page-handler="enougheventsattended" />            
+            }
             @if (Model.AutomaticDischargeEnabled) {
                 <input type="submit" class="btn btn-warning" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
             }            
