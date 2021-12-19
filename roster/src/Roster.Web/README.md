@@ -35,8 +35,9 @@ Open powershell, go to root folder of Roster.Web project and build a project wit
 
 In powershell (root folder of Web project) type `dotnet ef database update`. If you don't have Entity Framework Tools installed check out this [guide](https://docs.microsoft.com/en-us/ef/core/cli/dotnet#installing-the-tools).
 
-1. Once for identity database `dotnet ef database update --context ApplicationDbContext`.
-1. Once for roster database `dotnet ef database update --context RosterDbContext`.
+1. Once for identity db context `dotnet ef database update --context ApplicationDbContext`.
+1. Once for roster db context `dotnet ef database update --context RosterDbContext`.
+1. Once for process (saga) db context `dotnet ef database update --context ProcessDbContext`.
 
 ## Start the application
 
