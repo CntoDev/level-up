@@ -59,7 +59,7 @@ namespace Roster.Core.Domain
 
         public DateTime DateOfBirth { get; private init; }
 
-        public DateTime JoinDate { get; init; }
+        public DateTime JoinDate { get; private set; }
 
         public string Email { get; }
 
@@ -130,6 +130,7 @@ namespace Roster.Core.Domain
                 throw new InvalidOperationException("Member discharged for break of regulations cannot rejoin.");
 
             Discharged = false;
+            JoinDate = DateTime.UtcNow;
 
             if (lastDischarge.IsAlumni)
             {
@@ -142,7 +143,7 @@ namespace Roster.Core.Domain
                 StartRecruitmentWindow(recruitmentSagaId);
                 StartAssessmentWindow(recruitmentSagaId);
                 Promote(RankId.Recruit);                
-                Publish(new MemberRejoined(Nickname, false, Guid.NewGuid()));
+                Publish(new MemberRejoined(Nickname, false, recruitmentSagaId));
             }
         }
 
@@ -165,6 +166,11 @@ namespace Roster.Core.Domain
         public void CompleteBootcamp()
         {
             Publish(new BootcampCompleted(Nickname));
+        }
+
+        public void AttendEnoughEvents()
+        {
+            Publish(new EnoughEventsAttended(Nickname));
         }
 
         public void DischargeRecruit(string reason)

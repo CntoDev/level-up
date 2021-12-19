@@ -25,6 +25,7 @@ using Roster.Core.Sagas;
 using MassTransit.EntityFrameworkCoreIntegration;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Roster.Web
 {
@@ -41,7 +42,7 @@ namespace Roster.Web
         public void ConfigureServices(IServiceCollection services)
         {
             #region Logging startup info
-            Log.Information("Configuring services...");
+            Log.Information("Configuring services, UTC time is {utcTime}.", DateTime.UtcNow);
             Log.Information("ConnectionStrings {roster} {postgres}", Configuration.GetConnectionString("Roster"), Configuration.GetConnectionString("PostgresConnection"));
             Log.Information("MailJet {@mailjetOptions}", Configuration.GetSection("MailJet").Get<MailJetOptions>());
             Log.Information("RabbitMq {@rabbitmqOptions}", Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>());
@@ -87,30 +88,38 @@ namespace Roster.Web
             {
                 x.AddDelayedMessageScheduler();
 
+                // Add consumers
+                x.AddConsumer<MemberCreationConsumer>();
+                x.AddConsumer<EmailSender>();
+                x.AddConsumer<PromotionConsumer>();                
+                x.AddConsumer<DischargeConsumer>();
+                
+                // Add sagas
+                x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>
+                {
+                    r.ExistingDbContext<ProcessDbContext>();
+                    r.LockStatementProvider = new LockStatementProvider();
+                });
+
                 // send endpoint conventions
                 EndpointConvention.Map<DischargeRecruit>(new Uri("queue:discharge-processing"));
 
                 x.UsingRabbitMq((context, configurator) =>
                 {
                     configurator.UseDelayedMessageScheduler();
+
                     configurator.Host(rabbitMqOptions.Host, "/", h =>
                     {
                         h.Username(rabbitMqOptions.Username);
                         h.Password(rabbitMqOptions.Password);
                     });
+                                        
                     configurator.ConfigureEndpoints(context);
-                });
 
-                // Add consumers
-                x.AddConsumer<MemberCreationConsumer>();
-                x.AddConsumer<EmailSender>();
-                x.AddConsumer<PromotionConsumer>();
-
-                // Add sagas
-                x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>
-                {
-                    r.ExistingDbContext<ProcessDbContext>();
-                    r.LockStatementProvider = new LockStatementProvider();
+                    configurator.ReceiveEndpoint("discharge-processing", e =>
+                    {
+                        e.ConfigureConsumer<DischargeConsumer>(context);
+                    });
                 });
             });
 
