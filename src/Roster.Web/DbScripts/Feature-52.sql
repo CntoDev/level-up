@@ -25,3 +25,14 @@ VALUES ('20220106154934_LanguageSkillLevel', '6.0.1');
 
 COMMIT;
 
+START TRANSACTION;
+
+ALTER TABLE "ApplicationForms" ADD "PreviousArmaExperience" text NULL;
+
+ALTER TABLE "ApplicationForms" ADD "PreviousArmaModExperience" text NULL;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20220106155744_PreviousExperience', '6.0.1');
+
+COMMIT;
+
