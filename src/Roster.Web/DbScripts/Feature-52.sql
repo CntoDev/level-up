@@ -36,3 +36,14 @@ VALUES ('20220106155744_PreviousExperience', '6.0.1');
 
 COMMIT;
 
+START TRANSACTION;
+
+ALTER TABLE "ApplicationForms" ADD "AboutYourself" text NULL;
+
+ALTER TABLE "ApplicationForms" ADD "DesiredCommunityRole" text NULL;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20220106160342_AboutYourself', '6.0.1');
+
+COMMIT;
+
