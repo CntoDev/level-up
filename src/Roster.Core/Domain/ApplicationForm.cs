@@ -16,6 +16,7 @@ namespace Roster.Core.Domain
         public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
         public Pronoun PreferredPronouns { get; set; }
+        public TimeZoneInfo TimeZone { get; set; }
         public ICollection<OwnedDlc> OwnedDlcs { get; set; }
         public bool? Accepted { get; private set; }
         public string InterviewerComment { get; private set; }

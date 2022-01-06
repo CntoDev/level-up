@@ -7,3 +7,12 @@ VALUES ('20220106084758_Pronoun', '6.0.1');
 
 COMMIT;
 
+START TRANSACTION;
+
+ALTER TABLE "ApplicationForms" ADD "TimeZone" text NULL;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20220106153621_Timezone', '6.0.1');
+
+COMMIT;
+
