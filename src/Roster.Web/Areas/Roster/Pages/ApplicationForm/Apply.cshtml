@@ -4,64 +4,87 @@
 <h1>Apply for CNTO</h1>
 
 <div class="row">
-    <div class="col-md-6">
-        <form class="row g-2" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="col-md-6">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control"  placeholder="E-mail address" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="col-md-6">
-                <label asp-for="Nickname" class="form-label"></label>
-                <input asp-for="Nickname" class="form-control"  placeholder="Nickname" />
-                <span asp-validation-for="Nickname" class="text-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="DateOfBirth" class="form-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
-            </div>
-            <div class="col-md-8">
-                <label asp-for="BiNickname" class="form-label"></label>
-                <input asp-for="BiNickname" class="form-control" />
-                <span asp-validation-for="BiNickname" class="text-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="DiscordId" class="form-label"></label>
-                <input asp-for="DiscordId" class="form-control" />
-                <span asp-validation-for="DiscordId" class="text-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="GithubNickname" class="form-label"></label>
-                <input asp-for="GithubNickname" class="form-control" />
-                <span asp-validation-for="GithubNickname" class="text-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="Gmail" class="form-label"></label>
-                <input asp-for="Gmail" class="form-control" />
-                <span asp-validation-for="Gmail" class="text-danger"></span>
-            </div>  
-            <div class="col-md-6">
-                <label asp-for="SteamId" class="form-label"></label>
-                <input asp-for="SteamId" class="form-control" />
-                <span asp-validation-for="SteamId" class="text-danger"></span>
-            </div>
-            <div class="col-md-6">
-                <label asp-for="TeamspeakId" class="form-label"></label>
-                <input asp-for="TeamspeakId" class="form-control" />
-                <span asp-validation-for="TeamspeakId" class="text-danger"></span>
-            </div>
-            <div class="col-md-12">
-                <label asp-for="OwnedDlcs" class="form-label"></label>
-                <small class="form-text">(hold control for multiple selection)</small>
-                <select asp-for="OwnedDlcs" asp-items="Model.Dlcs" class="form-control"></select>
-            </div>
-            <div class="col-md-4">
-                <input type="submit" value="Apply" class="btn btn-dark" />
-            </div>
-        </form>
-    </div>
-    <div class="col-md-6">
-        <p class="lead">Welcome to CNTO application form. Please fill in all the details and CNTO staff member will be on it quickly. For <strong>any</strong> questions feel free to visit our Discord channel!</p>
-    </div>
+    <form class="row g-2" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" placeholder="E-mail address" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Nickname" class="form-label"></label>
+            <input asp-for="Nickname" class="form-control" placeholder="Nickname" />
+            <span asp-validation-for="Nickname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="DateOfBirth" class="form-label"></label>
+            <input asp-for="DateOfBirth" class="form-control" />
+        </div>
+        <div class="col-md-8">
+            <label asp-for="BiNickname" class="form-label"></label>
+            <input asp-for="BiNickname" class="form-control" />
+            <span asp-validation-for="BiNickname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="DiscordId" class="form-label"></label>
+            <input asp-for="DiscordId" class="form-control" />
+            <span asp-validation-for="DiscordId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="GithubNickname" class="form-label"></label>
+            <input asp-for="GithubNickname" class="form-control" />
+            <span asp-validation-for="GithubNickname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Gmail" class="form-label"></label>
+            <input asp-for="Gmail" class="form-control" />
+            <span asp-validation-for="Gmail" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="SteamId" class="form-label"></label>
+            <input asp-for="SteamId" class="form-control" />
+            <span asp-validation-for="SteamId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TeamspeakId" class="form-label"></label>
+            <input asp-for="TeamspeakId" class="form-control" />
+            <span asp-validation-for="TeamspeakId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PreferredPronouns" class="form-label"></label>
+            <select asp-for="PreferredPronouns" asp-items="Model.Pronouns" class="form-control"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="TimeZone" class="form-label"></label>
+            <select asp-for="TimeZone" asp-items="Model.TimeZones" class="form-control"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="LanguageSkillLevel" class="form-label"></label>
+            <select asp-for="LanguageSkillLevel" asp-items="Model.LanguageSkillLevels" class="form-control"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PreviousArmaExperience" class="form-label"></label>
+            <input asp-for="PreviousArmaExperience" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PreviousArmaModExperience" class="form-label"></label>
+            <input asp-for="PreviousArmaModExperience" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="DesiredCommunityRole" class="form-label"></label>
+            <input asp-for="DesiredCommunityRole" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="AboutYourself" class="form-label"></label>
+            <input asp-for="AboutYourself" class="form-control" />
+        </div>
+        <div class="col-md-12">
+            <label asp-for="OwnedDlcs" class="form-label"></label>
+            <small class="form-text">(hold control for multiple selection)</small>
+            <select asp-for="OwnedDlcs" asp-items="Model.Dlcs" class="form-control"></select>
+        </div>
+        <div class="col-md-4">
+            <input type="submit" value="Apply" class="btn btn-dark" />
+        </div>
+    </form>
 </div>
