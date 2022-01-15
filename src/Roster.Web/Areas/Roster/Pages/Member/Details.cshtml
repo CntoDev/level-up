@@ -98,13 +98,14 @@
                 <input type="submit" class="btn btn-outline-primary" value="Bootcamp done" asp-page-handler="bootcampdone" />            
                 <input type="submit" class="btn btn-outline-primary" value="Events attended" asp-page-handler="enougheventsattended" />            
             }
-            @if (Model.AutomaticDischargeEnabled) {
-                <input type="submit" class="btn btn-warning" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
+            @if (Model.AutomaticDischargeEnabled && Model.InRecruitment) {
+                <input type="submit" class="btn btn-outline-warning" value="@Model.AutomaticDischargeLabel" asp-page-handler="toggleautomaticdischarge" />
             }            
             @if (!Model.Member.Discharged) {
-                <input type="submit" class="btn btn-danger" value="Discharge" asp-page-handler="discharge" />
+                <input type="submit" class="btn btn-outline-primary" value="Promote" asp-page-handler="promote" />
+                <input type="submit" class="btn btn-outline-danger" value="Discharge" asp-page-handler="discharge" />
             } else {
-                <input type="submit" class="btn btn-primary" value="Rejoin" asp-page-handler="rejoin" />
+                <input type="submit" class="btn btn-outline-primary" value="Rejoin" asp-page-handler="rejoin" />
             }
         </div>
     </form>    

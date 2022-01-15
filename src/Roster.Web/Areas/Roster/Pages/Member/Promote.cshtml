@@ -1,0 +1,20 @@
+@page
+@model PromoteModel
+
+<h1>Promote member</h1>
+
+<form class="form" method="post">
+    <div class="mb-3">
+        <label asp-for="Nickname" class="form-label">Nickname</label>
+        <input asp-for="Nickname" class="form-control" readonly />
+    </div>
+    <div class="mb-3">
+        <label asp-for="RankId" class="form-label">Rank</label>
+        <select asp-for="RankId" asp-items="Model.AvailableRanks" class="form-select">
+            <option value="0">Choose new Rank</option>
+        </select>
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary" value="Promote" />
+    </div>
+</form>
