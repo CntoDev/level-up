@@ -93,7 +93,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 
         public List<SelectListItem> Dlcs { get; set; }
 
-        public List<SelectListItem> Pronouns { get; set; }
+        public Pronoun Pronouns { get; set; }
 
         [Display(Name = "Preferred pronouns")]
         [BindProperty]
@@ -182,7 +182,6 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         {
             _dlcNames = _querySource.Dlcs.Select(dlc => dlc.DlcName.Name).ToArray();
             Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
-            Pronouns = Enum.GetValues<Pronoun>().Select(x => new SelectListItem(x.ToString(), ((int)x).ToString())).ToList();
             TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectListItem(x.DisplayName, x.Id)).ToList();
             LanguageSkillLevels = Enum.GetValues<LanguageSkillLevel>().Select(x => new SelectListItem(x.ToString(), ((int)x).ToString())).ToList();
         }
