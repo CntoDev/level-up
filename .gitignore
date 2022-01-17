@@ -21,6 +21,7 @@ docker-build
 
 # Visual Studio
 .vs
+appsettings.development.json
 
 # Binaries
 **/wwwroot/images/
