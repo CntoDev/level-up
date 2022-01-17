@@ -15,6 +15,13 @@ namespace Roster.Core.Domain
         public string GithubNickname { get; set; }
         public DiscordId DiscordId { get; set; }
         public string TeamspeakId { get; set; }
+        public Pronoun PreferredPronouns { get; set; }
+        public TimeZoneInfo TimeZone { get; set; }
+        public LanguageSkillLevel LanguageSkillLevel { get; set; }
+        public string PreviousArmaExperience { get; set; }
+        public string PreviousArmaModExperience { get; set; }
+        public string DesiredCommunityRole { get; set; }
+        public string AboutYourself { get; set; }
         public ICollection<OwnedDlc> OwnedDlcs { get; set; }
         public bool? Accepted { get; private set; }
         public string InterviewerComment { get; private set; }
@@ -42,7 +49,7 @@ namespace Roster.Core.Domain
         {
             if (Processed)
                 return;
-            
+
             Accepted = false;
             InterviewerComment = comment;
             Publish(new ApplicationFormRejected(Nickname.ToString(), Email.ToString(), comment));

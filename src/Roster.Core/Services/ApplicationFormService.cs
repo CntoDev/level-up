@@ -42,6 +42,13 @@ namespace Roster.Core.Services
                     .SetDiscordId(formCommand.DiscordId)
                     .SetTeamspeakId(formCommand.TeamspeakId)
                     .SetOwnedDlcs(formCommand.OwnedDlcs)
+                    .SetPreferredPronouns(formCommand.PreferredPronouns)
+                    .SetTimeZone(formCommand.TimeZone)
+                    .SetLanguageSkillLevel(formCommand.LanguageSkillLevel)
+                    .SetPreviousArmaExperience(formCommand.PreviousArmaExperience)
+                    .SetPreviousArmaModExperience(formCommand.PreviousArmaModExperience)
+                    .SetDesiredCommunityRole(formCommand.DesiredCommunityRole)
+                    .SetAboutYourself(formCommand.AboutYourself)
                     .Build();
 
                 _storage.Add(form);

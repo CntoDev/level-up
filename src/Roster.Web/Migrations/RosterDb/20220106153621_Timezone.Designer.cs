@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Roster.Infrastructure.Storage;
@@ -11,9 +12,10 @@ using Roster.Infrastructure.Storage;
 namespace Roster.Web.Migrations.RosterDb
 {
     [DbContext(typeof(RosterDbContext))]
-    partial class RosterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220106153621_Timezone")]
+    partial class Timezone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +30,6 @@ namespace Roster.Web.Migrations.RosterDb
                         .HasColumnType("text")
                         .HasColumnName("Nickname");
 
-                    b.Property<string>("AboutYourself")
-                        .HasColumnType("text");
-
                     b.Property<bool?>("Accepted")
                         .HasColumnType("boolean");
 
@@ -40,26 +39,14 @@ namespace Roster.Web.Migrations.RosterDb
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("DesiredCommunityRole")
-                        .HasColumnType("text");
-
                     b.Property<string>("GithubNickname")
                         .HasColumnType("text");
 
                     b.Property<string>("InterviewerComment")
                         .HasColumnType("text");
 
-                    b.Property<int>("LanguageSkillLevel")
-                        .HasColumnType("integer");
-
                     b.Property<int>("PreferredPronouns")
                         .HasColumnType("integer");
-
-                    b.Property<string>("PreviousArmaExperience")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PreviousArmaModExperience")
-                        .HasColumnType("text");
 
                     b.Property<string>("SteamId")
                         .HasColumnType("text");

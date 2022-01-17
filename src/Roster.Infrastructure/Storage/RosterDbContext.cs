@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Roster.Core.Domain;
@@ -66,6 +67,10 @@ namespace Roster.Infrastructure.Storage
                         .Property(d => d.Id)
                         .IsRequired()
                         .HasColumnName("DiscordId");
+
+            modelBuilder.Entity<ApplicationForm>()
+                        .Property(af => af.TimeZone)
+                        .HasConversion(af => af.Id, id => TimeZoneInfo.FindSystemTimeZoneById(id));
 
             modelBuilder.Entity<Member>()
                         .HasKey(m => m.Nickname);

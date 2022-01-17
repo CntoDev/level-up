@@ -93,6 +93,40 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
 
         public List<SelectListItem> Dlcs { get; set; }
 
+        public Pronoun Pronouns { get; set; }
+
+        [Display(Name = "Preferred pronouns")]
+        [BindProperty]
+        public string PreferredPronouns { get; set; }
+
+        public List<SelectListItem> TimeZones { get; set; }
+
+        [Display(Name = "Time zone")]
+        [BindProperty]
+        public string TimeZone { get; set; }
+
+        public List<SelectListItem> LanguageSkillLevels { get; set; }
+
+        [Display(Name = "Language skill level")]
+        [BindProperty]
+        public string LanguageSkillLevel { get; set; }
+
+        [Display(Name = "How much experience do you have playing with Arma series?")]
+        [BindProperty]
+        public string PreviousArmaExperience { get; set; }
+
+        [Display(Name = "Which Arma mods have you been using so far?")]
+        [BindProperty]
+        public string PreviousArmaModExperience { get; set; }
+
+        [Display(Name = "Where do you see yourself in the community, any specific roles or activities?")]
+        [BindProperty]
+        public string DesiredCommunityRole { get; set; }
+
+        [Display(Name = "Tell us a little about yourself.")]
+        [BindProperty]
+        public string AboutYourself { get; set; }
+
         public IActionResult OnGet()
         {
             DateOfBirth = DateTime.UtcNow.Date;
@@ -104,16 +138,27 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         {
             if (ModelState.IsValid)
             {
-                ApplicationFormCommand formCommand = new(Nickname, DateOfBirth, Email)
+                ApplicationFormCommand formCommand = new()
                 {
+                    Nickname = Nickname,
+                    DateOfBirth = DateOfBirth,
+                    Email = Email,
                     BiNickname = BiNickname,
                     DiscordId = DiscordId,
                     GithubNickname = GithubNickname,
                     Gmail = Gmail,
                     OwnedDlcs = _ownedDlcs,
                     SteamId = SteamId,
-                    TeamspeakId = TeamspeakId
+                    TeamspeakId = TeamspeakId,
+                    PreferredPronouns = int.Parse(PreferredPronouns),
+                    TimeZone = TimeZone,
+                    LanguageSkillLevel = int.Parse(LanguageSkillLevel),
+                    PreviousArmaExperience = PreviousArmaExperience,
+                    PreviousArmaModExperience = PreviousArmaModExperience,
+                    DesiredCommunityRole = DesiredCommunityRole,
+                    AboutYourself = AboutYourself
                 };
+
                 _logger.LogInformation("Submitting application form {@command}", formCommand);
                 var result = _rosterCoreService.SubmitApplicationForm(formCommand);
                 if (result.IsSuccess)
@@ -132,11 +177,13 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
             FetchLinkedData();
             return Page();
         }
-    
+
         private void FetchLinkedData()
         {
             _dlcNames = _querySource.Dlcs.Select(dlc => dlc.DlcName.Name).ToArray();
             Dlcs = _dlcNames.Select(x => new SelectListItem(x, x)).ToList();
+            TimeZones = TimeZoneInfo.GetSystemTimeZones().Select(x => new SelectListItem(x.DisplayName, x.Id)).ToList();
+            LanguageSkillLevels = Enum.GetValues<LanguageSkillLevel>().Select(x => new SelectListItem(x.ToString(), ((int)x).ToString())).ToList();
         }
     }
 }

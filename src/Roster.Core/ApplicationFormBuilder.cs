@@ -83,5 +83,47 @@ namespace Roster.Core
 
             return this;
         }
+
+        public ApplicationFormBuilder SetPreferredPronouns(int preferredPronouns)
+        {
+            _applicationForm.PreferredPronouns = (Pronoun)preferredPronouns;
+            return this;
+        }
+
+        public ApplicationFormBuilder SetTimeZone(string timeZone)
+        {
+            _applicationForm.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+            return this;
+        }
+
+        public ApplicationFormBuilder SetLanguageSkillLevel(int languageSkillLevel)
+        {
+            _applicationForm.LanguageSkillLevel = (LanguageSkillLevel)languageSkillLevel;
+            return this;
+        }
+
+        public ApplicationFormBuilder SetPreviousArmaExperience(string previousArmaExperience)
+        {
+            _applicationForm.PreviousArmaExperience = previousArmaExperience;
+            return this;
+        }
+
+        public ApplicationFormBuilder SetPreviousArmaModExperience(string previousArmaModExperience)
+        {
+            _applicationForm.PreviousArmaModExperience = previousArmaModExperience;
+            return this;
+        }
+
+        public ApplicationFormBuilder SetDesiredCommunityRole(string desiredCommunityRole)
+        {
+            _applicationForm.DesiredCommunityRole = desiredCommunityRole;
+            return this;
+        }
+
+        public ApplicationFormBuilder SetAboutYourself(string aboutYourself)
+        {
+            _applicationForm.AboutYourself = aboutYourself;
+            return this;
+        }
     }
 }

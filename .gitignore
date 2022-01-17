@@ -30,3 +30,5 @@ obj
 # Resharper Code Inspection
 resharper.xml
 
+
+.fake
