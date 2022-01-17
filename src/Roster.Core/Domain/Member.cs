@@ -154,9 +154,9 @@ namespace Roster.Core.Domain
 
         public void Promote(RankId rankId)
         {
-            var oldRankId = RankId;
+            int oldRankId = RankId;
             RankId = rankId;
-            Publish(new MemberPromoted(Nickname, oldRankId, RankId.Id, DateTime.UtcNow));
+            Publish(new MemberPromoted(Nickname, RankId.Id, oldRankId, DateTime.UtcNow));
         }
 
         public void CheckMods()
