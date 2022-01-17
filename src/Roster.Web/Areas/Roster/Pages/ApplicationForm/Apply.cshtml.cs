@@ -55,7 +55,7 @@ namespace Roster.Web.Areas.Roster.Pages.ApplicationForm
         [BindProperty]
         public string BiNickname { get; set; }
 
-        [Display(Name = "Discord ID")]
+        [Display(Name = "Discord username")]
         [BindProperty]
         public string DiscordId { get; set; }
 
