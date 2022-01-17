@@ -156,7 +156,7 @@ namespace Roster.Core.Domain
         {
             int oldRankId = RankId;
             RankId = rankId;
-            Publish(new MemberPromoted(Nickname, RankId.Id, oldRankId, DateTime.UtcNow));
+            Publish(new MemberPromoted(Nickname, DiscordId, RankId.Id, oldRankId, DateTime.UtcNow));
         }
 
         public void CheckMods()
