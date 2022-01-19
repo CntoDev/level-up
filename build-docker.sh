@@ -34,7 +34,7 @@ rm -rf docker-build/*
 # build discord service
 echo "Building Rooster Discord service..."
 dotnet publish src/Roster.DiscordService -c Release -o docker-build
-sudo docker build -f container/Dockerfile-DiscordService -t cntoarma/rooster-discord:$CNTO_ROSTER_VERSION ./docker-build
+sudo docker build -f container/Dockerfile.DiscordService -t cntoarma/rooster-discord:$CNTO_ROSTER_VERSION ./docker-build
 echo "Rooster Discord service built."
 
 # tidy after build
