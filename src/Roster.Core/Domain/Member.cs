@@ -49,8 +49,8 @@ namespace Roster.Core.Domain
                                              joinDate,
                                              recruitmentSagaId));
 
-            member.StartRecruitmentWindow(recruitmentSagaId);
             member.StartAssessmentWindow(recruitmentSagaId);
+            member.StartRecruitmentWindow(recruitmentSagaId);
             member.Promote(RankId.Recruit);
             return member;
         }
@@ -139,9 +139,9 @@ namespace Roster.Core.Domain
             }
             else
             {
-                Guid recruitmentSagaId = Guid.NewGuid();
-                StartRecruitmentWindow(recruitmentSagaId);
+                Guid recruitmentSagaId = Guid.NewGuid();                
                 StartAssessmentWindow(recruitmentSagaId);
+                StartRecruitmentWindow(recruitmentSagaId);
                 Promote(RankId.Recruit);                
                 Publish(new MemberRejoined(Nickname, false, recruitmentSagaId));
             }

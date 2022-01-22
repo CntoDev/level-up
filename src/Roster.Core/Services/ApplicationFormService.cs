@@ -53,7 +53,7 @@ namespace Roster.Core.Services
 
                 _storage.Add(form);
                 _storage.Save();
-                _eventStore.Publish(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
+                _eventStore.PublishAsync(new ApplicationFormSubmitted(formCommand.Nickname, formCommand.Email));
 
                 return Result.Ok();
             }

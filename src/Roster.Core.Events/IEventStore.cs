@@ -4,7 +4,7 @@ namespace Roster.Core.Events
 {
     public interface IEventStore
     {
-        void Publish<T>(T @event) where T : class, IEvent;
+        Task PublishAsync<T>(T @event) where T : class;
         void Publish(IEnumerable<IEvent> events);
     }
 }

@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using Roster.Core.Domain;
 using Roster.Core.Events;
-using Roster.Core.Storage;
 
 namespace Roster.Infrastructure.Events
 {
@@ -21,28 +19,30 @@ namespace Roster.Infrastructure.Events
             _logger = logger;
         }
 
-        public void Publish<T>(T @event) where T : class, IEvent
+        public async Task PublishAsync<T>(T @event) where T : class
         {
             if (@event is IScheduledEvent)
             {
-                IScheduledEvent scheduledEvent = (IScheduledEvent)@event;                
-                _messageScheduler.SchedulePublish(scheduledEvent.ScheduledForDate, @event);
-                _logger.LogInformation("Published scheduled event {@event} for {date}", scheduledEvent, scheduledEvent.ScheduledForDate);
+                IScheduledEvent scheduledEvent = (IScheduledEvent)@event;
+                _logger.LogDebug("PUBLISH SCHEDULED {@event} {date}", scheduledEvent, scheduledEvent.ScheduledForDate);                
+                await _messageScheduler.SchedulePublish<T>(scheduledEvent.ScheduledForDate, @event);
             }
             else
             {
-                _bus.Publish(@event);
-                _logger.LogInformation("Published event {@event}", @event);
+                _logger.LogDebug("PUBLISH {@event}", @event);                
+                await _bus.Publish<T>(@event);
             }
         }
 
         void IEventStore.Publish(IEnumerable<IEvent> events)
         {
+            _logger.LogDebug("PUBLISH MULTIPLE {@events}", events);
+
             Task.Run(async () =>
             {
                 foreach (var @event in events)
                 {
-                    Publish((dynamic)@event);
+                    await PublishAsync((dynamic)@event);
                     await Task.Delay(500);
                 }
             });

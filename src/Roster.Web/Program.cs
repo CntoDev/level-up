@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 using System.IO;
+using Microsoft.Extensions.Configuration;
+using System;
+using Serilog.Settings.Configuration;
 
 namespace Roster.Web
 {
@@ -12,12 +14,14 @@ namespace Roster.Web
         {
             string logPath = Path.Combine("logs", "roster-log.txt");
 
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.Development.json", true)
+                .Build();
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft",
-                                    LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.File(logPath, rollingInterval: RollingInterval.Day)
+                .ReadFrom.Configuration(configuration)
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();

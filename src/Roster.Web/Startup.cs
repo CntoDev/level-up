@@ -83,6 +83,7 @@ namespace Roster.Web
 
             // Application settings
             RecruitmentSettings recruitmentSettings = Configuration.GetSection("Recruitment").Get<RecruitmentSettings>();
+            Uri schedulerEndpoint = new Uri("queue:scheduler");
 
             services.AddMassTransit(x =>
             {
@@ -93,6 +94,7 @@ namespace Roster.Web
                 x.AddConsumer<EmailSender>();
                 x.AddConsumer<PromotionConsumer>();                
                 x.AddConsumer<DischargeConsumer>();
+                x.AddConsumer<LoggingConsumer>();
                 
                 // Add sagas
                 x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>

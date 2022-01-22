@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using MassTransit;
+using Roster.Core.Events;
+using System;
 
 namespace Roster.Web.Areas.Identity.Pages.Account
 {
@@ -17,14 +20,17 @@ namespace Roster.Web.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        readonly IEventStore _eventStore;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            IEventStore eventStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _eventStore = eventStore;
         }
 
         [BindProperty]
@@ -81,7 +87,8 @@ namespace Roster.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("User {email} logged in.", Input.Email);
+                    await _eventStore.PublishAsync(new UserLoggedIn(Input.Email));
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
