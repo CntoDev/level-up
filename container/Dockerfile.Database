@@ -1,0 +1,4 @@
+FROM postgres:latest
+ENV POSTGRES_PASSWORD=cnto_dev
+COPY ./ /data/
+RUN cp /data/db-init.sh /docker-entrypoint-initdb.d/db-init.sh
