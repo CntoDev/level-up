@@ -142,7 +142,7 @@ namespace Roster.Core.Domain
                 Guid recruitmentSagaId = Guid.NewGuid();
                 StartRecruitmentWindow(recruitmentSagaId);
                 StartAssessmentWindow(recruitmentSagaId);
-                Promote(RankId.Recruit);                
+                Promote(RankId.Recruit);
                 Publish(new MemberRejoined(Nickname, false, recruitmentSagaId));
             }
         }
@@ -186,7 +186,7 @@ namespace Roster.Core.Domain
 
             Discharged = true;
             DateTime dischargeDate = DateTime.UtcNow;
-            
+
             bool alumni = dischargePath switch
             {
                 DischargePath.BreachOfRegulations => false,
@@ -204,7 +204,8 @@ namespace Roster.Core.Domain
         {
             RecruitmentSettings recruitmentSettings = RecruitmentSettings.Instance;
             DateTime recruitmentWindowEndDate = JoinDate.AddDays(recruitmentSettings.RecruitmentWindowDays);
-            Publish(new RecruitTrialExpired(Nickname, recruitmentSettings.RecruitmentWindowDays, recruitmentWindowEndDate, recruitmentSagaId));
+            ExpirationDate expirationDate = new ExpirationDate(recruitmentWindowEndDate);
+            Publish(new RecruitTrialExpired(Nickname, recruitmentSettings.RecruitmentWindowDays, expirationDate.EndDate, expirationDate.NextCheckinDate, recruitmentSagaId));
         }
 
         private void StartAssessmentWindow(Guid recruitmentSagaId)
