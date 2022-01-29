@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Saga;
 using Roster.Core.Events;
+using Roster.Core.Domain;
 using Serilog;
 
 namespace Roster.Core.Sagas
@@ -97,21 +98,33 @@ namespace Roster.Core.Sagas
             return Task.CompletedTask;
         }
 
-        public Task Consume(ConsumeContext<RecruitTrialExpired> context)
+        public async Task Consume(ConsumeContext<RecruitTrialExpired> context)
         {
+            /*
+             * Due to issue with RabbitMq timers, events must be processed in shorter time periods.
+             */
+            ExpirationDate expirationDate = new(context.Message.EndDate);
+
+            if (!expirationDate.Expired)
+            {                
+                RecruitTrialExpired @event = context.Message;
+                RecruitTrialExpired republishedEvent = new (@event.Nickname, @event.Days, @event.EndDate, expirationDate.NextCheckinDate, @event.CorrelationId);
+                Log.Information("Republishing event {@republishedEvent}.", republishedEvent);
+                await context.SchedulePublish(republishedEvent.ScheduledForDate, republishedEvent);
+                return;
+            }
+
             Log.Information("Recruit {nickname} trial expired.", context.Message.Nickname);
 
             if (TrialSucceeded.HasValue)
-                return Task.CompletedTask;
+                return;
 
             TrialSucceeded = IsTrialSuccessfull();
 
             if (TrialSucceeded.Value)
-                context.Publish(new RecruitPromoted(context.Message.Nickname));
+                await context.Publish(new RecruitPromoted(context.Message.Nickname));
             else if (AutomaticDischarge)
-                context.Send(new DischargeRecruit(context.Message.Nickname, TrialExpired));
-
-            return Task.CompletedTask;
+                await context.Send(new DischargeRecruit(context.Message.Nickname, TrialExpired));
         }
 
         public Task Consume(ConsumeContext<RecruitAssessmentExpired> context)
@@ -133,7 +146,7 @@ namespace Roster.Core.Sagas
             Nickname = message.Nickname;
 
             if (message.Alumni)
-            {    
+            {
                 RecruitmentStartDate = ModsCheckDate = BootcampCompletionDate = DateTime.UtcNow;
                 EnoughAttendedEvents = true;
                 TrialSucceeded = true;
@@ -164,7 +177,7 @@ namespace Roster.Core.Sagas
             return Task.CompletedTask;
         }
 
-        public bool IsSagaFinished() => TrialSucceeded != null;        
+        public bool IsSagaFinished() => TrialSucceeded != null;
 
         private bool IsTrialSuccessfull()
         {
