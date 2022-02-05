@@ -97,3 +97,20 @@ CREATE INDEX "EmailIndex" ON "AspNetUsers" ("NormalizedEmail");
 CREATE UNIQUE INDEX "UserNameIndex" ON "AspNetUsers" ("NormalizedUserName");
 
 
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+
+START TRANSACTION;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20210730105700_Create', '6.0.1');
+
+INSERT INTO "AspNetUsers" ("Id", "UserName", "NormalizedUserName", "Email", "NormalizedEmail", "EmailConfirmed", "PasswordHash", "SecurityStamp", "ConcurrencyStamp", "PhoneNumber", "PhoneNumberConfirmed", "TwoFactorEnabled", "LockoutEnd", "LockoutEnabled", "AccessFailedCount") VALUES ('20ea2c0d-be97-41c3-9b90-13729cd9b27c', 'root@carpenoctem.co', 'ROOT@CARPENOCTEM.CO', 'root@carpenoctem.co', 'ROOT@CARPENOCTEM.CO', true, 'AQAAAAEAACcQAAAAENGMsWlmS5P+pwXEjLQ5D6dQaBqlopJLGi+AE6EWM1IfhteiDgdEPwpjjs10IHaa0g==', 'YC4IVKM5DDP5D3Q7TY4O7BYMPXGHBFQJ', '188c499d-c2ef-4284-bf24-cd70a7278151', NULL, false, false, NULL, true, 0);
+INSERT INTO "AspNetUserClaims" ("UserId", "ClaimType", "ClaimValue") VALUES ('20ea2c0d-be97-41c3-9b90-13729cd9b27c', 'ViewApplications', '');
+INSERT INTO "AspNetUserClaims" ("UserId", "ClaimType", "ClaimValue") VALUES ('20ea2c0d-be97-41c3-9b90-13729cd9b27c', 'ViewMembers', '');
+INSERT INTO "AspNetUserClaims" ("UserId", "ClaimType", "ClaimValue") VALUES ('20ea2c0d-be97-41c3-9b90-13729cd9b27c', 'AcceptMembers', '');
+
+COMMIT;
