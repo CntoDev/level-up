@@ -1,0 +1,39 @@
+# Production environment description
+
+version: '3.3'
+services:
+    roster:
+        container_name: cnto-roster
+        ports:
+            - '8902:80'
+        depends_on:
+            - "rabbitmq"
+        environment:
+            - RabbitMq__Host=${RABBITMQ_HOST}
+            - RabbitMq__Username=${RABBITMQ_USERNAME}
+            - RabbitMq__Password=${RABBITMQ_PASSWORD}
+            - ConnectionStrings__Roster=${CONNECTION_STRINGS_ROSTER}
+            - ConnectionStrings__PostgresConnection=${CONNECTION_STRINGS_POSTGRES}
+            - MailJet__BaseUrl=${MAILJET_BASE_URL}
+            - MailJet__Key=${MAILJET_KEY}
+            - MailJet__Secret=${MAILJET_SECRET}
+            - MailJet__FromEmail=${MAILJET_FROM_EMAIL}
+            - MailJet__FromName=${MAILJET_FROM_NAME}
+            - MailJet__Subject=${MAILJET_SUBJECT_VERIFY_ACCOUNT}
+            - Recruitment__RecruitmentWindowDays=${RECRUITMENT_WINDOW_DAYS}
+            - Recruitment__ModsAssesmentWindowDays=${RECRUITMENT_MOD_ASSESSMENT_DAYS}
+            - Recruitment__MinimalAttendance=${RECRUITMENT_MINIMAL_ATTENDANCE}
+            - Recruitment__OneClickAssessment=${RECRUITMENT_ONECLICK_ASSESSMENT}
+        restart: always
+        image: 'cntoarma/rooster:${ROOSTER_IMAGE_TAG}'
+    rabbitmq:
+        container_name: roster-rabbitmq
+        ports:
+            - '15672:15672'
+        restart: always
+        image: 'masstransit/rabbitmq:3.9.7'
+        volumes:
+            - rabbitmq-volume:/var/lib/rabbitmq
+
+volumes:
+    rabbitmq-volume:

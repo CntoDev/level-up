@@ -33,3 +33,6 @@ resharper.xml
 
 
 .fake
+
+# Production environment configuration
+.env.prod

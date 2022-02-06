@@ -7,7 +7,7 @@ fi
 
 mkdir docker-build
 
-CNTO_ROSTER_VERSION="0.5.0-snapshot"
+CNTO_ROSTER_VERSION="0.5.0"
 CNTO_ROSTER_CONTAINER=$(sudo docker ps -f name=cnto-arma --format '{{.Names}}')
 
 if [[ -n "$CNTO_ROSTER_CONTAINER" ]]; then

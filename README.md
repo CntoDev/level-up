@@ -2,6 +2,26 @@
 
 CNTO Tool for member management.
 
+## Getting started
+
+Use `docker-compose` to start both the production and development environment. For both envs a compose file is available in the repository alongisde with a `.env` stub configuration and `.env.dev` for development scenario.
+
+### Development
+
+The development environment defines the application container, message broker and database. To use it, run
+
+`docker-compose -f docker-compose.dev.yml --env-file .env.dev up -d`
+
+All the configuration parameters are contained in the `.env.dev`.
+
+### Production
+
+The production environment only defines application and message broker, as it is recommended to run database on bare metal. To deploy, make a copy of `.env` named `.env.prod` and fill in the `<VALUE>` placeholders with actual values then run:
+
+`docker-compose --env-file .env.prod up -d`
+
+For more details on how to run Rooster, [checkout the Wiki](https://github.com/CntoDev/rooster/wiki/Getting-started).
+
 ## Contributing
 
 - Branch `master` is for production-ready code and cannot be pushed to. Open a PR and code will be merged into `master` once it's approved.
