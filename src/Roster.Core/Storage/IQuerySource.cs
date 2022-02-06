@@ -10,5 +10,6 @@ namespace Roster.Core.Storage
         IQueryable<Rank> Ranks { get; }
         IQueryable<Dlc> Dlcs { get; }
         IQueryable<EventState> EventStates { get; }
+        IQueryable<Warning> Warnings { get; }
     }
 }
