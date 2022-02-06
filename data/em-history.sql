@@ -84,4 +84,7 @@ VALUES ('20211206174619_AutomaticDischarge', '6.0.1');
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
 VALUES ('20211216175735_Six', '6.0.1');
 
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20220206081955_Warnings', '6.0.1');
+
 COMMIT;

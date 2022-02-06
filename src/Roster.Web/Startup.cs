@@ -93,6 +93,7 @@ namespace Roster.Web
                 x.AddConsumer<EmailSender>();
                 x.AddConsumer<PromotionConsumer>();                
                 x.AddConsumer<DischargeConsumer>();
+                x.AddConsumer<WarningsConsumer>();
                 
                 // Add sagas
                 x.AddSaga<RecruitmentSaga>().EntityFrameworkRepository(r =>

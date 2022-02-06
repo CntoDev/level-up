@@ -23,6 +23,8 @@ namespace Roster.Infrastructure.Storage
 
         public DbSet<EventState> EventStates { get; set; }
 
+        public DbSet<Warning> Warnings { get; set; }
+
         IQueryable<ApplicationForm> IQuerySource.ApplicationForms => ApplicationForms;
 
         IQueryable<Member> IQuerySource.Members => Members;
@@ -32,6 +34,8 @@ namespace Roster.Infrastructure.Storage
         IQueryable<Dlc> IQuerySource.Dlcs => Dlcs;
 
         IQueryable<EventState> IQuerySource.EventStates => EventStates;
+
+        IQueryable<Warning> IQuerySource.Warnings => Warnings;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,6 +135,19 @@ namespace Roster.Infrastructure.Storage
 
             modelBuilder.Entity<EventState>()
                         .HasKey(es => es.Id);
+
+            modelBuilder.Entity<Warning>(builder => {
+                builder.HasKey("_id");
+
+                builder.Property<long>("_id")
+                       .IsRequired()
+                       .HasColumnName("Id")
+                       .ValueGeneratedOnAdd();
+                
+                builder.Property(w => w.Type).IsRequired();
+                builder.Property(w => w.Message).IsRequired();
+                builder.Property(w => w.UtcTime).IsRequired();
+            });
         }
     }
 }
