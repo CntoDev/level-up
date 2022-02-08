@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 ROOSTER_VERSION=0.5.0
 ROOSTER_DB=$(podman ps -a --filter "name=dev-postgres" --format "{{.ID}}")
