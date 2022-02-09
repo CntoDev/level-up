@@ -24,8 +24,10 @@ For more details on how to run Rooster, [checkout the Wiki](https://github.com/C
 
 ## Contributing
 
-- Branch `master` is for production-ready code and cannot be pushed to. Open a PR and code will be merged into `master` once it's approved.
-  - _Note_: rule will be enforced once project reaches version `1.0.0`.
-- Branch `develop` is for working on next release. That's the place to branch off from when working on new features or non-critical bug fixing.
-- In general, the project follows [this](https://nvie.com/posts/a-successful-git-branching-model/) git flow with some tweaking:
-  - During initial development phase, `release` branches can be skipped and code can be merged directly from `develop` into `master`.
+### Submitting feedbacks and bug reports
+
+We use the [Issues section](https://github.com/CntoDev/rooster/issues) as _task list_ for what will be done next and in general to organize the development process.
+
+The reference workflow is mentioned [in this CNTO Forum thread](https://www.carpenoctem.co/forums/m/26081621/viewthread/33652123-research-development-branch-101). If you find a bug, _and you are absolutely certain it's a bug_ feel free to open a new issue and label it as such. For feature request please open a [Discussion](https://github.com/CntoDev/rooster/discussions) under the category "Q&A" and label it with "feature request", ideally merging all feedback for a given session with an understandable name. Maintainers will decide which ideas to implement and open issues accordingly.
+
+Thank you for your help! :)
