@@ -1,0 +1,32 @@
+# Build and publish project Docker images
+
+name: Build images
+
+on:
+  push:
+    branches: [gh-actions]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+      - name: Create image directory
+        run: mkdir docker-build
+      - name: Publish Roster.Web
+        run: dotnet publish src/Roster.Web -c Release -o docker-build
+      - name: Build Roster.Web Docker image
+        run: docker build -f container/Dockerfile -t cntoarma/rooster:latest ./docker-build
+      - name: Authenticate to DockerHub
+        uses: docker/login-action@v1
+        with:
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Publish Roster.Web image
+        run: docker push cntoarma/rooster:latest
