@@ -11,28 +11,42 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout the codebase to have all the required files
       - name: Checkout codebase
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      # Fetch latest git tag to tag Docker images accordingly
       - name: Acquire latest tag
         id: previoustag
         uses: WyriHaximus/github-action-get-previous-tag@v1
+      # Setup .NET SDK to build modules
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
+      # Create working directory to perform .NET build
       - name: Create image directory
-        run: mkdir docker-build
-      - name: Publish Roster.Web
-        run: dotnet publish src/Roster.Web -c Release -o docker-build
-      - name: Build Roster.Web Docker image
-        run: docker build -f container/Dockerfile -t cntoarma/rooster:${{ steps.previoustag.outputs.tag }} ./docker-build
+        run: mkdir dotnet-build
+      # Build project files
+      - name: Build project files
+        run: |
+          dotnet publish src/Roster.Web -c Release -o dotnet-build/Roster.Web
+          dotnet publish src/Roster.DiscordService -c Release -o dotnet-build/Roster.DiscordService
+      # Build Docker images
+      - name: Build Docker images
+        run: |
+          docker build -f container/Dockerfile -t cntoarma/rooster:${{ steps.previoustag.outputs.tag }} ./dotnet-build/Roster.Web
+          docker build -f container/Dockerfile.DiscordService -t cntoarma/rooster-discord:${{ steps.previoustag.outputs.tag }} ./dotnet-build/Roster.DiscordService
+      # Login to DockerHub registry
       - name: Authenticate to DockerHub
         uses: docker/login-action@v1
         with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Publish Roster.Web image
-        run: docker push cntoarma/rooster:${{ steps.previoustag.outputs.tag }}
+      # Publish images on DockerHub
+      - name: Publish Docker images
+        run: |
+          docker push cntoarma/rooster:${{ steps.previoustag.outputs.tag }}
+          docker push cntoarma/rooster-discord:${{ steps.previoustag.outputs.tag }}
