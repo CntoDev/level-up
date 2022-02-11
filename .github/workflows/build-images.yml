@@ -4,7 +4,8 @@ name: Build images
 
 on:
   push:
-    branches: [gh-actions]
+    tags:
+      - '*'
 
 jobs:
   build:
