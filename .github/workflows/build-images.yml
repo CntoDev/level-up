@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout codebase
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Acquire latest tag
+        id: previoustag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
@@ -22,11 +27,11 @@ jobs:
       - name: Publish Roster.Web
         run: dotnet publish src/Roster.Web -c Release -o docker-build
       - name: Build Roster.Web Docker image
-        run: docker build -f container/Dockerfile -t cntoarma/rooster:latest ./docker-build
+        run: docker build -f container/Dockerfile -t cntoarma/rooster:${{ steps.previoustag.outputs.tag }} ./docker-build
       - name: Authenticate to DockerHub
         uses: docker/login-action@v1
         with:
             username: ${{ secrets.DOCKERHUB_USERNAME }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Publish Roster.Web image
-        run: docker push cntoarma/rooster:latest
+        run: docker push cntoarma/rooster:${{ steps.previoustag.outputs.tag }}
